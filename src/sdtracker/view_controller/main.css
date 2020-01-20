@@ -1,0 +1,230 @@
+/*
+ * Empty Stylesheet file.
+ */
+
+* {
+/*    -fx-border-color: #2e3d36;*/
+    -primary-color: #ff9900;
+    -secondary-color: #ffedcc;
+    -primary-nuetral-color: #ddd;
+    -light-nuetral-color: #f9f9f9;
+    -dark-nuetral-color: #2e3d36;
+    -system-message-color: blue;
+    -system-message-error-color: red;
+    -default-background-color: white;
+
+}
+
+.screen-header {
+    -fx-background-color: -primary-nuetral-color;
+    -fx-alignment: CENTER;
+}
+
+
+
+.active-user-label {
+    -fx-background-color: -primary-nuetral-color;
+    -fx-text-fill: -primary-color;
+    -fx-font: 16px "Cambria";
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+.current-date-label {
+    -fx-background-color: -primary-nuetral-color;
+    -fx-text-fill: -primary-color;
+    -fx-font: 16px "Cambria";
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.form-instruction {
+    -fx-background-color: -secondary-color;
+    -fx-font: 12px "Verdana";
+    -fx-font-style: italic;
+    -fx-padding: 0px 20px 0px 20px;
+}
+
+.form-label {
+    -fx-background-color: -default-background-color;
+    -fx-font: 14px "Verdana";
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_RIGHT
+}
+
+.form-error-label {
+    -fx-background-color: -default-background-color;
+    -fx-font: 12px "Verdana";
+    -fx-text-fill: red;
+    -fx-alignment: BOTTOM_LEFT;
+}
+
+.form-button {
+    -fx-font: 18px "Verdana";
+/*    -fx-background-color: -primary-nuetral-color;*/
+    -fx-text-fill: -primary-color;
+}
+
+.form-button:hover {
+    -fx-cursor: hand;
+}
+
+.form-text-field {
+    -fx-background-color: -light-nuetral-color;
+    -fx-font: 14px "Verdana";
+    -fx-border-style: solid;
+    -fx-border-width: 0px 0px 1px 0px;
+    -fx-border-color: -primary-nuetral-color;
+}
+
+.home-page-subpane {
+    -fx-background-color: -default-background-color;
+}
+
+.login-form-error-label {
+    -fx-background-color: -default-background-color;
+    -fx-font: 12px "Verdana";
+    -fx-text-fill: red;
+    -fx-alignment: TOP_LEFT;
+}
+
+.nav-vbox {
+    -fx-background-color: -primary-nuetral-color;
+}
+
+.nav-button {
+    -fx-text-fill: -primary-color;
+    -fx-font: 22px "Cambria";
+    -fx-font-weight: bold;
+}
+
+.nav-seperator {
+    -fx-background-color: -primary-color;
+    -fx-preferred-width: 12px;
+}
+
+.pane-header {
+    -fx-border-color: -dark-nuetral-color;
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 2px 0;
+    -fx-alignment: CENTER;
+}
+
+.pane-header-title {
+    -fx-alignment: CENTER;
+    -fx-text-fill: -primary-color;
+    -fx-font: 32px "Cambria";
+    -fx-font-weight: bold;
+}
+
+.primary-progress-indicator {
+    -fx-progress-color: -primary-color;
+}
+
+.progress-bar {
+    -fx-accent: -primary-color;
+}
+
+.radio-button-bar {
+    -fx-background-color: -secondary-color;
+    -fx-alignment: CENTER;
+    -fx-spacing: 30px;  
+}
+
+.radio-button-bar-label {
+    -fx-font: 14px "Verdana";
+    -fx-font-weight: bold;
+}
+
+.radio-button-bar-text {
+    -fx-font: 14px "Verdana";
+}
+
+.report-link {
+    -fx-padding: 8px 10px 8px 10px;
+    -fx-text-fill: -dark-nuetral-color;
+    -fx-font: 16px "Verdana";
+    -fx-font-style: italic;
+}
+
+.scroll-pane > .viewport  { 
+    -fx-background-color: -default-background-color;
+}
+
+.status-bar {
+    -fx-background-color: -secondary-color;
+    -fx-alignment: CENTER;
+    -fx-border-color: -dark-nuetral-color;
+    -fx-border-style: solid;
+    -fx-border-width: 2px 0 4px 0;
+}
+
+.system-table-link {
+    -fx-padding: 8px 10px 8px 10px;
+    -fx-text-fill: -dark-nuetral-color;
+    -fx-font: 16px "Verdana";
+    -fx-font-style: italic;
+    -fx-alignment: CENTER;
+}
+
+.system-message-label {
+    -fx-text-fill: -system-message-color;
+    -fx-font: 12px "Verdana";
+    -fx-font-style: italic;
+}
+
+.system-message-label-error {
+    -fx-text-fill: -system-message-error-color;
+    -fx-font: 12px "Verdana";
+    -fx-font-style: italic;
+}
+
+.table-delete-button {
+    -fx-font: 6px "System";
+    -fx-pref-width: 20;
+    -fx-pref-height: 20;
+    -fx-background-image: url(../img/trash-icon-small.png);
+    -fx-background-size: 20px;
+}
+
+.table-edit-button {
+    -fx-font: 6px "System";
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-background-image: url(../img/pencilicon.png);
+    -fx-background-size: 20px;
+}
+
+.table-select-button {
+    -fx-font: 6px "System";
+    -fx-pref-width: 20px;
+    -fx-pref-height: 20px;
+    -fx-background-image: url(../img/check-mark.png);
+    -fx-background-size: 20px;
+}
+
+.table-view .button:hover {
+    -fx-cursor: hand;
+}
+
+.table-view .column-header .label {
+  -fx-text-alignment: center;
+}
+
+.user-box-title {
+    -fx-text-fill: -primary-color;
+    -fx-font: 18px "Cambria";
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER;
+    -fx-underline: true;
+}
+
+.user-box-item {
+    -fx-text-fill: black;
+    -fx-font: 14px "Cambria";
+    -fx-font-weight: bold;
+}
+
+.white-background {
+    -fx-background-color: white;
+}
