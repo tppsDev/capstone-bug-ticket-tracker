@@ -15,13 +15,6 @@
 
 }
 
-.screen-header {
-    -fx-background-color: -primary-nuetral-color;
-    -fx-alignment: CENTER;
-}
-
-
-
 .active-user-label {
     -fx-background-color: -primary-nuetral-color;
     -fx-text-fill: -primary-color;
@@ -145,6 +138,11 @@
     -fx-text-fill: -dark-nuetral-color;
     -fx-font: 16px "Verdana";
     -fx-font-style: italic;
+}
+
+.screen-header {
+    -fx-background-color: -primary-nuetral-color;
+    -fx-alignment: CENTER;
 }
 
 .scroll-pane > .viewport  { 
