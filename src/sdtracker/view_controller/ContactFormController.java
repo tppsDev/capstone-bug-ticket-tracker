@@ -42,7 +42,7 @@ public class ContactFormController implements Initializable {
     @FXML private RadioButton prospectRadioButton;
     @FXML private RadioButton clientRadioButton;
     @FXML private RadioButton vendorRadioButton;
-    @FXML private ToggleGroup contactTypeToggleGroup = new ToggleGroup();;
+    @FXML private ToggleGroup contactTypeToggleGroup = new ToggleGroup();
    
     // Main form text fields and combo boxes
     @FXML private TextField firstNameTextField;
@@ -118,7 +118,7 @@ public class ContactFormController implements Initializable {
         initializeInputElements();
         applyFormMode();
         startEventHandlers();
-        //remove after test
+        // TODO remove after test
         if (formMode.equals(FormMode.INSERT)) contact = new Contact();
         
     }

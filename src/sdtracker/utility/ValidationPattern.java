@@ -40,4 +40,9 @@ public class ValidationPattern {
      * This pattern matches ABC1234567
      */
     public static final String BUG_NUMBER = "^[A-Z]{3}\\d{7}$";
+    
+    /**
+     * This pattern matches 8-20 characters (a-z, 1-9 plus . and _). Cannot begin or end with . or _
+     */
+    public static final String USER_NAME = "^(?=.{8,20}$)(?![_.])(?!.*[_.]{2})[a-z0-9._]+(?<![_.])$";
 }

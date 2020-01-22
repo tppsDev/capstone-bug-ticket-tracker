@@ -22,7 +22,7 @@
       </AnchorPane>
       <Label layoutX="14.0" layoutY="121.0" prefHeight="18.0" prefWidth="119.0" styleClass="form-label" text="Username:" />
       <TextField id="username-textfield" fx:id="usernameTextField" layoutX="151.0" layoutY="116.0" prefHeight="29.0" prefWidth="208.0" styleClass="form-text-field" />
-      <Button fx:id="setPasswordButton" layoutX="396.0" layoutY="113.0" mnemonicParsing="false" styleClass="form-button" text="Set Password" />
+      <Button fx:id="setPasswordButton" layoutX="396.0" layoutY="113.0" mnemonicParsing="false" onAction="#handleSetPasswordButton" styleClass="form-button" text="Set Password" />
       <Label layoutX="569.0" layoutY="122.0" prefHeight="18.0" prefWidth="130.0" styleClass="form-label" text="Security Role:" />
       <ComboBox fx:id="securityRoleComboBox" layoutX="723.0" layoutY="116.0" prefHeight="29.0" prefWidth="175.0" styleClass="form-text-field" />
       <Label layoutX="14.0" layoutY="187.0" prefHeight="18.0" prefWidth="119.0" styleClass="form-label" text="First Name:" />
@@ -52,9 +52,9 @@
       <RadioButton fx:id="phone2WorkRadioButton" layoutX="521.0" layoutY="438.0" mnemonicParsing="false" styleClass="form-label" text="Work" />
       <RadioButton fx:id="phone2OtherRadioButton" layoutX="610.0" layoutY="438.0" mnemonicParsing="false" styleClass="form-label" text="Other" />
       <Label layoutX="14.0" layoutY="503.0" prefHeight="18.0" prefWidth="119.0" styleClass="form-label" text="Email:" />
-      <TextField fx:id="emailTextView" layoutX="151.0" layoutY="497.0" prefHeight="29.0" prefWidth="451.0" styleClass="form-text-field" />
-      <Button fx:id="cancelButton" layoutX="736.0" layoutY="553.0" mnemonicParsing="false" styleClass="form-button" text="Cancel" />
-      <Button fx:id="addSaveButton" layoutX="842.0" layoutY="553.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="84.0" styleClass="form-button" text="Add" />
+      <TextField fx:id="emailTextField" layoutX="151.0" layoutY="497.0" prefHeight="29.0" prefWidth="451.0" styleClass="form-text-field" />
+      <Button fx:id="cancelButton" layoutX="736.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleCancelButton" styleClass="form-button" text="Cancel" />
+      <Button fx:id="addSaveButton" layoutX="842.0" layoutY="553.0" mnemonicParsing="false" onAction="#handleAddSaveButton" prefHeight="35.0" prefWidth="84.0" styleClass="form-button" text="Add" />
       <Label fx:id="systemMessageLabel" layoutX="15.0" layoutY="558.0" prefHeight="25.0" prefWidth="710.0" styleClass="system-message-label" />
       <Label fx:id="usernameErrorLabel" layoutX="48.0" layoutY="96.0" prefHeight="15.0" prefWidth="311.0" styleClass="form-error-label" />
       <Label fx:id="securityRoleErrorLabel" layoutX="589.0" layoutY="96.0" prefHeight="15.0" prefWidth="311.0" styleClass="form-error-label" />
