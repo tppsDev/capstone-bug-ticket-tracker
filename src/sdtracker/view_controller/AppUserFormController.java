@@ -4,6 +4,7 @@
  */
 package sdtracker.view_controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
@@ -13,7 +14,9 @@ import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -21,6 +24,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import sdtracker.database.AppUserDbServiceManager;
 import sdtracker.database.AppUserDbServiceManager.*;
 import sdtracker.database.DepartmentDbServiceManager;
@@ -31,6 +36,7 @@ import sdtracker.model.AppUser;
 import sdtracker.model.Department;
 import sdtracker.model.SecurityRole;
 import sdtracker.utility.ValidationPattern;
+import sdtracker.view_controller.FormResult.FormResultStatus;
 
 /**
  * FXML Controller class
@@ -419,7 +425,28 @@ public class AppUserFormController implements Initializable {
     // Button event handlers
     @FXML
     private void handleSetPasswordButton(ActionEvent event) {
-        
+        FXMLLoader setPasswordLoader = new FXMLLoader(getClass().getResource("SetPasswordForm.fxml"));
+        Scene setPasswordScene;
+        try {
+            setPasswordScene = new Scene(setPasswordLoader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+        }
+        Stage setPasswordStage = new Stage();
+        setPasswordStage.initOwner(titleLabel.getScene().getWindow());
+        setPasswordStage.initModality(Modality.APPLICATION_MODAL);
+        setPasswordStage.setTitle("SDTracker 1.0 - Set Password");
+        setPasswordStage.setScene(setPasswordScene);
+        SetPasswordFormController setPasswordFormController = setPasswordLoader.getController();
+        setPasswordFormController.setAdminPasswordSet(true);
+        setPasswordFormController.setAppUser(appUser);
+        setPasswordStage.showAndWait();
+        FormResult setPasswordResult = setPasswordFormController.getFormResult();
+        passwordSet = setPasswordResult.getResultStatus().equals(FormResultStatus.SUCCESS);
+        systemMessageLabel.setText(setPasswordResult.getMessage());
+        System.out.println(appUser.getSalt());
+        System.out.println(appUser.getPassword());
     }
     
     @FXML

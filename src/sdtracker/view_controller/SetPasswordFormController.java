@@ -240,5 +240,9 @@ public class SetPasswordFormController implements Initializable {
     private BooleanProperty adminPasswordSetProperty() {
         return adminSetPassword;
     }
+
+    public FormResult getFormResult() {
+        return formResult;
+    }
     
 }
