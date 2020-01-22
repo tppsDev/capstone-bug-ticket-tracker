@@ -36,4 +36,8 @@ public class BugStatus {
         this.name = name;
     }
     
+    @Override
+    public String toString() {
+        return name;
+    }
 }

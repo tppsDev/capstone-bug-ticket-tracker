@@ -40,4 +40,8 @@ public class TicketPriority {
         this.name = name;
     }
     
+    @Override
+    public String toString() {
+        return name;
+    }
 }

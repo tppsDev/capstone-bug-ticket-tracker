@@ -66,6 +66,7 @@ public class SecurityRoleDaoImpl implements CrudDao<SecurityRole>{
                 securityRoleList.add(new SecurityRole(id, name));
             }
         } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
             throw new DaoException("Database error: Try again later.");
         }
         

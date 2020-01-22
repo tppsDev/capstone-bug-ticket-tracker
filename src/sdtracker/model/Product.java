@@ -46,4 +46,9 @@ public class Product {
         this.version = version;
     }
     
+    @Override
+    public String toString() {
+        return name;
+    }
+    
 }

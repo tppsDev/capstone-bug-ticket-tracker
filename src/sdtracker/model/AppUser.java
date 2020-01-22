@@ -105,9 +105,7 @@ public class AppUser {
 
     @Override
     public String toString() {
-        return "AppUser{" + "id=" + id + "\n firstName=" + firstName + "\nlastName=" + lastName + "\nemail=" + email 
-                + "\nusername=" + username + "\npassword=" + password + "\nsalt=" + salt + "\njobTitle=" 
-                + jobTitle + "\ncourtesyTitle=" + courtesyTitle + '}';
+        return lastName + ", " + firstName;
     }
 
     // Getter and Setter Methods for class properties

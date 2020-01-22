@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
@@ -116,9 +117,9 @@ public class AppUserFormController implements Initializable {
     private GetAllSecurityRolesService getAllSecurityRolesService;
     private DepartmentDbServiceManager departmentDbServiceManager = DepartmentDbServiceManager.getServiceManager();
     private GetAllDepartmentsService getAllDepartmentsService;
-    private ObservableList<AppUser> allAppUserList;
-    private ObservableList<SecurityRole> securityRoleList;
-    private ObservableList<Department> departmentList;
+    private ObservableList<AppUser> allAppUserList = FXCollections.observableArrayList();
+    private ObservableList<SecurityRole> securityRoleList = FXCollections.observableArrayList();
+    private ObservableList<Department> departmentList = FXCollections.observableArrayList();
     private AppUser appUser;
     private boolean passwordSet = false;
     private FormResult formResult;
@@ -236,9 +237,10 @@ public class AppUserFormController implements Initializable {
             }
             emailTextField.setText(appUser.getEmail());
             
-            addSaveButton.setText("Add");
-        } else {
             addSaveButton.setText("Save");
+        } else {
+            setPasswordButton.setVisible(false);
+            addSaveButton.setText("Add");
         }
     }
     
@@ -257,17 +259,9 @@ public class AppUserFormController implements Initializable {
     }
     
     private void insertAppUser() {
-        if (passwordSet) {
-            systemMessageLabel.setText("");
-            systemMessageLabel.getStyleClass().removeAll("system-message-label-error");
-            systemMessageLabel.getStyleClass().add("system-message-label");
-            buildAppUser();
-            runInsertAppUserService();
-        } else {
-            systemMessageLabel.setText("Please set initial user password");
-            systemMessageLabel.getStyleClass().removeAll("system-message-label");
-            systemMessageLabel.getStyleClass().add("system-message-label-error");
-        }
+        buildAppUser();
+        setPasswordButton.fire();
+        runInsertAppUserService();
     }
     
     private void updateAppUser() {
@@ -365,6 +359,7 @@ public class AppUserFormController implements Initializable {
     // Service status event handlers
     private EventHandler<WorkerStateEvent> getAllAppUsersSuccess = (event) -> {
         allAppUserList = getAllAppUsersService.getValue();
+        mgrComboBox.getItems().setAll(allAppUserList);
     };
     
     private EventHandler<WorkerStateEvent> getAllAppUsersFailure = (event) -> {
@@ -404,6 +399,7 @@ public class AppUserFormController implements Initializable {
     
     private EventHandler<WorkerStateEvent> getAllSecurityRolesSuccess = (event) -> {
         securityRoleList = getAllSecurityRolesService.getValue();
+        securityRoleComboBox.getItems().setAll(securityRoleList);
     };
     
     private EventHandler<WorkerStateEvent> getAllSecurityRolesFailure = (event) -> {
@@ -414,6 +410,7 @@ public class AppUserFormController implements Initializable {
     
     private EventHandler<WorkerStateEvent> getAllDepartmentsSuccess = (event) -> {
         departmentList = getAllDepartmentsService.getValue();
+        deptComboBox.getItems().setAll(departmentList);
     };
     
     private EventHandler<WorkerStateEvent> getAllDepartmentsFailure = (event) -> {

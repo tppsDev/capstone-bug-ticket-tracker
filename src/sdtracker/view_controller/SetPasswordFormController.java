@@ -79,9 +79,16 @@ public class SetPasswordFormController implements Initializable {
         newPasswordField.textProperty().bindBidirectional(unmaskedNewPasswordTextField.textProperty());
         confirmPasswordField.textProperty().bindBidirectional(unmaskedConfirmPasswordTextField.textProperty());
         
-        showCurrentPasswordImageView.visibleProperty().bind(currentPasswordField.visibleProperty());
-        maskCurrentPasswordImageView.visibleProperty().bind(currentPasswordField.visibleProperty().not());
-        unmaskedCurrentPasswordTextField.visibleProperty().bind(currentPasswordField.visibleProperty().not());
+        if (adminSetPassword.get()) {
+            showCurrentPasswordImageView.visibleProperty().bind(currentPasswordField.visibleProperty());
+            maskCurrentPasswordImageView.visibleProperty().bind(currentPasswordField.visibleProperty().not());
+            unmaskedCurrentPasswordTextField.visibleProperty().bind(currentPasswordField.visibleProperty().not());
+        } else {
+            showCurrentPasswordImageView.setVisible(false);
+            maskCurrentPasswordImageView.setVisible(false);
+            currentPasswordField.setVisible(false);
+            unmaskedCurrentPasswordTextField.setVisible(false);
+        }
         
         showNewPasswordImageView.visibleProperty().bind(newPasswordField.visibleProperty());
         maskNewPasswordImageView.visibleProperty().bind(newPasswordField.visibleProperty().not());
