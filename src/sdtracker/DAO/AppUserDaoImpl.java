@@ -379,7 +379,7 @@ public class AppUserDaoImpl implements CrudDao<AppUser> {
                                            +"courtesy_title = ?, "
                                            +"dept_id = ?, "
                                            +"mgr_id = ?, "
-                                           +"security_role_id = ? "
+                                           +"security_role_id = ?, "
                                            +"salt = ? "
                       +"WHERE id = ?";
         
@@ -398,12 +398,17 @@ public class AppUserDaoImpl implements CrudDao<AppUser> {
             stmt.setString(11, appUser.getJobTitle());
             stmt.setString(12, appUser.getCourtesyTitle());
             stmt.setInt(13, appUser.getDepartment().getId());
-            stmt.setInt(14, appUser.getMgr().getId());
+            if (appUser.getMgr() == null) {
+                stmt.setNull(14, Types.INTEGER);
+            } else {
+                stmt.setInt(14, appUser.getMgr().getId());
+            }
             stmt.setInt(15, appUser.getSecurityRole().getId());
             stmt.setString(16, appUser.getSalt());
             stmt.setInt(17, appUser.getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
     }

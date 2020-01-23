@@ -74,11 +74,11 @@ public class PasswordUtil {
     }
 
     public static ValidationResult validatePassword(String proposedPassword) {
-        Pattern pattern = Pattern.compile("(?=.*[a-z])(?=.*d)(?=.*[@#!*$%-])(?=.*[A-Z])");
+        Pattern pattern = Pattern.compile("((?=.*[a-z])(?=.*\\d)(?=.*[A-Z])(?=.*[@#$%!]).{8,40})");
         Matcher matcher = pattern.matcher(proposedPassword);
         
-        if (proposedPassword.length() < 8) {
-            return new ValidationResult(false, "Password must be at least 8 characters");
+        if (proposedPassword.length() < 8 || proposedPassword.length() > 40) {
+            return new ValidationResult(false, "Password must be between 8 and 40 characters");
         }
         
         if (!matcher.matches()) {
@@ -86,7 +86,7 @@ public class PasswordUtil {
                                                 +"\tLowercase letter\n"
                                                 +"\tUppercase letter\n"
                                                 +"\tNumber\n"
-                                                +"\tSpecial character (@#!*$%-)");
+                                                +"\tSpecial character (@#$%!)");
         }
         
         return new ValidationResult(true, "Success");

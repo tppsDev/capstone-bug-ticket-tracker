@@ -117,9 +117,12 @@ public class SetPasswordFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> updateAppUserFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
+        System.out.println(updateAppUserService.getMessage());
         systemMessageLabel.setText("System error, please try your request again.");
         systemMessageLabel.getStyleClass().removeAll("system-message-label");
         systemMessageLabel.getStyleClass().add("system-message-label-error");
+        this.formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Password not set");
     };
     
     @FXML
