@@ -19,8 +19,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import sdtracker.database.AppUserDbServiceManager;
-import sdtracker.database.AppUserDbServiceManager.UpdateAppUserService;
+import sdtracker.database.AppUserDbServiceManager.UpdatePasswordAppUserService;
 import sdtracker.model.AppUser;
 import sdtracker.utility.PasswordUtil;
 import sdtracker.utility.ValidationResult;
@@ -54,8 +55,9 @@ public class SetPasswordFormController implements Initializable {
     
     private AppUser appUser;
     private final BooleanProperty adminSetPassword = new SimpleBooleanProperty(false);
+    private final BooleanProperty newUser = new SimpleBooleanProperty(false);
     private AppUserDbServiceManager appUserDbServiceManager = AppUserDbServiceManager.getServiceManager();
-    private UpdateAppUserService updateAppUserService = appUserDbServiceManager.new UpdateAppUserService();
+    private UpdatePasswordAppUserService updatePasswordAppUserService = appUserDbServiceManager.new UpdatePasswordAppUserService();
     private FormResult formResult;
 
     
@@ -69,12 +71,12 @@ public class SetPasswordFormController implements Initializable {
     }
     
     private void initializeServices() {
-        updateAppUserService.setOnSucceeded(updateAppUserSuccess);
-        updateAppUserService.setOnFailed(updateAppUserFailure);
+        updatePasswordAppUserService.setOnSucceeded(updatePasswordAppUserSuccess);
+        updatePasswordAppUserService.setOnFailed(updatePasswordAppUserFailure);
     }
     
     private void establishBindings() {
-        progressIndicator.visibleProperty().bind(updateAppUserService.runningProperty());
+        progressIndicator.visibleProperty().bind(updatePasswordAppUserService.runningProperty());
         currentPasswordField.textProperty().bindBidirectional(unmaskedCurrentPasswordTextField.textProperty());
         newPasswordField.textProperty().bindBidirectional(unmaskedNewPasswordTextField.textProperty());
         confirmPasswordField.textProperty().bindBidirectional(unmaskedConfirmPasswordTextField.textProperty());
@@ -99,35 +101,38 @@ public class SetPasswordFormController implements Initializable {
         unmaskedConfirmPasswordTextField.visibleProperty().bind(confirmPasswordField.visibleProperty().not());
     }
     
-    private void runUpdateAppUserService() {
-        if (!updateAppUserService.isRunning()) {
-            updateAppUserService.reset();
-            updateAppUserService.setAppUser(appUser);
-            updateAppUserService.start();
+    private void runUpdatePasswordAppUserService() {
+        if (!updatePasswordAppUserService.isRunning()) {
+            updatePasswordAppUserService.reset();
+            updatePasswordAppUserService.setAppUser(appUser);
+            updatePasswordAppUserService.start();
         }
     }
     
-    private EventHandler<WorkerStateEvent> updateAppUserSuccess = (event) -> {
+    
+    private EventHandler<WorkerStateEvent> updatePasswordAppUserSuccess = (event) -> {
         // TODO create form result and close
-        this.formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Password for " 
-                + this.appUser.getDisplayName()
+        Stage currentStage = (Stage) titleLabel.getScene().getWindow();
+        formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Password for " 
+                + appUser.getDisplayName()
                 + " was successfully changed.");
         System.out.println("Update successful");
-        
+        currentStage.close();
     };
     
-    private EventHandler<WorkerStateEvent> updateAppUserFailure = (event) -> {
-        event.getSource().getException().printStackTrace();
-        System.out.println(updateAppUserService.getMessage());
+    private EventHandler<WorkerStateEvent> updatePasswordAppUserFailure = (event) -> {
         systemMessageLabel.setText("System error, please try your request again.");
         systemMessageLabel.getStyleClass().removeAll("system-message-label");
         systemMessageLabel.getStyleClass().add("system-message-label-error");
-        this.formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Password not set");
+        formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Password not set");
     };
-    
+
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        
+        Stage currentStage = (Stage) titleLabel.getScene().getWindow();
+        // TODO are you sure pop up
+        formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Password set cancelled");
+        currentStage.close();
     }
     
     @FXML
@@ -142,7 +147,16 @@ public class SetPasswordFormController implements Initializable {
             appUser.setEncryptedPassword(newPasswordField.getText());
             System.out.println(appUser.getSalt());
             System.out.println(appUser.getPassword());
-            runUpdateAppUserService();
+            if (!isNewUser()) {
+                runUpdatePasswordAppUserService();
+            } else {
+                Stage currentStage = (Stage) titleLabel.getScene().getWindow();
+                formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Password for " 
+                + appUser.getDisplayName()
+                + " was successfully changed.");
+                System.out.println("Update successful");
+                currentStage.close();
+            }
         }
     }
     
@@ -253,6 +267,18 @@ public class SetPasswordFormController implements Initializable {
 
     public FormResult getFormResult() {
         return formResult;
+    }
+    
+    public boolean isNewUser() {
+        return newUser.get();
+    }
+
+    public void setNewUser(boolean value) {
+        newUser.set(value);
+    }
+
+    public BooleanProperty newUserProperty() {
+        return newUser;
     }
     
 }

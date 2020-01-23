@@ -164,6 +164,32 @@ public class AppUserDbServiceManager {
         
     }
     
+    public class UpdatePasswordAppUserService extends Service<Void> {
+        private AppUser appUser;
+        
+        public void setAppUser(AppUser appUser) {
+            this.appUser = appUser;
+        }
+        
+        public UpdatePasswordAppUserService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        @Override
+        protected Task<Void> createTask() {
+            return new Task<Void>() {
+                @Override
+                protected Void call() throws Exception {
+                    appUserDaoImpl.updatePassword(appUser);
+                    return null;
+                }
+                
+            };
+        }
+        
+    }
+    
     // Delete service
     public class DeleteAppUserService extends Service<Void> {
         private AppUser appUser;

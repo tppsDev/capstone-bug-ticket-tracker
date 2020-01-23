@@ -412,6 +412,21 @@ public class AppUserDaoImpl implements CrudDao<AppUser> {
             throw new DaoException("Database error: Try again later.");
         }
     }
+    
+    public void updatePassword(AppUser appUser) throws DaoException {
+        String query = "UPDATE app_user SET password = ?, "
+                                          +"salt = ? "
+                      +"WHERE id = ?";
+        try (Connection conn = DatabaseMgr.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);) {
+            stmt.setString(1, appUser.getPassword());
+            stmt.setString(2, appUser.getSalt());
+            stmt.setInt(3, appUser.getId());
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            throw new DaoException("Database error: Try again later.");
+        }
+    }
 
     @Override
     public void delete(AppUser appUser) throws DaoException, Exception {

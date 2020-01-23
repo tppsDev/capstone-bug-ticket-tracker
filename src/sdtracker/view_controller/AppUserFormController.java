@@ -370,10 +370,11 @@ public class AppUserFormController implements Initializable {
     
     private EventHandler<WorkerStateEvent> insertAppUserSuccess = (event) -> {
         // TODO create form result and close
-        this.formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "AppUser for " 
-                + this.appUser.getDisplayName()
+        formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "AppUser for " 
+                + appUser.getDisplayName()
                 + "was successfully added.");
-        System.out.println("Insert successful");
+        Stage currentStage = (Stage) titleLabel.getScene().getWindow();
+        currentStage.close();
     };
     
     private EventHandler<WorkerStateEvent> insertAppUserFailure = (event) -> {
@@ -385,10 +386,11 @@ public class AppUserFormController implements Initializable {
     
     private EventHandler<WorkerStateEvent> updateAppUserSuccess = (event) -> {
         // TODO create form result and close
-        this.formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "AppUser for " 
-                + this.appUser.getDisplayName()
+        formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "AppUser for " 
+                + appUser.getDisplayName()
                 + "was successfully changed.");
-        System.out.println("Update successful");
+        Stage currentStage = (Stage) titleLabel.getScene().getWindow();
+        currentStage.close();
     };
     
     private EventHandler<WorkerStateEvent> updateAppUserFailure = (event) -> {
@@ -438,6 +440,9 @@ public class AppUserFormController implements Initializable {
         SetPasswordFormController setPasswordFormController = setPasswordLoader.getController();
         setPasswordFormController.setAdminPasswordSet(true);
         setPasswordFormController.setAppUser(appUser);
+        if (formMode.equals(FormMode.INSERT)) {
+            setPasswordFormController.setNewUser(true);
+        }
         setPasswordStage.showAndWait();
         FormResult setPasswordResult = setPasswordFormController.getFormResult();
         passwordSet = setPasswordResult.getResultStatus().equals(FormResultStatus.SUCCESS);
@@ -448,7 +453,9 @@ public class AppUserFormController implements Initializable {
     
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        // TODO check for set password
+        Stage currentStage = (Stage) titleLabel.getScene().getWindow();
+        // TODO warning
+        currentStage.close();
     }
     
     @FXML
