@@ -113,6 +113,7 @@ public class AppUserFormController implements Initializable {
     private InsertAppUserService insertAppUserService;
     private UpdateAppUserService updateAppUserService;
     private GetAllAppUsersService getAllAppUsersService;
+    private CheckForDuplicateAppUserService checkForDuplicateAppUserService;
     private SecurityRoleDbServiceManager securityRoleDbServiceManager = SecurityRoleDbServiceManager.getServiceManager();
     private GetAllSecurityRolesService getAllSecurityRolesService;
     private DepartmentDbServiceManager departmentDbServiceManager = DepartmentDbServiceManager.getServiceManager();
@@ -142,6 +143,7 @@ public class AppUserFormController implements Initializable {
         getAllAppUsersService = appUserDbServiceManager.new GetAllAppUsersService();
         insertAppUserService = appUserDbServiceManager.new InsertAppUserService();
         updateAppUserService = appUserDbServiceManager.new UpdateAppUserService();
+        checkForDuplicateAppUserService = appUserDbServiceManager.new CheckForDuplicateAppUserService();
         getAllSecurityRolesService = securityRoleDbServiceManager.new GetAllSecurityRolesService();
         getAllDepartmentsService = departmentDbServiceManager.new GetAllDepartmentsService();
         
@@ -151,6 +153,8 @@ public class AppUserFormController implements Initializable {
         insertAppUserService.setOnFailed(insertAppUserFailure);
         updateAppUserService.setOnSucceeded(updateAppUserSuccess);
         updateAppUserService.setOnFailed(updateAppUserFailure);
+        checkForDuplicateAppUserService.setOnSucceeded(checkForDuplicateAppUserSuccess);
+        checkForDuplicateAppUserService.setOnFailed(checkForDuplicateAppUserFailure);
         
         getAllSecurityRolesService.setOnSucceeded(getAllSecurityRolesSuccess);
         getAllSecurityRolesService.setOnFailed(getAllSecurityRolesFailure);
@@ -166,7 +170,10 @@ public class AppUserFormController implements Initializable {
     private void establishBindings() {
         BooleanBinding servicesRunning = getAllAppUsersService.runningProperty()
                                         .or(insertAppUserService.runningProperty())
-                                        .or(updateAppUserService.runningProperty());
+                                        .or(updateAppUserService.runningProperty())
+                                        .or(checkForDuplicateAppUserService.runningProperty())
+                                        .or(getAllDepartmentsService.runningProperty())
+                                        .or(getAllSecurityRolesService.runningProperty());
         progressIndicator.visibleProperty().bind(servicesRunning);
     }
     
@@ -261,7 +268,7 @@ public class AppUserFormController implements Initializable {
     private void insertAppUser() {
         buildAppUser();
         setPasswordButton.fire();
-        runInsertAppUserService();
+        runCheckForDuplicateAppUserService();
     }
     
     private void updateAppUser() {
@@ -342,6 +349,14 @@ public class AppUserFormController implements Initializable {
         }
     }
     
+    private void runCheckForDuplicateAppUserService() {
+        if (!checkForDuplicateAppUserService.isRunning()) {
+            checkForDuplicateAppUserService.reset();
+            checkForDuplicateAppUserService.setUsername(appUser.getUsername());
+            checkForDuplicateAppUserService.start();
+        }
+    }
+    
     private void runGetAllSecurityRolesService() {
         if (!getAllSecurityRolesService.isRunning()) {
             getAllSecurityRolesService.reset();
@@ -394,6 +409,23 @@ public class AppUserFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> updateAppUserFailure = (event) -> {
+        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.getStyleClass().removeAll("system-message-label");
+        systemMessageLabel.getStyleClass().add("system-message-label-error");
+    };
+    
+    private EventHandler<WorkerStateEvent> checkForDuplicateAppUserSuccess = (event) -> {
+        if (checkForDuplicateAppUserService.getValue()) {
+            systemMessageLabel.setText("System error, please try your request again.");
+            systemMessageLabel.getStyleClass().removeAll("system-message-label");
+            systemMessageLabel.getStyleClass().add("system-message-label-error");
+        } else {
+            runInsertAppUserService();
+        }
+    };
+    
+    private EventHandler<WorkerStateEvent> checkForDuplicateAppUserFailure = (event) -> {
+        System.out.println(insertAppUserService.getException());
         systemMessageLabel.setText("System error, please try your request again.");
         systemMessageLabel.getStyleClass().removeAll("system-message-label");
         systemMessageLabel.getStyleClass().add("system-message-label-error");

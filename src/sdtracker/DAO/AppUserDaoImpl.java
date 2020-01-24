@@ -280,39 +280,28 @@ public class AppUserDaoImpl implements CrudDao<AppUser> {
         return appUser;
     }
     
-//    public AppUser getUserLoginCredentials(String username) throws DaoException, Exception {
-//        AppUser appUser;
-//        
-//        String query = "SELECT user.id, "
-//                             +"user.username, "
-//                             +"user.password, "
-//                             +"user.salt "
-//                      +"FROM app_user AS user "
-//                      +"WHERE user.username = ? ";
-//        
-//        try (Connection conn = DatabaseMgr.getConnection();
-//                PreparedStatement stmt = conn.prepareStatement(query);) {
-//            stmt.setString(1, username);
-//            ResultSet result = stmt.executeQuery();
-//            if (result.next()) {
-//                int id = result.getInt("user.id");
-//                String resultUsername = result.getString("user.username");
-//                String password = result.getString("user.password");
-//                String salt = result.getString("user.salt");
-//                
-//                appUser = new AppUser(id, resultUsername, password, salt);
-//                
-//                result.close();
-//            } else {
-//                result.close();
-//                appUser = new AppUser(-1);
-//            }
-//        } catch (SQLException ex) {
-//            throw new DaoException("Database error: Try again later.");
-//        }
-//        
-//        return appUser;
-//    }
+    public boolean checkForDuplicate(String username) throws DaoException, Exception {
+        int recCount = 0;
+        String query = "SELECT COUNT(*) AS recCount "
+                      +"FROM app_user AS user "
+                      +"WHERE user.username = ? ";
+        
+        try (Connection conn = DatabaseMgr.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);) {
+            stmt.setString(1, username);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                recCount = result.getInt("recCount");
+                result.close();
+            } else {
+                result.close();
+            }
+        } catch (SQLException ex) {
+            throw new DaoException("Database error: Try again later.");
+        }
+        
+        return recCount > 0;
+    }
 
     @Override
     public void insert(AppUser appUser) throws DaoException, Exception {

@@ -67,7 +67,7 @@ public class AppUserDbServiceManager {
         
     }
     
-    // Read services - get all, get by id, get by username
+    // Read services - get all, get by id, get by username, check for duplicate
     public class GetAllAppUsersService extends Service<ObservableList<AppUser>> {
         public  GetAllAppUsersService() {
             super();
@@ -130,6 +130,31 @@ public class AppUserDbServiceManager {
                 @Override
                 protected AppUser call() throws Exception {
                     return appUserDaoImpl.getByUsername(username);
+                }
+                
+            };
+        }
+        
+    }
+    
+    public class CheckForDuplicateAppUserService extends Service<Boolean> {
+        private String username;
+        
+        public CheckForDuplicateAppUserService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            return new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return appUserDaoImpl.checkForDuplicate(username);
                 }
                 
             };
