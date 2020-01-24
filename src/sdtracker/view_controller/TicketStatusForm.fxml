@@ -14,11 +14,11 @@
    <children>
       <AnchorPane prefHeight="80.0" prefWidth="456.0" styleClass="screen-header">
          <children>
-            <Label fx:id="titleLabel" layoutY="14.0" prefHeight="44.0" prefWidth="477.0" styleClass="pane-header-title" text="Add Ticket Priority" />
+            <Label fx:id="titleLabel" layoutY="14.0" prefHeight="44.0" prefWidth="477.0" styleClass="pane-header-title" text="Add Ticket Status" />
             <ProgressBar fx:id="progressIndicator" layoutX="139.0" layoutY="57.0" prefWidth="200.0" />
          </children>
       </AnchorPane>
-      <Label layoutX="7.0" layoutY="144.0" prefHeight="18.0" prefWidth="126.0" styleClass="form-label" text="Ticket Priority:" />
+      <Label layoutX="7.0" layoutY="144.0" prefHeight="18.0" prefWidth="126.0" styleClass="form-label" text="Ticket Status:" />
       <TextField fx:id="nameTextField" layoutX="145.0" layoutY="139.0" prefHeight="29.0" prefWidth="306.0" styleClass="form-text-field" />
       <Label fx:id="nameErrorLabel" layoutX="138.0" layoutY="117.0" prefHeight="15.0" prefWidth="313.0" styleClass="form-error-label" />
       <Button fx:id="cancelButton" layoutX="265.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleCancelButton" styleClass="form-button" text="Cancel" />
