@@ -40,9 +40,10 @@ public class DepartmentFormController implements Initializable {
     private DepartmentDbServiceManager departmentDbServiceManager = DepartmentDbServiceManager.getServiceManager();
     private InsertDepartmentService insertDepartmentService;
     private UpdateDepartmentService updateDepartmentService;
+    private CheckForDuplicateDepartmentService checkForDuplicateDepartmentService;
     private Department department;
     private Stage currentStage;
-    
+
     /**
      * Initializes the controller class.
      */
@@ -57,17 +58,22 @@ public class DepartmentFormController implements Initializable {
     private void initializeServices() {
         insertDepartmentService = departmentDbServiceManager.new InsertDepartmentService();
         updateDepartmentService = departmentDbServiceManager.new UpdateDepartmentService();
+        checkForDuplicateDepartmentService = departmentDbServiceManager.new CheckForDuplicateDepartmentService();
         
         insertDepartmentService.setOnSucceeded(insertDepartmentSuccess);
         insertDepartmentService.setOnFailed(insertDepartmentFailure);
         
         updateDepartmentService.setOnSucceeded(updateDepartmentSuccess);
-        updateDepartmentService.setOnFailed(insertDepartmentFailure);
+        updateDepartmentService.setOnFailed(updateDepartmentFailure);
+        
+        checkForDuplicateDepartmentService.setOnSucceeded(checkForDuplicateDepartmentSuccess);
+        checkForDuplicateDepartmentService.setOnFailed(checkForDuplicateDepartmentFailure);
     }
     
     private void establishBindings() {
         BooleanBinding servicesRunning = insertDepartmentService.runningProperty()
-                                     .or(updateDepartmentService.runningProperty());
+                                     .or(updateDepartmentService.runningProperty())
+                                     .or(checkForDuplicateDepartmentService.runningProperty());
         progressIndicator.visibleProperty().bind(servicesRunning);
     }
     
@@ -90,7 +96,7 @@ public class DepartmentFormController implements Initializable {
     private void buildDepartment() {
         department.setName(nameTextField.getText());
         if (formMode.equals(FormMode.INSERT)) {
-            runInsertDepartmentService();
+            runCheckForDuplicateDepartmentService();
         } else {
             runUpdateDepartmentService();
         }
@@ -110,6 +116,14 @@ public class DepartmentFormController implements Initializable {
             updateDepartmentService.reset();
             updateDepartmentService.setDepartment(department);
             updateDepartmentService.start();
+        }
+    }
+    
+    private void runCheckForDuplicateDepartmentService() {
+        if (!checkForDuplicateDepartmentService.isRunning()) {
+            checkForDuplicateDepartmentService.reset();
+            checkForDuplicateDepartmentService.setName(department.getName());
+            checkForDuplicateDepartmentService.start();
         }
     }
     
@@ -145,6 +159,22 @@ public class DepartmentFormController implements Initializable {
         systemMessageLabel.getStyleClass().add("system-message-label-error");
     };
     
+    private EventHandler<WorkerStateEvent> checkForDuplicateDepartmentSuccess = (event) -> {
+        if (checkForDuplicateDepartmentService.getValue()) {
+            systemMessageLabel.setText("Department already exists");
+            systemMessageLabel.getStyleClass().removeAll("system-message-label");
+            systemMessageLabel.getStyleClass().add("system-message-label-error");
+        } else {
+            runInsertDepartmentService();
+        }
+    };
+    
+    private EventHandler<WorkerStateEvent> checkForDuplicateDepartmentFailure = (event) -> {
+        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.getStyleClass().removeAll("system-message-label");
+        systemMessageLabel.getStyleClass().add("system-message-label-error");
+    };
+    
     @FXML
     private void handleCancelButton(ActionEvent event) {
         // TODO warning
@@ -163,6 +193,10 @@ public class DepartmentFormController implements Initializable {
         formMode = FormMode.UPDATE;
     }
     
+    public FormResult getFormResult() {
+        return formResult;
+    }
+    
     private boolean validateName() {
         String input = nameTextField.getText();
         if (input.isEmpty()) {
@@ -170,8 +204,8 @@ public class DepartmentFormController implements Initializable {
             return false;
         }
         
-        if (input.length() > 50) {
-            nameErrorLabel.setText("Department name must be less than 50 characters");
+        if (input.length() > 25) {
+            nameErrorLabel.setText("Department name must be less than 25 characters");
             return false;
         }
         

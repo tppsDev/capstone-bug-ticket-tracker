@@ -67,7 +67,7 @@ public class DepartmentDbServiceManager {
         
     }
     
-    // Read services - get all, get by id
+    // Read services - get all, get by id, check for duplicate
     public class GetAllDepartmentsService extends Service<ObservableList<Department>> {
         public  GetAllDepartmentsService() {
             super();
@@ -105,6 +105,31 @@ public class DepartmentDbServiceManager {
                 @Override
                 protected Department call() throws Exception {
                     return departmentDaoImpl.getById(id);
+                }
+                
+            };
+        }
+        
+    }
+    
+    public class CheckForDuplicateDepartmentService extends Service<Boolean> {
+        private String name;
+        
+        public CheckForDuplicateDepartmentService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            return new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return departmentDaoImpl.checkForDuplicate(name);
                 }
                 
             };
