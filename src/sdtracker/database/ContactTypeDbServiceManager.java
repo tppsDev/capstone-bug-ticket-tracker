@@ -67,7 +67,7 @@ public class ContactTypeDbServiceManager {
         
     }
     
-    // Read services - get all, get by id
+    // Read services - get all, get by id, check for duplicate
     public class GetAllContactTypesService extends Service<ObservableList<ContactType>> {
         public  GetAllContactTypesService() {
             super();
@@ -105,6 +105,31 @@ public class ContactTypeDbServiceManager {
                 @Override
                 protected ContactType call() throws Exception {
                     return contactTypeDaoImpl.getById(id);
+                }
+                
+            };
+        }
+        
+    }
+    
+    public class CheckForDuplicateContactTypeService extends Service<Boolean> {
+        private String name;
+        
+        public CheckForDuplicateContactTypeService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            return new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return contactTypeDaoImpl.checkForDuplicate(name);
                 }
                 
             };

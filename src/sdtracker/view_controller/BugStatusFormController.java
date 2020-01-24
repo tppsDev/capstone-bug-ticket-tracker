@@ -18,9 +18,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sdtracker.database.BugStatusDbServiceManager;
-import sdtracker.database.BugStatusDbServiceManager.CheckForDuplicateBugStatusService;
-import sdtracker.database.BugStatusDbServiceManager.InsertBugStatusService;
-import sdtracker.database.BugStatusDbServiceManager.UpdateBugStatusService;
+import sdtracker.database.BugStatusDbServiceManager.*;
 import sdtracker.model.BugStatus;
 
 /**
