@@ -146,4 +146,26 @@ public class AssetTypeDaoImpl implements CrudDao<AssetType>{
         }
     }
     
+    public boolean checkForDuplicate(String name) throws DaoException {
+        int recCount = 0;
+        String query = "SELECT COUNT(*) AS recCount "
+                        +"FROM asset_type AS atype "
+                        +"WHERE atype.name = ? ";
+        
+        try (Connection conn = DatabaseMgr.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);) {
+            stmt.setString(1, name);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                recCount = result.getInt("recCount");
+                result.close();
+            } else {
+                result.close();
+            }
+        } catch (SQLException ex) {
+            throw new DaoException("Database error: Try again later.");
+        }
+        
+        return recCount > 0;
+    }
 }

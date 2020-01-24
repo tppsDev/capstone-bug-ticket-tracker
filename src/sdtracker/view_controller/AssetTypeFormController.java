@@ -18,8 +18,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import sdtracker.database.AssetTypeDbServiceManager;
-import sdtracker.database.AssetTypeDbServiceManager.InsertAssetTypeService;
-import sdtracker.database.AssetTypeDbServiceManager.UpdateAssetTypeService;
+import sdtracker.database.AssetTypeDbServiceManager.*;
+
 import sdtracker.model.AssetType;
 
 /**
@@ -41,6 +41,7 @@ public class AssetTypeFormController implements Initializable {
     private AssetTypeDbServiceManager assetTypeDbServiceManager = AssetTypeDbServiceManager.getServiceManager();
     private InsertAssetTypeService insertAssetTypeService;
     private UpdateAssetTypeService updateAssetTypeService;
+    private CheckForDuplicateAssetTypeService checkForDuplicateAssetTypeService;
     private AssetType assetType;
     private Stage currentStage;
 
@@ -58,17 +59,22 @@ public class AssetTypeFormController implements Initializable {
     private void initializeServices() {
         insertAssetTypeService = assetTypeDbServiceManager.new InsertAssetTypeService();
         updateAssetTypeService = assetTypeDbServiceManager.new UpdateAssetTypeService();
+        checkForDuplicateAssetTypeService = assetTypeDbServiceManager.new CheckForDuplicateAssetTypeService();
         
         insertAssetTypeService.setOnSucceeded(insertAssetTypeSuccess);
         insertAssetTypeService.setOnFailed(insertAssetTypeFailure);
         
         updateAssetTypeService.setOnSucceeded(updateAssetTypeSuccess);
-        updateAssetTypeService.setOnFailed(insertAssetTypeFailure);
+        updateAssetTypeService.setOnFailed(updateAssetTypeFailure);
+        
+        checkForDuplicateAssetTypeService.setOnSucceeded(checkForDuplicateAssetTypeSuccess);
+        checkForDuplicateAssetTypeService.setOnFailed(checkForDuplicateAssetTypeFailure);
     }
     
     private void establishBindings() {
         BooleanBinding servicesRunning = insertAssetTypeService.runningProperty()
-                                     .or(updateAssetTypeService.runningProperty());
+                                     .or(updateAssetTypeService.runningProperty())
+                                     .or(checkForDuplicateAssetTypeService.runningProperty());
         progressIndicator.visibleProperty().bind(servicesRunning);
     }
     
@@ -91,7 +97,7 @@ public class AssetTypeFormController implements Initializable {
     private void buildAssetType() {
         assetType.setName(nameTextField.getText());
         if (formMode.equals(FormMode.INSERT)) {
-            runInsertAssetTypeService();
+            runCheckForDuplicateAssetTypeService();
         } else {
             runUpdateAssetTypeService();
         }
@@ -111,6 +117,14 @@ public class AssetTypeFormController implements Initializable {
             updateAssetTypeService.reset();
             updateAssetTypeService.setAssetType(assetType);
             updateAssetTypeService.start();
+        }
+    }
+    
+    private void runCheckForDuplicateAssetTypeService() {
+        if (!checkForDuplicateAssetTypeService.isRunning()) {
+            checkForDuplicateAssetTypeService.reset();
+            checkForDuplicateAssetTypeService.setAssetTypeName(assetType.getName());
+            checkForDuplicateAssetTypeService.start();
         }
     }
     
@@ -146,6 +160,22 @@ public class AssetTypeFormController implements Initializable {
         systemMessageLabel.getStyleClass().add("system-message-label-error");
     };
     
+    private EventHandler<WorkerStateEvent> checkForDuplicateAssetTypeSuccess = (event) -> {
+        if (checkForDuplicateAssetTypeService.getValue()) {
+            systemMessageLabel.setText("Asset Type already exists");
+            systemMessageLabel.getStyleClass().removeAll("system-message-label");
+            systemMessageLabel.getStyleClass().add("system-message-label-error");
+        } else {
+            runInsertAssetTypeService();
+        }
+    };
+    
+    private EventHandler<WorkerStateEvent> checkForDuplicateAssetTypeFailure = (event) -> {
+        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.getStyleClass().removeAll("system-message-label");
+        systemMessageLabel.getStyleClass().add("system-message-label-error");
+    };
+    
     @FXML
     private void handleCancelButton(ActionEvent event) {
         // TODO warning
@@ -162,6 +192,10 @@ public class AssetTypeFormController implements Initializable {
     public void setAssetType(AssetType assetType) {
         this.assetType = assetType;
         formMode = FormMode.UPDATE;
+    }
+    
+    public FormResult getFormResult() {
+        return formResult;
     }
     
     private boolean validateName() {

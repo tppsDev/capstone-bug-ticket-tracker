@@ -68,7 +68,7 @@ public class AssetTypeDbServiceManager {
         
     }
     
-    // Read services - get all, get by id
+    // Read services - get all, get by id, check for duplicate
     public class GetAllAssetTypesService extends Service<ObservableList<AssetType>> {
         public  GetAllAssetTypesService() {
             super();
@@ -111,6 +111,30 @@ public class AssetTypeDbServiceManager {
             };
         }
         
+    }
+    
+    public class CheckForDuplicateAssetTypeService extends Service<Boolean> {
+        private String assetTypeName;
+        
+        public CheckForDuplicateAssetTypeService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        public void setAssetTypeName(String assetTypeName) {
+            this.assetTypeName = assetTypeName;
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            return new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return assetTypeDaoImpl.checkForDuplicate(assetTypeName);
+                }
+                
+            };
+        }
     }
     
     // Update service
