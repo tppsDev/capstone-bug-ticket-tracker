@@ -27,7 +27,7 @@ import sdtracker.model.BugPriority;
  * @author Tim Smith
  */
 public class BugPriorityFormController implements Initializable {
-@FXML private Label titleLabel;
+    @FXML private Label titleLabel;
     @FXML private ProgressBar progressIndicator;
     @FXML private TextField nameTextField;
     @FXML private Label nameErrorLabel;
