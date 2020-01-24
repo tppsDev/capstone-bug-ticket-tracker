@@ -67,7 +67,7 @@ public class MfgDbServiceManager {
         
     }
     
-    // Read services - get all, get by id
+    // Read services - get all, get by id, check for duplicate
     public class GetAllMfgsService extends Service<ObservableList<Mfg>> {
         public  GetAllMfgsService() {
             super();
@@ -105,6 +105,31 @@ public class MfgDbServiceManager {
                 @Override
                 protected Mfg call() throws Exception {
                     return mfgDaoImpl.getById(id);
+                }
+                
+            };
+        }
+        
+    }
+    
+    public class CheckForDuplicateMfgService extends Service<Boolean> {
+        private String name;
+        
+        public CheckForDuplicateMfgService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            return new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return mfgDaoImpl.checkForDuplicate(name);
                 }
                 
             };
