@@ -67,7 +67,7 @@ public class TicketPriorityDbServiceManager {
         
     }
     
-    // Read services - get all, get by id
+    // Read services - get all, get by id, check for duplicate
     public class GetAllTicketPrioritysService extends Service<ObservableList<TicketPriority>> {
         public  GetAllTicketPrioritysService() {
             super();
@@ -105,6 +105,31 @@ public class TicketPriorityDbServiceManager {
                 @Override
                 protected TicketPriority call() throws Exception {
                     return ticketPriorityDaoImpl.getById(id);
+                }
+                
+            };
+        }
+        
+    }
+    
+    public class CheckForDuplicateTicketPriorityService extends Service<Boolean> {
+        private String name;
+        
+        public CheckForDuplicateTicketPriorityService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            return new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return ticketPriorityDaoImpl.checkForDuplicate(name);
                 }
                 
             };
