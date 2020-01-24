@@ -67,7 +67,7 @@ public class ProductDbServiceManager {
         
     }
     
-    // Read services - get all, get by id
+    // Read services - get all, get by id, check for duplicate
     public class GetAllProductsService extends Service<ObservableList<Product>> {
         public  GetAllProductsService() {
             super();
@@ -105,6 +105,36 @@ public class ProductDbServiceManager {
                 @Override
                 protected Product call() throws Exception {
                     return productDaoImpl.getById(id);
+                }
+                
+            };
+        }
+        
+    }
+    
+    public class CheckForDuplicateProductService extends Service<Boolean> {
+        private String name;
+        private String version;
+        
+        public CheckForDuplicateProductService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        public void setName(String name) {
+            this.name = name;
+        }
+        
+        public void setVersion(String version) {
+            this.version = version;
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            return new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return productDaoImpl.checkForDuplicate(name, version);
                 }
                 
             };

@@ -103,6 +103,31 @@ public class ProductDaoImpl implements CrudDao<Product> {
         
         return product;
     }
+    
+    public boolean checkForDuplicate(String name, String version) throws DaoException, Exception {
+        int recCount = 0;
+        String query = "SELECT COUNT(*) AS recCount "
+                        +"FROM product AS prod "
+                        +"WHERE prod.name = ? "
+                        + "AND prod.version = ? ";
+        
+        try (Connection conn = DatabaseMgr.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);) {
+            stmt.setString(1, name);
+            stmt.setString(2, version);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                recCount = result.getInt("recCount");
+                result.close();
+            } else {
+                result.close();
+            }
+        } catch (SQLException ex) {
+            throw new DaoException("Database error: Try again later.");
+        }
+        
+        return recCount > 0;
+    }
 
     @Override
     public void insert(Product product) throws DaoException, Exception {
