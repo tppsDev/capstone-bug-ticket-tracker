@@ -123,7 +123,7 @@
                   </GridPane>
                   <Button fx:id="cancelButton" layoutX="382.0" layoutY="877.0" mnemonicParsing="false" onAction="#handleCancelButton" styleClass="form-button" text="Cancel" />
                   <Button fx:id="addSaveButton" layoutX="484.0" layoutY="877.0" mnemonicParsing="false" onAction="#handleAddSaveButton" prefHeight="35.0" prefWidth="86.0" styleClass="form-button" text="Add" />
-                  <Label fx:id="generalErrorLabel" layoutY="876.0" prefHeight="30.0" prefWidth="370.0" styleClass="system-message-label" />
+                  <Label fx:id="systemMessageLabel" layoutY="876.0" prefHeight="30.0" prefWidth="370.0" styleClass="system-message-label" />
                </children>
             </AnchorPane>
          </content>

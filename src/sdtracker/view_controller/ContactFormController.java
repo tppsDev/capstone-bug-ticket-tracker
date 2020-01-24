@@ -75,7 +75,7 @@ public class ContactFormController implements Initializable {
     @FXML private Label zipcodeErrorLabel;
     @FXML private Label jobTitleErrorLabel;
     @FXML private Label phoneErrorLabel;
-    @FXML private Label generalErrorLabel;
+    @FXML private Label systemMessageLabel;
     
     // Buttons
     @FXML private Button cancelButton;
@@ -279,9 +279,9 @@ public class ContactFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllContactsFailure = (event) -> {
-        generalErrorLabel.setText("System error, please try your request again.");
-        generalErrorLabel.getStyleClass().removeAll("system-message-label");
-        generalErrorLabel.getStyleClass().add("system-message-label-error");
+        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.getStyleClass().removeAll("system-message-label");
+        systemMessageLabel.getStyleClass().add("system-message-label-error");
     };
     
     private EventHandler<WorkerStateEvent> insertContactSuccess = (event) -> {
@@ -294,9 +294,9 @@ public class ContactFormController implements Initializable {
     
     private EventHandler<WorkerStateEvent> insertContactFailure = (event) -> {
         System.out.println(insertContactService.getException());
-        generalErrorLabel.setText("System error, please try your request again.");
-        generalErrorLabel.getStyleClass().removeAll("system-message-label");
-        generalErrorLabel.getStyleClass().add("system-message-label-error");
+        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.getStyleClass().removeAll("system-message-label");
+        systemMessageLabel.getStyleClass().add("system-message-label-error");
     };
     
     private EventHandler<WorkerStateEvent> updateContactSuccess = (event) -> {
@@ -308,9 +308,9 @@ public class ContactFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> updateContactFailure = (event) -> {
-        generalErrorLabel.setText("System error, please try your request again.");
-        generalErrorLabel.getStyleClass().removeAll("system-message-label");
-        generalErrorLabel.getStyleClass().add("system-message-label-error");
+        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.getStyleClass().removeAll("system-message-label");
+        systemMessageLabel.getStyleClass().add("system-message-label-error");
     };
     
     // Button event handlers
@@ -328,9 +328,9 @@ public class ContactFormController implements Initializable {
                 updateContact();
             }
         } else {
-            generalErrorLabel.setText("Please check all fields are filled out correctly");
-            generalErrorLabel.getStyleClass().removeAll("system-message-label");
-            generalErrorLabel.getStyleClass().add("system-message-label-error");
+            systemMessageLabel.setText("Please check all fields are filled out correctly");
+            systemMessageLabel.getStyleClass().removeAll("system-message-label");
+            systemMessageLabel.getStyleClass().add("system-message-label-error");
         }
     }
     

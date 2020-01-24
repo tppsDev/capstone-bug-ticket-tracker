@@ -33,6 +33,7 @@ public class DepartmentFormController implements Initializable {
     @FXML private Label nameErrorLabel;
     @FXML private Button cancelButton;
     @FXML private Button addSaveButton;
+    @FXML private Label systemMessageLabel;
     
     private FormMode formMode = FormMode.INSERT;
     private FormResult formResult;
@@ -123,7 +124,9 @@ public class DepartmentFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> insertDepartmentFailure = (event) -> {
-        System.out.println(insertDepartmentService.getException());
+        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.getStyleClass().removeAll("system-message-label");
+        systemMessageLabel.getStyleClass().add("system-message-label-error");
 
     };
     
@@ -137,7 +140,9 @@ public class DepartmentFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> updateDepartmentFailure = (event) -> {
-
+        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.getStyleClass().removeAll("system-message-label");
+        systemMessageLabel.getStyleClass().add("system-message-label-error");
     };
     
     @FXML

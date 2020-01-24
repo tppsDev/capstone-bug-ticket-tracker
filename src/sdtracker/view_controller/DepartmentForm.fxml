@@ -23,5 +23,6 @@
       <Label fx:id="nameErrorLabel" layoutX="138.0" layoutY="117.0" prefHeight="15.0" prefWidth="313.0" styleClass="form-error-label" />
       <Button fx:id="cancelButton" layoutX="265.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleCancelButton" styleClass="form-button" text="Cancel" />
       <Button fx:id="addSaveButton" layoutX="367.0" layoutY="200.0" mnemonicParsing="false" onAction="#handleAddSaveButton" prefHeight="35.0" prefWidth="84.0" styleClass="form-button" text="Add" />
+      <Label fx:id="systemMessageLabel" alignment="TOP_LEFT" layoutX="10.0" layoutY="200.0" prefHeight="57.0" prefWidth="241.0" styleClass="system-message-label" />
    </children>
 </AnchorPane>
