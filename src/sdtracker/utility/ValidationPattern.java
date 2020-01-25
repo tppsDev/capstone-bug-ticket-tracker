@@ -29,17 +29,17 @@ public class ValidationPattern {
     /**
      * This pattern matches AB12345678
      */
-    public static final String ASSET_NUMBER = "^[A-Z]{2}\\d{8}$";
+    public static final String ASSET_NUMBER = "^[A-Z]{2}\\d{12}$";
     
     /**
      * This pattern matches A123456789
      */
-    public static final String TICKET_NUMBER = "^[A-Z]{1}\\d{9}$";
+    public static final String TICKET_NUMBER = "^[A-Z]{1}\\d{12}$";
     
     /**
      * This pattern matches ABC1234567
      */
-    public static final String BUG_NUMBER = "^[A-Z]{3}\\d{7}$";
+    public static final String BUG_NUMBER = "^[A-Z]{3}\\d{12}$";
     
     /**
      * This pattern matches 8-20 characters (a-z, 1-9 plus . and _). Cannot begin or end with . or _

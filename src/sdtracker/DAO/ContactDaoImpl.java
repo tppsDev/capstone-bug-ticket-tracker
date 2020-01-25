@@ -76,18 +76,18 @@ public class ContactDaoImpl implements CrudDao<Contact> {
                              +"cType.id, "
                              +"cType.name "
                       +"FROM contact AS cont "
-                      +"INNER JOIN contact_type AS cType ON c.contact_type_id = cType.id";
+                      +"INNER JOIN contact_type AS cType ON cont.contact_type_id = cType.id";
         try (Connection conn = DatabaseMgr.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);
                 ResultSet result = stmt.executeQuery();) {
             while (result.next()) {
                 int id = result.getInt("cont.id");
-                String firstName = result.getString("cont.last_name");
-                String lastName = result.getString("cont.");
+                String firstName = result.getString("cont.first_name");
+                String lastName = result.getString("cont.last_name");
                 String midInitial = result.getString("cont.mid_initial");
                 String email = result.getString("cont.email");
                 String phone = result.getString("cont.phone");
-                String phoneType = result.getString("cont.phoneType");
+                String phoneType = result.getString("cont.phone_type");
                 String address = result.getString("cont.address");
                 String address2 = result.getString("cont.address2");
                 String city = result.getString("cont.city");
@@ -105,6 +105,7 @@ public class ContactDaoImpl implements CrudDao<Contact> {
                         address, address2, city, state, zipcode, company, jobTitle, courtesyTitle, contactType));
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
         
@@ -133,7 +134,7 @@ public class ContactDaoImpl implements CrudDao<Contact> {
                              +"cType.id, "
                              +"cType.name "
                       +"FROM contact AS cont "
-                      +"INNER JOIN contact_type AS cType ON c.contact_type_id = cType.id"
+                      +"INNER JOIN contact_type AS cType ON cont.contact_type_id = cType.id"
                       +"WHERE cont.id = ?";
         
         try (Connection conn = DatabaseMgr.getConnection();
@@ -142,12 +143,12 @@ public class ContactDaoImpl implements CrudDao<Contact> {
             ResultSet result = stmt.executeQuery();
             if (result.next()) {
                 int resultId = result.getInt("cont.id");
-                String firstName = result.getString("cont.last_name");
-                String lastName = result.getString("cont.");
+                String firstName = result.getString("cont.first_name");
+                String lastName = result.getString("cont.last_name");
                 String midInitial = result.getString("cont.mid_initial");
                 String email = result.getString("cont.email");
                 String phone = result.getString("cont.phone");
-                String phoneType = result.getString("cont.phoneType");
+                String phoneType = result.getString("cont.phone_type");
                 String address = result.getString("cont.address");
                 String address2 = result.getString("cont.address2");
                 String city = result.getString("cont.city");

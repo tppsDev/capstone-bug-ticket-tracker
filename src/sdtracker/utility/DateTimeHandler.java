@@ -14,7 +14,12 @@ public class DateTimeHandler {
     /**
      * Date & time DateTimeFormatter pattern of "M/d/YYYY h:mm:ssa"
      */
-    public static final DateTimeFormatter DATE_TIME_STAMP = DateTimeFormatter.ofPattern("M/d/YYYY h:mm:ssa");
+    public static final DateTimeFormatter DATE_TIME = DateTimeFormatter.ofPattern("M/d/YYYY h:mm:ssa");
+    
+    /**
+     * Date & time DateTimeFormatter pattern of "YYddMMkkmmss"
+     */
+    public static final DateTimeFormatter DATE_TIME_STAMP = DateTimeFormatter.ofPattern("YYddMMkkmmss");
 
     /**
      * Date & time DateTimeFormatter pattern of "M/d/YYYY h:mma"

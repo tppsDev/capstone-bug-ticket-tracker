@@ -209,4 +209,9 @@ public class Contact {
         this.contactType = contactType;
     }
     
+    @Override
+    public String toString() {
+        return lastName + ", " + firstName;
+    }
+    
 }
