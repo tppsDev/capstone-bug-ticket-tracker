@@ -387,7 +387,7 @@ public class AppUserFormController implements Initializable {
         // TODO create form result and close
         formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "AppUser for " 
                 + appUser.getDisplayName()
-                + "was successfully added.");
+                + " was successfully added.");
         Stage currentStage = (Stage) titleLabel.getScene().getWindow();
         currentStage.close();
     };
@@ -403,7 +403,7 @@ public class AppUserFormController implements Initializable {
         // TODO create form result and close
         formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "AppUser for " 
                 + appUser.getDisplayName()
-                + "was successfully changed.");
+                + " was successfully changed.");
         Stage currentStage = (Stage) titleLabel.getScene().getWindow();
         currentStage.close();
     };
