@@ -20,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import sdtracker.database.AppUserDbServiceManager;
 import sdtracker.database.AppUserDbServiceManager.GetAllAppUsersService;
 import sdtracker.database.BugDbServiceManager;
@@ -70,6 +71,8 @@ public class BugFormController implements Initializable {
     private FormMode formMode = FormMode.INSERT;
     private FormResult formResult;
     
+    Stage currentStage;
+    
     private BugDbServiceManager bugDbServiceManager = BugDbServiceManager.getServiceManager();
     private InsertBugService insertBugService;
     private UpdateBugService updateBugService;
@@ -104,12 +107,17 @@ public class BugFormController implements Initializable {
         initializeInputElements();
         applyFormMode();
         startEventHandlers();
-                
     }
     
     private void initializeServices() {
-        getAllContactsService = contactDbServiceManager.new GetAllContactsService();
+        insertBugService = bugDbServiceManager.new InsertBugService();
+        updateBugService = bugDbServiceManager.new UpdateBugService();
         
+        getAllBugStatusesService = bugStatusDbServiceManager.new GetAllBugStatusesService();
+        getAllBugPrioritiesService = bugPriorityDbServiceManager.new GetAllBugPrioritiesService();
+        getAllContactsService = contactDbServiceManager.new GetAllContactsService();
+        getAllProductsService = productDbServiceManager.new GetAllProductsService();
+        getAllAppUsersService = appUserDbServiceManager.new GetAllAppUsersService();
         
         insertBugService.setOnSucceeded(insertBugSuccess);
         insertBugService.setOnFailed(insertBugFailure);
@@ -146,7 +154,7 @@ public class BugFormController implements Initializable {
     }
     
     private void initializeInputElements() {
-        
+        currentStage = (Stage) titleLabel.getScene().getWindow();
     }
     
     private void applyFormMode() {
@@ -155,6 +163,11 @@ public class BugFormController implements Initializable {
     
     private void startEventHandlers() {
         
+    }
+    
+    private void setUpdateMode(Bug bug) {
+        formMode = FormMode.UPDATE;
+        this.bug = bug;
     }
     
     // Service run handlers
@@ -211,7 +224,10 @@ public class BugFormController implements Initializable {
 
     // Service status event handlers
     private EventHandler<WorkerStateEvent> insertBugSuccess = (event) -> {
-        // TODO
+        formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Bug listing for " 
+                + bug.getBugNumber()
+                + " was successfully added.");
+        currentStage.close();
     };
     
     private EventHandler<WorkerStateEvent> insertBugFailure = (event) -> {
@@ -219,7 +235,10 @@ public class BugFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> updateBugSuccess = (event) -> {
-        // TODO
+        formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Bug listing for " 
+                + bug.getBugNumber()
+                + " was successfully updated.");
+        currentStage.close();
     };
 
     private EventHandler<WorkerStateEvent> updateBugFailure = (event) -> {
