@@ -67,6 +67,8 @@ public class BugFormController implements Initializable {
     @FXML private Button addSaveButton;
     
     private Bug bug;
+    private FormMode formMode = FormMode.INSERT;
+    private FormResult formResult;
     
     private BugDbServiceManager bugDbServiceManager = BugDbServiceManager.getServiceManager();
     private InsertBugService insertBugService;
@@ -102,8 +104,7 @@ public class BugFormController implements Initializable {
         initializeInputElements();
         applyFormMode();
         startEventHandlers();
-        runGetAllContactsService();
-        
+                
     }
     
     private void initializeServices() {
@@ -210,35 +211,35 @@ public class BugFormController implements Initializable {
 
     // Service status event handlers
     private EventHandler<WorkerStateEvent> insertBugSuccess = (event) -> {
-        
+        // TODO
     };
     
     private EventHandler<WorkerStateEvent> insertBugFailure = (event) -> {
-        
+        displaySystemMessage("System error on insert, please try your request again.", true);
     };
     
     private EventHandler<WorkerStateEvent> updateBugSuccess = (event) -> {
-        
+        // TODO
     };
 
     private EventHandler<WorkerStateEvent> updateBugFailure = (event) -> {
-        
+        displaySystemMessage("System error on update, please try your request again.", true);
     };
     
     private EventHandler<WorkerStateEvent> getAllBugStatusesSuccess = (event) -> {
-        
+        allBugStatusList = getAllBugStatusesService.getValue();
     };
 
     private EventHandler<WorkerStateEvent> getAllBugStatusesFailure = (event) -> {
-        
+        displaySystemMessage("System error loading bug statuses, please try your request again.", true);
     };
     
     private EventHandler<WorkerStateEvent> getAllBugPrioritiesSuccess = (event) -> {
-        
+        allBugPriorityList = getAllBugPrioritiesService.getValue();
     };
     
     private EventHandler<WorkerStateEvent> getAllBugPrioritiesFailure = (event) -> {
-        
+        displaySystemMessage("System error loading priorites, please try your request again.", true);
     };
 
     private EventHandler<WorkerStateEvent> getAllContactsSuccess = (event) -> {
@@ -246,26 +247,37 @@ public class BugFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllContactsFailure = (event) -> {
-        systemMessageLabel.setText("System error, please try your request again.");
-        systemMessageLabel.getStyleClass().removeAll("system-message-label");
-        systemMessageLabel.getStyleClass().add("system-message-label-error");
+        displaySystemMessage("System error loading contacts, please try your request again.", true);
+        
     };
 
     private EventHandler<WorkerStateEvent> getAllProductsSuccess = (event) -> {
-        
+        allProductList = getAllProductsService.getValue();
     };
 
     private EventHandler<WorkerStateEvent> getAllProductsFailure = (event) -> {
-        
+        displaySystemMessage("System error loading products, please try your request again.", true);
     };
     
     private EventHandler<WorkerStateEvent> getAllAppUsersSuccess = (event) -> {
-        
+        allAppUserList = getAllAppUsersService.getValue();
     };
     
     private EventHandler<WorkerStateEvent> getAllAppUsersFailure = (event) -> {
-        
+        displaySystemMessage("System error loading users, please try your request again.", true);
     };
+    
+    private void displaySystemMessage(String message, boolean errorMessage) {
+        if (errorMessage) {
+            systemMessageLabel.getStyleClass().removeAll("system-message-label");
+            systemMessageLabel.getStyleClass().add("system-message-label-error");
+        } else {
+            systemMessageLabel.getStyleClass().removeAll("system-message-label-error");
+            systemMessageLabel.getStyleClass().add("system-message-label");
+        }
+        
+        systemMessageLabel.setText(message);
+    }
     
     @FXML
     private void handleAddSaveButton(ActionEvent event) {

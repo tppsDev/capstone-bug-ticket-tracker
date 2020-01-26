@@ -68,8 +68,8 @@ public class BugPriorityDbServiceManager {
     }
     
     // Read services - get all, get by id, check for duplicates
-    public class GetAllBugPrioritysService extends Service<ObservableList<BugPriority>> {
-        public  GetAllBugPrioritysService() {
+    public class GetAllBugPrioritiesService extends Service<ObservableList<BugPriority>> {
+        public  GetAllBugPrioritiesService() {
             super();
             this.setExecutor(executor);
         }
