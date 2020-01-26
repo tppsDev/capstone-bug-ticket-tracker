@@ -300,12 +300,13 @@ public class BugFormController implements Initializable {
     
     @FXML
     private void handleAddSaveButton(ActionEvent event) {
-
+        
     }
 
     @FXML
     private void handleCancelButton(ActionEvent event) {
-
+        formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Action cancelled by user");
+        currentStage.close();
     }
     
 }
