@@ -113,15 +113,15 @@ public class BugDbServiceManager {
     }
     
     public class CheckForDuplicateBugService extends Service<Boolean> {
-        private String bugName;
+        private String bugNumber;
         
         public CheckForDuplicateBugService() {
             super();
             this.setExecutor(executor);
         }
         
-        public void setBugName(String bugName) {
-            this.bugName = bugName;
+        public void setBugNumber(String bugNumber) {
+            this.bugNumber = bugNumber;
         }
 
         @Override
@@ -129,7 +129,7 @@ public class BugDbServiceManager {
             return new Task<Boolean>() {
                 @Override
                 protected Boolean call() throws Exception {
-                    return bugDaoImpl.checkForDuplicate(bugName);
+                    return bugDaoImpl.checkForDuplicate(bugNumber);
                 }
                 
             };

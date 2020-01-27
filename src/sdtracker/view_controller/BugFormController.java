@@ -85,6 +85,7 @@ public class BugFormController implements Initializable {
     private BugDbServiceManager bugDbServiceManager = BugDbServiceManager.getServiceManager();
     private InsertBugService insertBugService;
     private UpdateBugService updateBugService;
+    private CheckForDuplicateBugService checkForDuplicateBugService;
     
     private BugStatusDbServiceManager bugStatusDbServiceManager = BugStatusDbServiceManager.getServiceManager();
     private GetAllBugStatusesService getAllBugStatusesService;
@@ -121,6 +122,7 @@ public class BugFormController implements Initializable {
     private void initializeServices() {
         insertBugService = bugDbServiceManager.new InsertBugService();
         updateBugService = bugDbServiceManager.new UpdateBugService();
+        checkForDuplicateBugService = bugDbServiceManager.new CheckForDuplicateBugService();
         
         getAllBugStatusesService = bugStatusDbServiceManager.new GetAllBugStatusesService();
         getAllBugPrioritiesService = bugPriorityDbServiceManager.new GetAllBugPrioritiesService();
@@ -133,6 +135,9 @@ public class BugFormController implements Initializable {
         
         updateBugService.setOnSucceeded(updateBugSuccess);
         updateBugService.setOnFailed(updateBugFailure);
+        
+        checkForDuplicateBugService.setOnSucceeded(checkForDuplicateBugSuccess);
+        checkForDuplicateBugService.setOnFailed(checkForDuplicateBugFailure);
 
         getAllBugStatusesService.setOnSucceeded(getAllBugStatusesSuccess);
         getAllBugStatusesService.setOnFailed(getAllBugStatusesFailure);
@@ -153,6 +158,7 @@ public class BugFormController implements Initializable {
     
     private void establishBindings() {
         BooleanBinding servicesRunning = insertBugService.runningProperty()
+                                     .or(checkForDuplicateBugService.runningProperty())
                                      .or(updateBugService.runningProperty())    
                                      .or(getAllBugStatusesService.runningProperty())    
                                      .or(getAllBugPrioritiesService.runningProperty())    
@@ -193,6 +199,13 @@ public class BugFormController implements Initializable {
             updateBugService.reset();
             updateBugService.setBug(bug);
             updateBugService.start();
+        }
+    }
+    
+    private void runCheckForDuplicateBugService() {
+        if (!checkForDuplicateBugService.isRunning()) {
+            checkForDuplicateBugService.reset();
+            checkForDuplicateBugService.setBugNumber(bug.getBugNumber());
         }
     }
     

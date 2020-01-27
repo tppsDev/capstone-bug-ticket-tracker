@@ -295,15 +295,15 @@ public class BugDaoImpl implements CrudDao<Bug> {
         return bug;
     }
     
-    public boolean checkForDuplicate(String bugName) throws DaoException, Exception {
+    public boolean checkForDuplicate(String bugNumber) throws DaoException, Exception {
         int recCount = 0;
         String query = "SELECT COUNT(*) AS recCount "
                       +"FROM bug AS b "
-                      +"WHERE b.bugName = ? ";
+                      +"WHERE b.bug_number = ? ";
         
         try (Connection conn = DatabaseMgr.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);) {
-            stmt.setString(1, bugName);
+            stmt.setString(1, bugNumber);
             ResultSet result = stmt.executeQuery();
             if (result.next()) {
                 recCount = result.getInt("recCount");
