@@ -9,7 +9,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="712.0" prefWidth="940.0" styleClass="white-background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.BugFormController">
+<AnchorPane id="AnchorPane" prefHeight="712.0" prefWidth="940.0" styleClass="white-background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.TicketFormController">
    <stylesheets>
       <URL value="@main.css" />
    </stylesheets>
@@ -38,8 +38,8 @@
       <TextField fx:id="titleTextField" layoutX="138.0" layoutY="427.0" prefHeight="29.0" prefWidth="678.0" styleClass="form-text-field" />
       <Label layoutX="16.0" layoutY="499.0" prefHeight="29.0" prefWidth="113.0" styleClass="form-label" text="Description:" />
       <TextArea fx:id="descriptionTextArea" layoutX="138.0" layoutY="499.0" prefHeight="139.0" prefWidth="678.0" styleClass="form-text-field" />
-      <Label fx:id="bugStatusErrorLabel" layoutX="136.0" layoutY="134.0" prefHeight="17.0" prefWidth="133.0" styleClass="form-error-label" />
-      <Label fx:id="bugPriorityErrorLabel" layoutX="409.0" layoutY="134.0" prefHeight="17.0" prefWidth="133.0" styleClass="form-error-label" />
+      <Label fx:id="ticketStatusErrorLabel" layoutX="136.0" layoutY="134.0" prefHeight="17.0" prefWidth="133.0" styleClass="form-error-label" />
+      <Label fx:id="ticketPriorityErrorLabel" layoutX="409.0" layoutY="134.0" prefHeight="17.0" prefWidth="133.0" styleClass="form-error-label" />
       <Label fx:id="contactErrorLabel" layoutX="136.0" layoutY="200.0" prefHeight="17.0" prefWidth="304.0" styleClass="form-error-label" />
       <Label fx:id="assignedToErrorLabel" layoutX="575.0" layoutY="200.0" prefHeight="17.0" prefWidth="304.0" styleClass="form-error-label" />
       <Label fx:id="productErrorLabel" layoutX="136.0" layoutY="269.0" prefHeight="17.0" prefWidth="515.0" styleClass="form-error-label" />

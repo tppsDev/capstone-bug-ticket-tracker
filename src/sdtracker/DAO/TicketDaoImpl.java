@@ -356,14 +356,14 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
         String query = "INSERT INTO ticket (title, "
                                           +"description,  "
                                           +"product_id, "
-                                          +"contact_id, "
+                                          +"requestor_app_user_id, "
                                           +"assigned_app_user_id, "
                                           +"created_timestamp, "
                                           +"created_by_app_user_id, "
                                           +"ticket_status_id, "
                                           +"ticket_number, "
                                           +"asset_id, "
-                                          +"ticket_priority_id "
+                                          +"ticket_priority_id) "
                       +"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
         try (Connection conn = DatabaseMgr.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);) {
@@ -392,6 +392,7 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
             stmt.setInt(11, ticket.getPriority().getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
     }

@@ -69,9 +69,9 @@ public class AssetDaoImpl implements CrudDao<Asset> {
                              +"m.id, "
                              +"m.name, "
                              +"u.id, "
-                             +"u.first_name "
-                             +"u.last_name "
-                             +"u.email "
+                             +"u.first_name, "
+                             +"u.last_name, "
+                             +"u.email, "
                              +"u.phone1 "
                       +"FROM asset AS a "
                       +"INNER JOIN asset_type AS aType ON a.asset_type_id = aType.id "
@@ -104,6 +104,7 @@ public class AssetDaoImpl implements CrudDao<Asset> {
                 assetList.add(new Asset(id, name, assetNumber, assetType, modelNumber, serialNumber, mfg, assignedToAppUser));
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
         
@@ -124,9 +125,9 @@ public class AssetDaoImpl implements CrudDao<Asset> {
                              +"m.id, "
                              +"m.name, "
                              +"u.id, "
-                             +"u.first_name "
-                             +"u.last_name "
-                             +"u.email "
+                             +"u.first_name, "
+                             +"u.last_name, "
+                             +"u.email, "
                              +"u.phone1 "
                       +"FROM asset AS a "
                       +"INNER JOIN asset_type AS aType ON a.asset_type_id = aType.id "

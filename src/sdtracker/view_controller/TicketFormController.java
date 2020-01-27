@@ -81,7 +81,6 @@ public class TicketFormController implements Initializable {
     private ChangeListener<Boolean> ticketStatusFocusListener ;
     private ChangeListener<Boolean> ticketPriorityFocusListener ;
     private ChangeListener<Boolean> contactFocusListener ;
-    private ChangeListener<Boolean> productFocusListener ;
     private ChangeListener<Boolean> titleFocusListener ;
     private ChangeListener<Boolean> descriptionFocusListener ;
     
@@ -225,7 +224,6 @@ public class TicketFormController implements Initializable {
         startTicketStatusFocusListener();
         startTicketPriorityFocusListener();
         startContactFocusListener();
-        startProductFocusListener();
         startTitleFocusListener();
         startDescriptionFocusListener();
     }
@@ -406,7 +404,8 @@ public class TicketFormController implements Initializable {
     };
 
     private EventHandler<WorkerStateEvent> getAllAssetsFailure = (event) -> {
-        displaySystemMessage("System error loading products, please try your request again.", true);
+        event.getSource().getException().printStackTrace();
+        displaySystemMessage("System error loading assets, please try your request again.", true);
         runGetAllProductsService();
     };
 
@@ -495,17 +494,6 @@ public class TicketFormController implements Initializable {
         contactComboBox.focusedProperty().addListener(contactFocusListener);
     }
     
-    private void startProductFocusListener() {
-        if (productFocusListener == null) {
-            productFocusListener = (observable, oldValue, newValue) -> {
-                if (!newValue) {
-                    validateProduct();
-                }
-            };
-        }
-        productComboBox.focusedProperty().addListener(productFocusListener);
-    }
-    
     private void startTitleFocusListener() {
         if (titleFocusListener == null) {
             titleFocusListener = (observable, oldValue, newValue) -> {
@@ -532,7 +520,6 @@ public class TicketFormController implements Initializable {
         return validateTicketStatus()
             && validateTicketPriority()
             && validateContact()
-            && validateProduct()
             && validateTitle()
             && validateDescription();
     }
@@ -564,16 +551,6 @@ public class TicketFormController implements Initializable {
         }
         
         contactErrorLabel.setText("");
-        return true;
-    }
-
-    private boolean validateProduct() {
-        if (productComboBox.getSelectionModel().isEmpty()) {
-            productErrorLabel.setText("Product is required");
-            return false;
-        }
-        
-        productErrorLabel.setText("");
         return true;
     }
 
