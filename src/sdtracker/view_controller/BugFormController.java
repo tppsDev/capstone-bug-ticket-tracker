@@ -180,6 +180,20 @@ public class BugFormController implements Initializable {
         
     }
     
+    private void insertBug() {
+        buildBug();
+        runCheckForDuplicateBugService();
+    }
+    
+    private void updateBug() {
+        buildBug();
+        runUpdateBugService();
+    }
+    
+    private void buildBug() {
+        
+    }
+    
     private void setUpdateMode(Bug bug) {
         formMode = FormMode.UPDATE;
         this.bug = bug;
@@ -206,6 +220,7 @@ public class BugFormController implements Initializable {
         if (!checkForDuplicateBugService.isRunning()) {
             checkForDuplicateBugService.reset();
             checkForDuplicateBugService.setBugNumber(bug.getBugNumber());
+            checkForDuplicateBugService.start();
         }
     }
     
@@ -245,6 +260,18 @@ public class BugFormController implements Initializable {
     }
 
     // Service status event handlers
+    private EventHandler<WorkerStateEvent> checkForDuplicateBugSuccess = (event) -> {
+        if (checkForDuplicateBugService.getValue()) {
+            displaySystemMessage("Bug number already exists, generating new bug number", true);
+        } else {
+            runInsertBugService();
+        }
+    };
+    
+    private EventHandler<WorkerStateEvent> checkForDuplicateBugFailure = (event) -> {
+        displaySystemMessage("System error, please try your request again.", true);
+    };
+    
     private EventHandler<WorkerStateEvent> insertBugSuccess = (event) -> {
         formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Bug listing for " 
                 + bug.getBugNumber()
@@ -322,7 +349,13 @@ public class BugFormController implements Initializable {
     
     @FXML
     private void handleAddSaveButton(ActionEvent event) {
-        
+        if (validateAll()) {
+            if (formMode.equals(FormMode.INSERT)) {
+                insertBug();
+            } else {
+                updateBug();
+            }
+        }
     }
 
     @FXML
