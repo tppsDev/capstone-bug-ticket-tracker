@@ -67,7 +67,7 @@ public class BugDbServiceManager {
         
     }
     
-    // Read services - get all, get by id
+    // Read services - get all, get by id, check for duplicate
     public class GetAllBugsService extends Service<ObservableList<Bug>> {
         public  GetAllBugsService() {
             super();
@@ -105,6 +105,31 @@ public class BugDbServiceManager {
                 @Override
                 protected Bug call() throws Exception {
                     return bugDaoImpl.getById(id);
+                }
+                
+            };
+        }
+        
+    }
+    
+    public class CheckForDuplicateBugService extends Service<Boolean> {
+        private String bugName;
+        
+        public CheckForDuplicateBugService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        public void setBugName(String bugName) {
+            this.bugName = bugName;
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            return new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return bugDaoImpl.checkForDuplicate(bugName);
                 }
                 
             };
