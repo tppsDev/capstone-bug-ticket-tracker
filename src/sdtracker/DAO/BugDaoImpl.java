@@ -323,14 +323,14 @@ public class BugDaoImpl implements CrudDao<Bug> {
     public void insert(Bug bug) throws DaoException {
         String query = "INSERT INTO bug (title, "
                                         +"description, "
-                                        +"product_id "
-                                        +"contact_id "
-                                        +"assigned_app_user_id "
+                                        +"product_id, "
+                                        +"contact_id, "
+                                        +"assigned_app_user_id, "
                                         +"created_timestamp, "
-                                        +"created_by_app_user_id "
-                                        +"bug_status_id "
+                                        +"created_by_user_id, "
+                                        +"bug_status_id, "
                                         +"bug_number, "
-                                        +"bug_priority_id "
+                                        +"bug_priority_id ) "
                       +"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
         try (Connection conn = DatabaseMgr.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);) {
@@ -350,6 +350,7 @@ public class BugDaoImpl implements CrudDao<Bug> {
             stmt.setInt(10, bug.getPriority().getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
     }
@@ -365,7 +366,7 @@ public class BugDaoImpl implements CrudDao<Bug> {
                                           +"last_updated_by_user_id = ?, "
                                           +"bug_status_id = ?, "
                                           +"bug_number = ?, "
-                                          +"bug_priority_id = ?, "
+                                          +"bug_priority_id = ? "
                       +"WHERE id = ? ";
         
         try (Connection conn = DatabaseMgr.getConnection();

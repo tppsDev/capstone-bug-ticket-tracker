@@ -215,7 +215,9 @@ public class BugFormController implements Initializable {
     private void insertBug() {
         buildBug();
         bug.setCreatedTimestamp(LocalDateTime.now());
-        bug.setAssignedAppUser(session.getSessionUser());
+        // TODO remove after test
+        bug.setCreatedByAppUser(assignedToComboBox.getItems().get(0));
+        //bug.setCreatedByAppUser(session.getSessionUser());
         runCheckForDuplicateBugService();
     }
     
@@ -342,9 +344,7 @@ public class BugFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllBugStatusesSuccess = (event) -> {
-        System.out.println("Get all status success");
         allBugStatusList = getAllBugStatusesService.getValue();
-        System.out.println(bugStatusComboBox.getItems().size());
         runGetAllBugPrioritiesService();
     };
 
