@@ -7,6 +7,7 @@ package sdtracker.view_controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.WorkerStateEvent;
@@ -66,6 +67,14 @@ public class BugFormController implements Initializable {
     @FXML private Label systemMessageLabel;
     @FXML private Button cancelButton;
     @FXML private Button addSaveButton;
+    
+    private ChangeListener<Boolean> bugStatusFocusListener ;
+    private ChangeListener<Boolean> bugPriorityFocusListener ;
+    private ChangeListener<Boolean> contactFocusListener ;
+    private ChangeListener<Boolean> assignedToFocusListener ;
+    private ChangeListener<Boolean> productFocusListener ;
+    private ChangeListener<Boolean> titleFocusListener ;
+    private ChangeListener<Boolean> descriptionFocusListener ;
     
     private Bug bug;
     private FormMode formMode = FormMode.INSERT;
@@ -309,4 +318,88 @@ public class BugFormController implements Initializable {
         currentStage.close();
     }
     
+    private void startBugStatusFocusListener() {
+        
+    }
+    
+    private boolean validateAll() {
+        return validateBugStatus()
+            && validateBugPriority()
+            && validateContact()
+            && validateProduct()
+            && validateTitle()
+            && validateDescription();
+    }
+
+    private boolean validateBugStatus() {
+        if (bugStatusComboBox.getSelectionModel().isEmpty()) {
+            bugStatusErrorLabel.setText("Bug Status is required");
+            return false;
+        }
+        
+        bugStatusErrorLabel.setText("");
+        return true;
+    }
+
+    private boolean validateBugPriority() {
+        if (bugPriorityComboBox.getSelectionModel().isEmpty()) {
+            bugPriorityErrorLabel.setText("Bug Priority is required");
+            return false;
+        }
+        
+        bugPriorityErrorLabel.setText("");
+        return true;
+    }
+
+    private boolean validateContact() {
+        if (contactComboBox.getSelectionModel().isEmpty()) {
+            contactErrorLabel.setText("Contact is required");
+            return false;
+        }
+        
+        contactErrorLabel.setText("");
+        return true;
+    }
+
+    private boolean validateProduct() {
+        if (productComboBox.getSelectionModel().isEmpty()) {
+            productErrorLabel.setText("Product is required");
+            return false;
+        }
+        
+        productErrorLabel.setText("");
+        return true;
+    }
+
+    private boolean validateTitle() {
+        String input = titleTextField.getText();
+        if (input.isEmpty()) {
+            titleErrorLabel.setText("Title is required");
+            return false;
+        }
+        
+        if (input.length() > 70) {
+            titleErrorLabel.setText("Title must be 70 characters or less");
+            return false;
+        }
+        
+        titleErrorLabel.setText("");
+        return true;
+    }
+
+    private boolean validateDescription() {
+        String input = descriptionTextArea.getText();
+        if (input.isEmpty()) {
+            descriptionErrorLabel.setText("Description is required");
+            return false;
+        }
+        
+        if (input.length() > 1000) {
+            descriptionErrorLabel.setText("Description must be 1000 characters or less");
+            return false;
+        }
+        
+        descriptionErrorLabel.setText("");
+        return true;
+    }
 }
