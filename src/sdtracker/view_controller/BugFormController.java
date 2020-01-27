@@ -117,12 +117,12 @@ public class BugFormController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        currentStage = (Stage) titleLabel.getScene().getWindow();
+        
         initializeServices();
         establishBindings();
         initializeInputElements();
         runGetAllBugStatusesService();
-        startEventHandlers();
+        
     }
     
     private void initializeServices() {
@@ -200,6 +200,7 @@ public class BugFormController implements Initializable {
             bug = new Bug();
             bugNumberLabel.setText(BugNumberGenerator.generateBugNumber());
         }
+        startEventHandlers();
     }
     
     private void startEventHandlers() {
@@ -319,6 +320,7 @@ public class BugFormController implements Initializable {
         formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Bug listing for " 
                 + bug.getBugNumber()
                 + " was successfully added.");
+        currentStage = (Stage) titleLabel.getScene().getWindow();
         currentStage.close();
     };
     
@@ -330,6 +332,7 @@ public class BugFormController implements Initializable {
         formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Bug listing for " 
                 + bug.getBugNumber()
                 + " was successfully updated.");
+        currentStage = (Stage) titleLabel.getScene().getWindow();
         currentStage.close();
     };
 
@@ -338,11 +341,14 @@ public class BugFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllBugStatusesSuccess = (event) -> {
+        System.out.println("Get all status success");
         allBugStatusList = getAllBugStatusesService.getValue();
+        System.out.println(bugStatusComboBox.getItems().size());
         runGetAllBugPrioritiesService();
     };
 
     private EventHandler<WorkerStateEvent> getAllBugStatusesFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
         displaySystemMessage("System error loading bug statuses, please try your request again.", true);
         runGetAllBugPrioritiesService();
     };
@@ -379,11 +385,13 @@ public class BugFormController implements Initializable {
     
     private EventHandler<WorkerStateEvent> getAllAppUsersSuccess = (event) -> {
         allAppUserList = getAllAppUsersService.getValue();
+        initializeInputElements();
         applyFormMode();
     };
     
     private EventHandler<WorkerStateEvent> getAllAppUsersFailure = (event) -> {
         displaySystemMessage("System error loading users, please try your request again.", true);
+        initializeInputElements();
         applyFormMode();
     };
     
@@ -413,13 +421,14 @@ public class BugFormController implements Initializable {
     @FXML
     private void handleCancelButton(ActionEvent event) {
         formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Action cancelled by user");
+        currentStage = (Stage) titleLabel.getScene().getWindow();
         currentStage.close();
     }
     
     private void startBugStatusFocusListener() {
         if (bugStatusFocusListener == null) {
             bugStatusFocusListener = (observable, oldValue, newValue) -> {
-                if (newValue) {
+                if (!newValue) {
                     validateBugStatus();
                 }
             };
@@ -430,7 +439,7 @@ public class BugFormController implements Initializable {
     private void startBugPriorityFocusListener() {
         if (bugPriorityFocusListener == null) {
             bugPriorityFocusListener = (observable, oldValue, newValue) -> {
-                if (newValue) {
+                if (!newValue) {
                     validateBugPriority();
                 }
             };
@@ -441,7 +450,7 @@ public class BugFormController implements Initializable {
     private void startContactFocusListener() {
         if (contactFocusListener == null) {
             contactFocusListener = (observable, oldValue, newValue) -> {
-                if (newValue) {
+                if (!newValue) {
                     validateContact();
                 }
             };
@@ -452,7 +461,7 @@ public class BugFormController implements Initializable {
     private void startProductFocusListener() {
         if (productFocusListener == null) {
             productFocusListener = (observable, oldValue, newValue) -> {
-                if (newValue) {
+                if (!newValue) {
                     validateProduct();
                 }
             };
@@ -463,7 +472,7 @@ public class BugFormController implements Initializable {
     private void startTitleFocusListener() {
         if (titleFocusListener == null) {
             titleFocusListener = (observable, oldValue, newValue) -> {
-                if (newValue) {
+                if (!newValue) {
                     validateTitle();
                 }
             };
@@ -474,7 +483,7 @@ public class BugFormController implements Initializable {
     private void startDescriptionFocusListener() {
         if (descriptionFocusListener == null) {
             descriptionFocusListener = (observable, oldValue, newValue) -> {
-                if (newValue) {
+                if (!newValue) {
                     validateDescription();
                 }
             };
