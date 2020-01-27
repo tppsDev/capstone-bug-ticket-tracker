@@ -121,7 +121,7 @@ public class BugFormController implements Initializable {
         initializeServices();
         establishBindings();
         initializeInputElements();
-        //applyFormMode();
+        runGetAllBugStatusesService();
         startEventHandlers();
     }
     
@@ -164,8 +164,8 @@ public class BugFormController implements Initializable {
     
     private void establishBindings() {
         BooleanBinding servicesRunning = insertBugService.runningProperty()
+                                     .or(updateBugService.runningProperty())
                                      .or(checkForDuplicateBugService.runningProperty())
-                                     .or(updateBugService.runningProperty())    
                                      .or(getAllBugStatusesService.runningProperty())    
                                      .or(getAllBugPrioritiesService.runningProperty())    
                                      .or(getAllContactsService.runningProperty())    
@@ -304,7 +304,8 @@ public class BugFormController implements Initializable {
     // Service status event handlers
     private EventHandler<WorkerStateEvent> checkForDuplicateBugSuccess = (event) -> {
         if (checkForDuplicateBugService.getValue()) {
-            displaySystemMessage("Bug number already exists, generating new bug number", true);
+            displaySystemMessage("Bug number already exists, generating new bug number.", true);
+            bugNumberLabel.setText(BugNumberGenerator.generateBugNumber());
         } else {
             runInsertBugService();
         }
