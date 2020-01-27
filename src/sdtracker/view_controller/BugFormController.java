@@ -192,11 +192,13 @@ public class BugFormController implements Initializable {
                 assignedToComboBox.getSelectionModel().select(bug.getAssignedAppUser());
             }
             productComboBox.getSelectionModel().select(bug.getProduct());
+            titleLabel.setText("Update Bug");
             titleTextField.setText(bug.getTitle());
             descriptionTextArea.setText(bug.getDescription());
             addSaveButton.setText("Save");
         } else {
             addSaveButton.setText("Add");
+            titleLabel.setText("Add Bug");
             bug = new Bug();
             bugNumberLabel.setText(BugNumberGenerator.generateBugNumber());
         }

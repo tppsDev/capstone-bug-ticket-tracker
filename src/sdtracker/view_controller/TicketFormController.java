@@ -211,9 +211,11 @@ public class TicketFormController implements Initializable {
             }
             titleTextField.setText(ticket.getTitle());
             descriptionTextArea.setText(ticket.getDescription());
+            titleLabel.setText("Update Ticket");
             addSaveButton.setText("Save");
         } else {
             addSaveButton.setText("Add");
+            titleLabel.setText("Add Ticket");
             ticket = new Ticket();
             ticketNumberLabel.setText(TicketNumberGenerator.generateTicketNumber());
         }

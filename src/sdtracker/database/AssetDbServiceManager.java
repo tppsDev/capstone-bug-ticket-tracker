@@ -67,7 +67,7 @@ public class AssetDbServiceManager {
         
     }
     
-    // Read services - get all, get by id
+    // Read services - get all, get by id, check for duplicates
     public class GetAllAssetsService extends Service<ObservableList<Asset>> {
         public  GetAllAssetsService() {
             super();
@@ -105,6 +105,31 @@ public class AssetDbServiceManager {
                 @Override
                 protected Asset call() throws Exception {
                     return assetDaoImpl.getById(id);
+                }
+                
+            };
+        }
+        
+    }
+    
+    public class CheckForDuplicateAssetService extends Service<Boolean> {
+        private String assetNumber;
+        
+        public CheckForDuplicateAssetService() {
+            super();
+            this.setExecutor(executor);
+        }
+        
+        public void setAssetNumber(String assetNumber) {
+            this.assetNumber = assetNumber;
+        }
+
+        @Override
+        protected Task<Boolean> createTask() {
+            return new Task<Boolean>() {
+                @Override
+                protected Boolean call() throws Exception {
+                    return assetDaoImpl.checkForDuplicate(assetNumber);
                 }
                 
             };

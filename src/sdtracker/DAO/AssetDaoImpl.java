@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import sdtracker.database.DatabaseMgr;
@@ -172,6 +173,29 @@ public class AssetDaoImpl implements CrudDao<Asset> {
         
         return asset;
     }
+    
+    public boolean checkForDuplicate(String assetNumber) throws DaoException, Exception {
+        int recCount = 0;
+        String query = "SELECT COUNT(*) AS recCount "
+                        +"FROM asset AS a "
+                        +"WHERE a.asset_number = ? ";
+        
+        try (Connection conn = DatabaseMgr.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);) {
+            stmt.setString(1, assetNumber);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                recCount = result.getInt("recCount");
+                result.close();
+            } else {
+                result.close();
+            }
+        } catch (SQLException ex) {
+            throw new DaoException("Database error: Try again later.");
+        }
+        
+        return recCount > 0;
+    }
 
     @Override
     public void insert(Asset asset) throws DaoException, Exception {
@@ -189,10 +213,22 @@ public class AssetDaoImpl implements CrudDao<Asset> {
             stmt.setString(1, asset.getName());
             stmt.setString(2, asset.getAssetNumber());
             stmt.setInt(3, asset.getAssetType().getId());
-            stmt.setString(4, asset.getSerialNumber());
-            stmt.setString(5, asset.getModelNumber());
+            if (asset.getSerialNumber() == null || asset.getSerialNumber().isEmpty()) {
+                stmt.setNull(4, Types.VARCHAR);
+            } else {
+                stmt.setString(4, asset.getSerialNumber());
+            }
+            if (asset.getModelNumber() == null || asset.getModelNumber().isEmpty()) {
+                stmt.setNull(5, Types.VARCHAR);
+            }else {
+                stmt.setString(5, asset.getModelNumber());
+            }
             stmt.setInt(6, asset.getMfg().getId());
-            stmt.setInt(7, asset.getAssignedToAppUser().getId());
+            if (asset.getAssignedToAppUser() == null) {
+                stmt.setNull(7, Types.INTEGER);
+            } else {
+                stmt.setInt(7, asset.getAssignedToAppUser().getId());
+            }
             stmt.executeUpdate();
         } catch (SQLException ex) {
             throw new DaoException("Database error: Try again later.");
@@ -216,10 +252,22 @@ public class AssetDaoImpl implements CrudDao<Asset> {
             stmt.setString(1, asset.getName());
             stmt.setString(2, asset.getAssetNumber());
             stmt.setInt(3, asset.getAssetType().getId());
-            stmt.setString(4, asset.getSerialNumber());
-            stmt.setString(5, asset.getModelNumber());
+            if (asset.getSerialNumber() == null || asset.getSerialNumber().isEmpty()) {
+                stmt.setNull(4, Types.VARCHAR);
+            } else {
+                stmt.setString(4, asset.getSerialNumber());
+            }
+            if (asset.getModelNumber() == null || asset.getModelNumber().isEmpty()) {
+                stmt.setNull(5, Types.VARCHAR);
+            }else {
+                stmt.setString(5, asset.getModelNumber());
+            }
             stmt.setInt(6, asset.getMfg().getId());
-            stmt.setInt(7, asset.getAssignedToAppUser().getId());
+            if (asset.getAssignedToAppUser() == null) {
+                stmt.setNull(7, Types.INTEGER);
+            } else {
+                stmt.setInt(7, asset.getAssignedToAppUser().getId());
+            }
             stmt.setInt(8, asset.getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {

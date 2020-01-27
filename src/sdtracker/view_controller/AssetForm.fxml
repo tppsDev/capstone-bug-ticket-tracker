@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.AssetFormController">
+<AnchorPane id="AnchorPane" prefHeight="628.0" prefWidth="600.0" styleClass="white-background" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="sdtracker.view_controller.AssetFormController">
     <stylesheets>
-        <URL value="@main.css"/>
+        <URL value="@main.css" />
     </stylesheets>
+   <children>
+      <AnchorPane prefHeight="80.0" prefWidth="600.0" styleClass="screen-header">
+         <children>
+            <Label fx:id="titleLabel" layoutY="14.0" prefHeight="44.0" prefWidth="600.0" styleClass="pane-header-title" text="Add Asset" />
+            <ProgressBar fx:id="progressIndicator" layoutX="200.0" layoutY="57.0" prefWidth="200.0" />
+         </children>
+      </AnchorPane>
+      <Label layoutX="286.0" layoutY="91.0" prefHeight="18.0" prefWidth="128.0" styleClass="form-label" text="Asset Number:" />
+      <Label fx:id="assetNumberLabel" layoutX="422.0" layoutY="91.0" prefHeight="18.0" prefWidth="158.0" styleClass="form-label" />
+      <Label layoutX="20.0" layoutY="147.0" prefHeight="18.0" prefWidth="114.0" styleClass="form-label" text="Asset Name:" />
+      <TextField fx:id="nameTextField" layoutX="142.0" layoutY="142.0" prefHeight="29.0" prefWidth="411.0" styleClass="form-text-field" />
+      <Label layoutX="20.0" layoutY="213.0" prefHeight="18.0" prefWidth="114.0" styleClass="form-label" text="Asset Type:" />
+      <ComboBox fx:id="assetTypeComboBox" layoutX="142.0" layoutY="208.0" prefHeight="29.0" prefWidth="171.0" styleClass="form-text-field" />
+      <Label layoutX="6.0" layoutY="277.0" prefHeight="18.0" prefWidth="128.0" styleClass="form-label" text="Serial Number:" />
+      <TextField fx:id="serialNumberTextField" layoutX="142.0" layoutY="272.0" prefHeight="29.0" prefWidth="411.0" styleClass="form-text-field" />
+      <Label layoutX="6.0" layoutY="343.0" prefHeight="18.0" prefWidth="128.0" styleClass="form-label" text="Model Number:" />
+      <TextField fx:id="modelNumberTextField" layoutX="142.0" layoutY="338.0" prefHeight="29.0" prefWidth="411.0" styleClass="form-text-field" />
+      <Label layoutX="20.0" layoutY="410.0" prefHeight="18.0" prefWidth="114.0" styleClass="form-label" text="Manufacturer:" />
+      <ComboBox fx:id="mfgComboBox" layoutX="142.0" layoutY="405.0" prefHeight="29.0" prefWidth="304.0" styleClass="form-text-field" />
+      <Label layoutX="20.0" layoutY="478.0" prefHeight="18.0" prefWidth="114.0" styleClass="form-label" text="Assigned To:" />
+      <ComboBox fx:id="assignedToComboBox" layoutX="142.0" layoutY="473.0" prefHeight="29.0" prefWidth="357.0" styleClass="form-text-field" />
+      <Label fx:id="nameErrorLabel" layoutX="142.0" layoutY="125.0" prefHeight="17.0" prefWidth="411.0" styleClass="form-error-label" />
+      <Label fx:id="assetTypeErrorLabel" layoutX="142.0" layoutY="191.0" prefHeight="17.0" prefWidth="411.0" styleClass="form-error-label" />
+      <Label fx:id="serialNumberErrorLabel" layoutX="142.0" layoutY="255.0" prefHeight="17.0" prefWidth="411.0" styleClass="form-error-label" />
+      <Label fx:id="modelNumberErrorLabel" layoutX="142.0" layoutY="321.0" prefHeight="17.0" prefWidth="411.0" styleClass="form-error-label" />
+      <Label fx:id="mfgErrorLabel" layoutX="142.0" layoutY="388.0" prefHeight="17.0" prefWidth="411.0" styleClass="form-error-label" />
+      <Label fx:id="systemMessageLabel" layoutX="22.0" layoutY="535.0" prefHeight="55.0" prefWidth="343.0" styleClass="system-message-label" />
+      <Button fx:id="cancelButton" layoutX="380.0" layoutY="535.0" mnemonicParsing="false" onAction="#handleCancelButton" styleClass="form-button" text="Cancel" />
+      <Button fx:id="addSaveButton" layoutX="484.0" layoutY="535.0" mnemonicParsing="false" onAction="#handleAddSaveButton" prefHeight="35.0" prefWidth="84.0" styleClass="form-button" text="Add" />
+   </children>
 </AnchorPane>
