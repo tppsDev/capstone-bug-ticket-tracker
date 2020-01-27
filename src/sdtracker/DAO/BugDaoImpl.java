@@ -374,7 +374,11 @@ public class BugDaoImpl implements CrudDao<Bug> {
             stmt.setString(2, bug.getDescription());
             stmt.setInt(3, bug.getProduct().getId());
             stmt.setInt(4, bug.getContact().getId());
-            stmt.setInt(5, bug.getAssignedAppUser().getId());
+            if (bug.getAssignedAppUser() == null) {
+                stmt.setNull(5, Types.INTEGER);
+            } else {
+                stmt.setInt(5, bug.getAssignedAppUser().getId());
+            }
             stmt.setTimestamp(6, Timestamp.valueOf(bug.getLastUpdatedTimestamp()));
             stmt.setInt(7, bug.getLastUpdatedByAppUser().getId());
             stmt.setInt(8, bug.getStatus().getId());
