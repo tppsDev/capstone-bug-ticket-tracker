@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -61,39 +62,39 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
         ObservableList<Ticket> allTickets = FXCollections.observableArrayList();
         
         String query = "SELECT tick.id, "
-                             +"tick.title "
-                             +"tick.description "
-                             +"tick.created_timestamp "
-                             +"tick.last_updated_timestamp "
-                             +"tick.ticket_number "
-                             +"prod.id "
-                             +"prod.name "
-                             +"prod.version "
-                             +"cont.id "
-                             +"cont.first_name "
-                             +"cont.last_name "
-                             +"cont.email "
-                             +"cont.phone "
-                             +"cont.phone_type "
-                             +"cont.courtest_title "
-                             +"aUser.id "
-                             +"aUser.first_name "
-                             +"aUser.last_name "
-                             +"aUser.email "
-                             +"aUser.phone1 "
-                             +"cUser.id "
-                             +"cUser.first_name "
-                             +"cUser.last_name "
-                             +"luUser.id "
-                             +"luUser.first_name "
-                             +"luUser.last_name "
-                             +"tStat.id "
-                             +"tStat.name "
-                             +"tPri.id "
-                             +"tPri.name "
-                             +"asst.id "
-                             +"asst.name "
-                             +"aType.id "
+                             +"tick.title, "
+                             +"tick.description, "
+                             +"tick.created_timestamp, "
+                             +"tick.last_updated_timestamp, "
+                             +"tick.ticket_number, "
+                             +"prod.id, "
+                             +"prod.name, "
+                             +"prod.version, "
+                             +"cont.id, "
+                             +"cont.first_name, "
+                             +"cont.last_name, "
+                             +"cont.email, "
+                             +"cont.phone, "
+                             +"cont.phone_type, "
+                             +"cont.courtest_title, "
+                             +"aUser.id, "
+                             +"aUser.first_name, "
+                             +"aUser.last_name, "
+                             +"aUser.email, "
+                             +"aUser.phone1, "
+                             +"cUser.id, "
+                             +"cUser.first_name, "
+                             +"cUser.last_name, "
+                             +"luUser.id, "
+                             +"luUser.first_name, "
+                             +"luUser.last_name, "
+                             +"tStat.id, "
+                             +"tStat.name, "
+                             +"tPri.id, "
+                             +"tPri.name, "
+                             +"asst.id, "
+                             +"asst.name, "
+                             +"aType.id, "
                              +"aType.name "
                       +"FROM ticket AS tick "
                         +"INNER JOIN contact AS cont ON tick.contact_id = cont.id "
@@ -194,39 +195,39 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
         Ticket ticket;
         
         String query = "SELECT tick.id, "
-                             +"tick.title "
-                             +"tick.description "
-                             +"tick.created_timestamp "
-                             +"tick.last_updated_timestamp "
-                             +"tick.ticket_number "
-                             +"prod.id "
-                             +"prod.name "
-                             +"prod.version "
-                             +"cont.id "
-                             +"cont.first_name "
-                             +"cont.last_name "
-                             +"cont.email "
-                             +"cont.phone "
-                             +"cont.phone_type "
-                             +"cont.courtest_title "
-                             +"aUser.id "
-                             +"aUser.first_name "
-                             +"aUser.last_name "
-                             +"aUser.email "
-                             +"aUser.phone1 "
-                             +"cUser.id "
-                             +"cUser.first_name "
-                             +"cUser.last_name "
-                             +"luUser.id "
-                             +"luUser.first_name "
-                             +"luUser.last_name "
-                             +"tStat.id "
-                             +"tStat.name "
-                             +"tPri.id "
-                             +"tPri.name "
-                             +"asst.id "
-                             +"asst.name "
-                             +"aType.id "
+                             +"tick.title, "
+                             +"tick.description, "
+                             +"tick.created_timestamp, "
+                             +"tick.last_updated_timestamp, "
+                             +"tick.ticket_number, "
+                             +"prod.id, "
+                             +"prod.name, "
+                             +"prod.version, "
+                             +"cont.id, "
+                             +"cont.first_name, "
+                             +"cont.last_name, "
+                             +"cont.email, "
+                             +"cont.phone, "
+                             +"cont.phone_type, "
+                             +"cont.courtest_title, "
+                             +"aUser.id, "
+                             +"aUser.first_name, "
+                             +"aUser.last_name, "
+                             +"aUser.email, "
+                             +"aUser.phone1, "
+                             +"cUser.id, "
+                             +"cUser.first_name, "
+                             +"cUser.last_name, "
+                             +"luUser.id, "
+                             +"luUser.first_name, "
+                             +"luUser.last_name, "
+                             +"tStat.id, "
+                             +"tStat.name, "
+                             +"tPri.id, "
+                             +"tPri.name, "
+                             +"asst.id, "
+                             +"asst.name, "
+                             +"aType.id, "
                              +"aType.name "
                       +"FROM ticket AS tick "
                         +"INNER JOIN contact AS cont ON tick.contact_id = cont.id "
@@ -326,38 +327,69 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
 
         return ticket;
     }
+    
+    public boolean checkForDuplicate(String ticketNumber) throws DaoException, Exception {
+        int recCount = 0;
+        String query = "SELECT COUNT(*) AS recCount "
+                      +"FROM ticket AS tick "
+                      +"WHERE tick.ticket_number = ? ";
+        
+        try (Connection conn = DatabaseMgr.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(query);) {
+            stmt.setString(1, ticketNumber);
+            ResultSet result = stmt.executeQuery();
+            if (result.next()) {
+                recCount = result.getInt("recCount");
+                result.close();
+            } else {
+                result.close();
+            }
+        } catch (SQLException ex) {
+            throw new DaoException("Database error: Try again later.");
+        }
+        
+        return recCount > 0;
+    }
 
     @Override
     public void insert(Ticket ticket) throws DaoException {
         String query = "INSERT INTO ticket (title, "
                                           +"description,  "
-                                          +"product_id "
-                                          +"contact_id "
-                                          +"assigned_app_user_id "
+                                          +"product_id, "
+                                          +"contact_id, "
+                                          +"assigned_app_user_id, "
                                           +"created_timestamp, "
-                                          +"created_by_app_user_id "
-                                          +"last_update_timestamp "
-                                          +"last_updated_by_user_id "
-                                          +"ticket_status_id "
-                                          +"ticket_number "
-                                          +"asset_id "
+                                          +"created_by_app_user_id, "
+                                          +"ticket_status_id, "
+                                          +"ticket_number, "
+                                          +"asset_id, "
                                           +"ticket_priority_id "
-                      +"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+                      +"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
         try (Connection conn = DatabaseMgr.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);) {
             stmt.setString(1, ticket.getTitle());
             stmt.setString(2, ticket.getDescription());
-            stmt.setInt(3, ticket.getProduct().getId());
+            if (ticket.getProduct() == null) {
+                stmt.setNull(3, Types.INTEGER);
+            } else {
+                stmt.setInt(3, ticket.getProduct().getId());
+            }
             stmt.setInt(4, ticket.getContact().getId());
-            stmt.setInt(5, ticket.getAssignedAppUser().getId());
+            if (ticket.getAssignedAppUser() == null) {
+                stmt.setNull(5, Types.INTEGER);
+            } else {
+                stmt.setInt(5, ticket.getAssignedAppUser().getId());
+            }
             stmt.setTimestamp(6, Timestamp.valueOf(ticket.getCreatedTimestamp()));
             stmt.setInt(7, ticket.getCreatedByAppUser().getId());
-            stmt.setTimestamp(8, Timestamp.valueOf(ticket.getLastUpdatedTimestamp()));
-            stmt.setInt(9, ticket.getLastUpdatedByAppUser().getId());
-            stmt.setInt(10, ticket.getStatus().getId());
-            stmt.setString(11, ticket.getTicketNumber());
-            stmt.setInt(12, ticket.getAsset().getId());
-            stmt.setInt(13, ticket.getPriority().getId());
+            stmt.setInt(8, ticket.getStatus().getId());
+            stmt.setString(9, ticket.getTicketNumber());
+            if (ticket.getAsset() == null) {
+                stmt.setNull(10, Types.INTEGER);
+            } else {
+                stmt.setInt(10, ticket.getAsset().getId());
+            }
+            stmt.setInt(11, ticket.getPriority().getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {
             throw new DaoException("Database error: Try again later.");
@@ -366,38 +398,45 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
 
     @Override
     public void update(Ticket ticket) throws DaoException {
-        String query = "INSERT INTO ticket (title, "
-                                          +"description,  "
-                                          +"product_id "
-                                          +"contact_id "
-                                          +"assigned_app_user_id "
-                                          +"created_timestamp, "
-                                          +"created_by_app_user_id "
-                                          +"last_update_timestamp "
-                                          +"last_updated_by_user_id "
-                                          +"ticket_status_id "
-                                          +"ticket_number "
-                                          +"asset_id "
-                                          +"ticket_priority_id "
-                      +"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+        String query = "UPDATE ticket SET title = ?, "
+                                          +"description = ?,  "
+                                          +"product_id = ?, "
+                                          +"contact_id = ?, "
+                                          +"assigned_app_user_id = ?, "
+                                          +"last_update_timestamp = ?, "
+                                          +"last_updated_by_user_id = ?, "
+                                          +"ticket_status_id = ?, "
+                                          +"ticket_number = ?, "
+                                          +"asset_id = ?, "
+                                          +"ticket_priority_id = ? "
                       +"WHERE id = ? ";
         
         try (Connection conn = DatabaseMgr.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);) {
             stmt.setString(1, ticket.getTitle());
             stmt.setString(2, ticket.getDescription());
-            stmt.setInt(3, ticket.getProduct().getId());
+            if (ticket.getProduct() == null) {
+                stmt.setNull(3, Types.INTEGER);
+            } else {
+                stmt.setInt(3, ticket.getProduct().getId());
+            }
             stmt.setInt(4, ticket.getContact().getId());
-            stmt.setInt(5, ticket.getAssignedAppUser().getId());
-            stmt.setTimestamp(6, Timestamp.valueOf(ticket.getCreatedTimestamp()));
-            stmt.setInt(7, ticket.getCreatedByAppUser().getId());
-            stmt.setTimestamp(8, Timestamp.valueOf(ticket.getLastUpdatedTimestamp()));
-            stmt.setInt(9, ticket.getLastUpdatedByAppUser().getId());
-            stmt.setInt(10, ticket.getStatus().getId());
-            stmt.setString(11, ticket.getTicketNumber());
-            stmt.setInt(12, ticket.getAsset().getId());
-            stmt.setInt(13, ticket.getPriority().getId());
-            stmt.setInt(14, ticket.getId());
+            if (ticket.getAssignedAppUser() == null) {
+                stmt.setNull(5, Types.INTEGER);
+            } else {
+                stmt.setInt(5, ticket.getAssignedAppUser().getId());
+            }
+            stmt.setTimestamp(6, Timestamp.valueOf(ticket.getLastUpdatedTimestamp()));
+            stmt.setInt(7, ticket.getLastUpdatedByAppUser().getId());
+            stmt.setInt(8, ticket.getStatus().getId());
+            stmt.setString(9, ticket.getTicketNumber());
+            if (ticket.getAsset() == null) {
+                stmt.setNull(10, Types.INTEGER);
+            } else {
+                stmt.setInt(10, ticket.getAsset().getId());
+            }
+            stmt.setInt(11, ticket.getPriority().getId());
+            stmt.setInt(12, ticket.getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {
             throw new DaoException("Database error: Try again later.");
