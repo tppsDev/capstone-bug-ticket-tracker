@@ -39,7 +39,7 @@ public class SDTracker extends Application {
         //user.setEncryptedPassword(user.getPassword());
         
         //Parent root = FXMLLoader.load(getClass().getResource("view_controller/Login.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("view_controller/TicketForm.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view_controller/AssetForm.fxml"));
         
         Scene scene = new Scene(root);
         

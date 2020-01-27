@@ -95,7 +95,6 @@ public class AssetFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initializeServices();
         establishBindings();
-        setCurrentStage();
         runGetAllAssetTypeService();
     }
     
@@ -167,21 +166,26 @@ public class AssetFormController implements Initializable {
         }
     }
     
-    private void setCurrentStage() {
-        currentStage = (Stage) titleLabel.getScene().getWindow();
-    }
-    
     private void insertAsset() {
+        asset.setAssetNumber(assetNumberLabel.getText());
         buildAsset();
         runCheckForDuplicateAssetService();
     }
     
     private void updateAsset() {
         buildAsset();
+        runUpdateAssetService();
     }
     
     private void buildAsset() {
-        runUpdateAssetService();
+        asset.setName(nameTextField.getText());
+        asset.setAssetType(assetTypeComboBox.getValue());
+        asset.setModelNumber(modelNumberTextField.getText());
+        asset.setSerialNumber(serialNumberTextField.getText());
+        asset.setMfg(mfgComboBox.getValue());
+        if (!assignedToComboBox.getSelectionModel().isEmpty()) {
+            asset.setAssignedToAppUser(assignedToComboBox.getValue());
+        }
     }
     
     // Service run handlers
@@ -237,11 +241,12 @@ public class AssetFormController implements Initializable {
                 + asset.getName()
                 + "was successfully added.");
         System.out.println("Insert successful");
+        currentStage = (Stage) titleLabel.getScene().getWindow();
         currentStage.close();
     };
     
     private EventHandler<WorkerStateEvent> insertAssetFailure = (event) -> {
-        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.setText("System error on insert, please try your request again.");
         systemMessageLabel.getStyleClass().removeAll("system-message-label");
         systemMessageLabel.getStyleClass().add("system-message-label-error");
 
@@ -253,11 +258,12 @@ public class AssetFormController implements Initializable {
                 + asset.getName()
                 + "was successfully changed.");
         System.out.println("Update successful");
+        currentStage = (Stage) titleLabel.getScene().getWindow();
         currentStage.close();
     };
     
     private EventHandler<WorkerStateEvent> updateAssetFailure = (event) -> {
-        systemMessageLabel.setText("System error, please try your request again.");
+        systemMessageLabel.setText("System error on update, please try your request again.");
         systemMessageLabel.getStyleClass().removeAll("system-message-label");
         systemMessageLabel.getStyleClass().add("system-message-label-error");
     };
@@ -323,6 +329,7 @@ public class AssetFormController implements Initializable {
 
     @FXML
     void handleCancelButton(ActionEvent event) {
+        currentStage = (Stage) titleLabel.getScene().getWindow();
         currentStage.close();
     }
 
