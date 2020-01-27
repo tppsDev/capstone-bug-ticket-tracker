@@ -5,6 +5,7 @@
 package sdtracker.view_controller;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.value.ChangeListener;
@@ -22,6 +23,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import sdtracker.Session;
 import sdtracker.database.AppUserDbServiceManager;
 import sdtracker.database.AppUserDbServiceManager.GetAllAppUsersService;
 import sdtracker.database.BugDbServiceManager;
@@ -40,6 +42,7 @@ import sdtracker.model.BugPriority;
 import sdtracker.model.BugStatus;
 import sdtracker.model.Contact;
 import sdtracker.model.Product;
+import sdtracker.utility.BugNumberGenerator;
 
 /**
  * FXML Controller class
@@ -82,6 +85,8 @@ public class BugFormController implements Initializable {
     
     Stage currentStage;
     
+    Session session = Session.getSession();
+    
     private BugDbServiceManager bugDbServiceManager = BugDbServiceManager.getServiceManager();
     private InsertBugService insertBugService;
     private UpdateBugService updateBugService;
@@ -112,10 +117,11 @@ public class BugFormController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        currentStage = (Stage) titleLabel.getScene().getWindow();
         initializeServices();
         establishBindings();
         initializeInputElements();
-        applyFormMode();
+        //applyFormMode();
         startEventHandlers();
     }
     
@@ -169,29 +175,65 @@ public class BugFormController implements Initializable {
     }
     
     private void initializeInputElements() {
-        currentStage = (Stage) titleLabel.getScene().getWindow();
+        bugStatusComboBox.getItems().addAll(allBugStatusList);
+        bugPriorityComboBox.getItems().addAll(allBugPriorityList);
+        contactComboBox.getItems().addAll(allContactList);
+        assignedToComboBox.getItems().addAll(allAppUserList);
+        productComboBox.getItems().addAll(allProductList);
     }
     
     private void applyFormMode() {
-        
+        if (formMode.equals(FormMode.UPDATE)) {
+            bugNumberLabel.setText(bug.getBugNumber());
+            bugStatusComboBox.getSelectionModel().select(bug.getStatus());
+            bugPriorityComboBox.getSelectionModel().select(bug.getPriority());
+            contactComboBox.getSelectionModel().select(bug.getContact());
+            if (bug.getAssignedAppUser() != null) {
+                assignedToComboBox.getSelectionModel().select(bug.getAssignedAppUser());
+            }
+            productComboBox.getSelectionModel().select(bug.getProduct());
+            titleTextField.setText(bug.getTitle());
+            descriptionTextArea.setText(bug.getDescription());
+            addSaveButton.setText("Save");
+        } else {
+            addSaveButton.setText("Add");
+            bug = new Bug();
+            bugNumberLabel.setText(BugNumberGenerator.generateBugNumber());
+        }
     }
     
     private void startEventHandlers() {
-        
+        startBugStatusFocusListener();
+        startBugPriorityFocusListener();
+        startContactFocusListener();
+        startProductFocusListener();
+        startTitleFocusListener();
+        startDescriptionFocusListener();
     }
     
     private void insertBug() {
         buildBug();
+        bug.setCreatedTimestamp(LocalDateTime.now());
+        bug.setAssignedAppUser(session.getSessionUser());
         runCheckForDuplicateBugService();
     }
     
     private void updateBug() {
         buildBug();
+        bug.setLastUpdatedTimestamp(LocalDateTime.now());
+        bug.setLasUpdatedByAppUser(session.getSessionUser());
         runUpdateBugService();
     }
     
     private void buildBug() {
-        
+        bug.setBugNumber(bugNumberLabel.getText());
+        bug.setTitle(titleTextField.getText());
+        bug.setDescription(descriptionTextArea.getText());
+        bug.setStatus(bugStatusComboBox.getValue());
+        bug.setPriority(bugPriorityComboBox.getValue());
+        bug.setContact(contactComboBox.getValue());
+        bug.setAssignedAppUser(assignedToComboBox.getValue());
+        bug.setProduct(productComboBox.getValue());
     }
     
     private void setUpdateMode(Bug bug) {
@@ -296,43 +338,52 @@ public class BugFormController implements Initializable {
     
     private EventHandler<WorkerStateEvent> getAllBugStatusesSuccess = (event) -> {
         allBugStatusList = getAllBugStatusesService.getValue();
+        runGetAllBugPrioritiesService();
     };
 
     private EventHandler<WorkerStateEvent> getAllBugStatusesFailure = (event) -> {
         displaySystemMessage("System error loading bug statuses, please try your request again.", true);
+        runGetAllBugPrioritiesService();
     };
     
     private EventHandler<WorkerStateEvent> getAllBugPrioritiesSuccess = (event) -> {
         allBugPriorityList = getAllBugPrioritiesService.getValue();
+        runGetAllContactsService();
     };
     
     private EventHandler<WorkerStateEvent> getAllBugPrioritiesFailure = (event) -> {
         displaySystemMessage("System error loading priorites, please try your request again.", true);
+        runGetAllContactsService();
     };
 
     private EventHandler<WorkerStateEvent> getAllContactsSuccess = (event) -> {
         allContactList = getAllContactsService.getValue();
+        runGetAllProductsService();
     };
     
     private EventHandler<WorkerStateEvent> getAllContactsFailure = (event) -> {
         displaySystemMessage("System error loading contacts, please try your request again.", true);
-        
+        runGetAllProductsService();
     };
 
     private EventHandler<WorkerStateEvent> getAllProductsSuccess = (event) -> {
         allProductList = getAllProductsService.getValue();
+        runGetAllAppUsersService();
     };
 
     private EventHandler<WorkerStateEvent> getAllProductsFailure = (event) -> {
         displaySystemMessage("System error loading products, please try your request again.", true);
+        runGetAllAppUsersService();
     };
     
     private EventHandler<WorkerStateEvent> getAllAppUsersSuccess = (event) -> {
         allAppUserList = getAllAppUsersService.getValue();
+        applyFormMode();
     };
     
     private EventHandler<WorkerStateEvent> getAllAppUsersFailure = (event) -> {
         displaySystemMessage("System error loading users, please try your request again.", true);
+        applyFormMode();
     };
     
     private void displaySystemMessage(String message, boolean errorMessage) {
@@ -365,7 +416,69 @@ public class BugFormController implements Initializable {
     }
     
     private void startBugStatusFocusListener() {
-        
+        if (bugStatusFocusListener == null) {
+            bugStatusFocusListener = (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    validateBugStatus();
+                }
+            };
+        }
+        bugStatusComboBox.focusedProperty().addListener(bugStatusFocusListener);
+    }
+    
+    private void startBugPriorityFocusListener() {
+        if (bugPriorityFocusListener == null) {
+            bugPriorityFocusListener = (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    validateBugPriority();
+                }
+            };
+        }
+        bugPriorityComboBox.focusedProperty().addListener(bugPriorityFocusListener);
+    }
+    
+    private void startContactFocusListener() {
+        if (contactFocusListener == null) {
+            contactFocusListener = (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    validateContact();
+                }
+            };
+        }
+        contactComboBox.focusedProperty().addListener(contactFocusListener);
+    }
+    
+    private void startProductFocusListener() {
+        if (productFocusListener == null) {
+            productFocusListener = (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    validateProduct();
+                }
+            };
+        }
+        productComboBox.focusedProperty().addListener(productFocusListener);
+    }
+    
+    private void startTitleFocusListener() {
+        if (titleFocusListener == null) {
+            titleFocusListener = (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    validateTitle();
+                }
+            };
+        }
+        titleTextField.focusedProperty().addListener(titleFocusListener);
+    }
+    
+    private void startDescriptionFocusListener() {
+        if (descriptionFocusListener == null) {
+            descriptionFocusListener = (observable, oldValue, newValue) -> {
+                if (newValue) {
+                    validateDescription();
+                }
+            };
+        }
+        descriptionTextArea.focusedProperty().addListener(descriptionFocusListener);
     }
     
     private boolean validateAll() {
