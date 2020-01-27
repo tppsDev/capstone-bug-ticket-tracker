@@ -325,6 +325,7 @@ public class BugFormController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> insertBugFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
         displaySystemMessage("System error on insert, please try your request again.", true);
     };
     

@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -327,26 +328,26 @@ public class BugDaoImpl implements CrudDao<Bug> {
                                         +"assigned_app_user_id "
                                         +"created_timestamp, "
                                         +"created_by_app_user_id "
-                                        +"last_update_timestamp "
-                                        +"last_updated_by_user_id "
                                         +"bug_status_id "
-                                        +"bug_number "
+                                        +"bug_number, "
                                         +"bug_priority_id "
-                      +"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+                      +"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
         try (Connection conn = DatabaseMgr.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query);) {
             stmt.setString(1, bug.getTitle());
             stmt.setString(2, bug.getDescription());
             stmt.setInt(3, bug.getProduct().getId());
             stmt.setInt(4, bug.getContact().getId());
-            stmt.setInt(5, bug.getAssignedAppUser().getId());
+            if (bug.getAssignedAppUser() == null) {
+                stmt.setNull(5, Types.INTEGER);
+            } else {
+                stmt.setInt(5, bug.getAssignedAppUser().getId());
+            }
             stmt.setTimestamp(6, Timestamp.valueOf(bug.getCreatedTimestamp()));
             stmt.setInt(7, bug.getCreatedByAppUser().getId());
-            stmt.setTimestamp(8, Timestamp.valueOf(bug.getLastUpdatedTimestamp()));
-            stmt.setInt(9, bug.getLastUpdatedByAppUser().getId());
-            stmt.setInt(10, bug.getStatus().getId());
-            stmt.setString(11, bug.getBugNumber());
-            stmt.setInt(12, bug.getPriority().getId());
+            stmt.setInt(8, bug.getStatus().getId());
+            stmt.setString(9, bug.getBugNumber());
+            stmt.setInt(10, bug.getPriority().getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {
             throw new DaoException("Database error: Try again later.");
@@ -355,20 +356,16 @@ public class BugDaoImpl implements CrudDao<Bug> {
 
     @Override
     public void update(Bug bug) throws DaoException {
-        String query = "INSERT INTO bug (title, "
-                                          +"description,  "
-                                          +"product_id "
-                                          +"contact_id "
-                                          +"assigned_app_user_id "
-                                          +"created_timestamp, "
-                                          +"created_by_app_user_id "
-                                          +"last_update_timestamp "
-                                          +"last_updated_by_user_id "
-                                          +"bug_status_id "
-                                          +"bug_number "
-                                          +"asset_id "
-                                          +"bug_priority_id "
-                      +"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) "
+        String query = "UPDATE bug SET title = ?, "
+                                          +"description = ?, "
+                                          +"product_id = ?, "
+                                          +"contact_id = ?, "
+                                          +"assigned_app_user_id = ?, "
+                                          +"last_update_timestamp = ?, "
+                                          +"last_updated_by_user_id = ?, "
+                                          +"bug_status_id = ?, "
+                                          +"bug_number = ?, "
+                                          +"bug_priority_id = ?, "
                       +"WHERE id = ? ";
         
         try (Connection conn = DatabaseMgr.getConnection();
@@ -378,14 +375,12 @@ public class BugDaoImpl implements CrudDao<Bug> {
             stmt.setInt(3, bug.getProduct().getId());
             stmt.setInt(4, bug.getContact().getId());
             stmt.setInt(5, bug.getAssignedAppUser().getId());
-            stmt.setTimestamp(6, Timestamp.valueOf(bug.getCreatedTimestamp()));
-            stmt.setInt(7, bug.getCreatedByAppUser().getId());
-            stmt.setTimestamp(8, Timestamp.valueOf(bug.getLastUpdatedTimestamp()));
-            stmt.setInt(9, bug.getLastUpdatedByAppUser().getId());
-            stmt.setInt(10, bug.getStatus().getId());
-            stmt.setString(11, bug.getBugNumber());
-            stmt.setInt(12, bug.getPriority().getId());
-            stmt.setInt(13, bug.getId());
+            stmt.setTimestamp(6, Timestamp.valueOf(bug.getLastUpdatedTimestamp()));
+            stmt.setInt(7, bug.getLastUpdatedByAppUser().getId());
+            stmt.setInt(8, bug.getStatus().getId());
+            stmt.setString(9, bug.getBugNumber());
+            stmt.setInt(10, bug.getPriority().getId());
+            stmt.setInt(11, bug.getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {
             throw new DaoException("Database error: Try again later.");
