@@ -68,8 +68,8 @@ public class TicketStatusDbServiceManager {
     }
     
     // Read services - get all, get by id, check for duplicate
-    public class GetAllTicketStatussService extends Service<ObservableList<TicketStatus>> {
-        public  GetAllTicketStatussService() {
+    public class GetAllTicketStatusesService extends Service<ObservableList<TicketStatus>> {
+        public  GetAllTicketStatusesService() {
             super();
             this.setExecutor(executor);
         }

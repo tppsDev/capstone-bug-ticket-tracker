@@ -68,8 +68,8 @@ public class TicketPriorityDbServiceManager {
     }
     
     // Read services - get all, get by id, check for duplicate
-    public class GetAllTicketPrioritysService extends Service<ObservableList<TicketPriority>> {
-        public  GetAllTicketPrioritysService() {
+    public class GetAllTicketPrioritiesService extends Service<ObservableList<TicketPriority>> {
+        public  GetAllTicketPrioritiesService() {
             super();
             this.setExecutor(executor);
         }

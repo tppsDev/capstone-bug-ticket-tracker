@@ -215,16 +215,14 @@ public class BugFormController implements Initializable {
     private void insertBug() {
         buildBug();
         bug.setCreatedTimestamp(LocalDateTime.now());
-        // TODO remove after test
-        bug.setCreatedByAppUser(assignedToComboBox.getItems().get(0));
-        //bug.setCreatedByAppUser(session.getSessionUser());
+        bug.setCreatedByAppUser(session.getSessionUser());
         runCheckForDuplicateBugService();
     }
     
     private void updateBug() {
         buildBug();
         bug.setLastUpdatedTimestamp(LocalDateTime.now());
-        bug.setLasUpdatedByAppUser(session.getSessionUser());
+        bug.setLastUpdatedByAppUser(session.getSessionUser());
         runUpdateBugService();
     }
     

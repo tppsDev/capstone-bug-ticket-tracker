@@ -118,7 +118,7 @@ public class Bug {
         return lastUpdatedByAppUser;
     }
 
-    public void setLasUpdatedByAppUser(AppUser lastUpdatedByAppUser) {
+    public void setLastUpdatedByAppUser(AppUser lastUpdatedByAppUser) {
         this.lastUpdatedByAppUser = lastUpdatedByAppUser;
     }
 

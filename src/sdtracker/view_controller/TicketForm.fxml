@@ -1,21 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="698.0" prefWidth="600.0" styleClass="white-background" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="sdtracker.view_controller.TicketFormController">
-    <stylesheets>
-        <URL value="@main.css" />
-    </stylesheets>
+<AnchorPane id="AnchorPane" prefHeight="712.0" prefWidth="940.0" styleClass="white-background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.BugFormController">
+   <stylesheets>
+      <URL value="@main.css" />
+   </stylesheets>
    <children>
-      <AnchorPane prefHeight="80.0" prefWidth="600.0" styleClass="screen-header">
+      <AnchorPane prefHeight="80.0" prefWidth="940.0" styleClass="screen-header">
          <children>
-            <Label fx:id="titleLabel" layoutY="18.0" prefHeight="44.0" prefWidth="600.0" styleClass="pane-header-title" text="ADD TICKET" />
+            <Label fx:id="titleLabel" layoutY="18.0" prefHeight="44.0" prefWidth="940.0" styleClass="pane-header-title" text="Add Ticket" />
+            <ProgressBar fx:id="progressIndicator" layoutX="370.0" layoutY="57.0" prefWidth="200.0" />
          </children>
       </AnchorPane>
-      <Label layoutX="91.0" layoutY="137.0" styleClass="form-label" text="Contact:" />
-      <ComboBox fx:id="contactComboBox" layoutX="166.0" layoutY="134.0" prefHeight="25.0" prefWidth="211.0" />
+      <Label layoutX="526.0" layoutY="90.0" prefHeight="18.0" prefWidth="155.0" styleClass="form-label" text="Ticket Number:" />
+      <Label fx:id="ticketNumberLabel" layoutX="695.0" layoutY="90.0" prefHeight="18.0" prefWidth="182.0" styleClass="form-label" />
+      <Label layoutX="2.0" layoutY="151.0" prefHeight="29.0" prefWidth="125.0" styleClass="form-label" text="Ticket Status:" />
+      <ComboBox fx:id="ticketStatusComboBox" layoutX="136.0" layoutY="151.0" prefHeight="25.0" prefWidth="133.0" styleClass="form-text-field" />
+      <Label layoutX="285.0" layoutY="151.0" prefHeight="29.0" prefWidth="146.0" styleClass="form-label" text="Ticket Priority:" />
+      <ComboBox fx:id="ticketPriorityComboBox" layoutX="440.0" layoutY="151.0" prefHeight="25.0" prefWidth="133.0" styleClass="form-text-field" />
+      <Label layoutX="35.0" layoutY="217.0" prefHeight="29.0" prefWidth="92.0" styleClass="form-label" text="Contact:" />
+      <ComboBox fx:id="contactComboBox" layoutX="136.0" layoutY="217.0" prefHeight="29.0" prefWidth="304.0" styleClass="form-text-field" />
+      <Label layoutX="462.0" layoutY="217.0" prefHeight="29.0" prefWidth="104.0" styleClass="form-label" text="Assigned To:" />
+      <ComboBox fx:id="assignedToComboBox" layoutX="575.0" layoutY="217.0" prefHeight="29.0" prefWidth="304.0" styleClass="form-text-field" />
+      <Label layoutX="35.0" layoutY="286.0" prefHeight="29.0" prefWidth="92.0" styleClass="form-label" text="Product:" />
+      <ComboBox fx:id="productComboBox" layoutX="136.0" layoutY="286.0" prefHeight="29.0" prefWidth="515.0" styleClass="form-text-field" />
+      <Label layoutX="37.0" layoutY="355.0" prefHeight="29.0" prefWidth="92.0" styleClass="form-label" text="Asset:" />
+      <ComboBox fx:id="assetComboBox" layoutX="138.0" layoutY="355.0" prefHeight="29.0" prefWidth="304.0" styleClass="form-text-field" />
+      <Label layoutX="37.0" layoutY="427.0" prefHeight="29.0" prefWidth="92.0" styleClass="form-label" text="Title:" />
+      <TextField fx:id="titleTextField" layoutX="138.0" layoutY="427.0" prefHeight="29.0" prefWidth="678.0" styleClass="form-text-field" />
+      <Label layoutX="16.0" layoutY="499.0" prefHeight="29.0" prefWidth="113.0" styleClass="form-label" text="Description:" />
+      <TextArea fx:id="descriptionTextArea" layoutX="138.0" layoutY="499.0" prefHeight="139.0" prefWidth="678.0" styleClass="form-text-field" />
+      <Label fx:id="bugStatusErrorLabel" layoutX="136.0" layoutY="134.0" prefHeight="17.0" prefWidth="133.0" styleClass="form-error-label" />
+      <Label fx:id="bugPriorityErrorLabel" layoutX="409.0" layoutY="134.0" prefHeight="17.0" prefWidth="133.0" styleClass="form-error-label" />
+      <Label fx:id="contactErrorLabel" layoutX="136.0" layoutY="200.0" prefHeight="17.0" prefWidth="304.0" styleClass="form-error-label" />
+      <Label fx:id="assignedToErrorLabel" layoutX="575.0" layoutY="200.0" prefHeight="17.0" prefWidth="304.0" styleClass="form-error-label" />
+      <Label fx:id="productErrorLabel" layoutX="136.0" layoutY="269.0" prefHeight="17.0" prefWidth="515.0" styleClass="form-error-label" />
+      <Label fx:id="titleErrorLabel" layoutX="136.0" layoutY="338.0" prefHeight="17.0" prefWidth="678.0" styleClass="form-error-label" />
+      <Label fx:id="descriptionErrorLabel" layoutX="137.0" layoutY="410.0" prefHeight="17.0" prefWidth="678.0" styleClass="form-error-label" />
+      <Label fx:id="systemMessageLabel" layoutX="51.0" layoutY="664.0" prefHeight="15.0" prefWidth="594.0" styleClass="system-message-label" />
+      <Button fx:id="cancelButton" layoutX="669.0" layoutY="654.0" mnemonicParsing="false" onAction="#handleCancelButton" styleClass="form-button" text="Cancel" />
+      <Button fx:id="addSaveButton" layoutX="779.0" layoutY="654.0" mnemonicParsing="false" onAction="#handleAddSaveButton" prefHeight="35.0" prefWidth="84.0" styleClass="form-button" text="Add" />
    </children>
 </AnchorPane>

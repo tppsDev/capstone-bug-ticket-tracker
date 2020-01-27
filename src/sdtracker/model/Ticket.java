@@ -121,7 +121,7 @@ public class Ticket {
         return lastUpdatedTimestamp;
     }
 
-    public void setLastupdatedTimestamp(LocalDateTime lastUpdatedTimestamp) {
+    public void setLastUpdatedTimestamp(LocalDateTime lastUpdatedTimestamp) {
         this.lastUpdatedTimestamp = lastUpdatedTimestamp;
     }
 
