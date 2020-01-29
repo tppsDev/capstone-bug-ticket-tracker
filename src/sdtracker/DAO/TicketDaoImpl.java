@@ -223,9 +223,9 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
                              +"cont.first_name, "
                              +"cont.last_name, "
                              +"cont.email, "
-                             +"cont.phone, "
-                             +"cont.phone_type, "
-                             +"cont.courtest_title, "
+                             +"cont.phone1, "
+                             +"cont.phone1_type, "
+                             +"cont.courtesy_title, "
                              +"aUser.id, "
                              +"aUser.first_name, "
                              +"aUser.last_name, "
@@ -253,7 +253,7 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
                         +"INNER JOIN ticket_priority AS tPri ON tick.ticket_priority_id = tPri.id "
                         +"LEFT JOIN product AS prod ON tick.product_id = prod.id "
                         +"LEFT JOIN asset AS asst ON tick.asset_id = asst.id "
-                        +"INNER JOIN asset_type AS aType ON asst.asset_type_id = aType.id "
+                        +"LEFT JOIN asset_type AS aType ON asst.asset_type_id = aType.id "
                         +"LEFT JOIN app_user AS luUser ON tick.last_updated_by_user_id = luUser.id "
                       +"WHERE tick.id = ? ";
         try (Connection conn = DatabaseMgr.getConnection();
@@ -418,9 +418,9 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
         String query = "UPDATE ticket SET title = ?, "
                                           +"description = ?,  "
                                           +"product_id = ?, "
-                                          +"contact_id = ?, "
+                                          +"requestor_app_user_id = ?, "
                                           +"assigned_app_user_id = ?, "
-                                          +"last_update_timestamp = ?, "
+                                          +"last_updated_timestamp = ?, "
                                           +"last_updated_by_user_id = ?, "
                                           +"ticket_status_id = ?, "
                                           +"ticket_number = ?, "
@@ -456,6 +456,7 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
             stmt.setInt(12, ticket.getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
     }

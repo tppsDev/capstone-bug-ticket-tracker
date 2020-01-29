@@ -16,7 +16,7 @@
    <children>
       <AnchorPane prefHeight="80.0" prefWidth="940.0" styleClass="screen-header">
          <children>
-            <Label fx:id="titleLabel" layoutY="18.0" prefHeight="44.0" prefWidth="940.0" styleClass="pane-header-title" text="Add Ticket" />
+            <Label fx:id="titleLabel" layoutY="18.0" prefHeight="44.0" prefWidth="940.0" styleClass="pane-header-title" text="Loading Ticket" />
             <ProgressBar fx:id="progressIndicator" layoutX="370.0" layoutY="57.0" prefWidth="200.0" />
          </children>
       </AnchorPane>

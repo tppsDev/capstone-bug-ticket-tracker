@@ -191,7 +191,7 @@ public class TicketFormController implements Initializable {
             ticketNumberLabel.setText(ticket.getTicketNumber());
             ticketStatusComboBox.getSelectionModel().select(ticket.getStatus());
             ticketPriorityComboBox.getSelectionModel().select(ticket.getPriority());
-            contactComboBox.getSelectionModel().select(ticket.getAssignedAppUser());
+            contactComboBox.getSelectionModel().select(ticket.getContact());
             if (ticket.getAssignedAppUser() != null) {
                 assignedToComboBox.getSelectionModel().select(ticket.getAssignedAppUser());
             }
@@ -507,7 +507,8 @@ public class TicketFormController implements Initializable {
     }
 
     private boolean validateTicketStatus() {
-        if (ticketStatusComboBox.getSelectionModel().isEmpty()) {
+        if (ticketStatusComboBox.getValue() == null) {
+            System.out.println(ticketStatusComboBox.getValue());
             ticketStatusErrorLabel.setText("Ticket Status is required");
             return false;
         }
@@ -517,7 +518,7 @@ public class TicketFormController implements Initializable {
     }
 
     private boolean validateTicketPriority() {
-        if (ticketPriorityComboBox.getSelectionModel().isEmpty()) {
+        if (ticketPriorityComboBox.getValue() == null) {
             ticketPriorityErrorLabel.setText("Ticket Priority is required");
             return false;
         }
@@ -527,7 +528,7 @@ public class TicketFormController implements Initializable {
     }
 
     private boolean validateContact() {
-        if (contactComboBox.getSelectionModel().isEmpty()) {
+        if (contactComboBox.getValue() == null) {
             contactErrorLabel.setText("Contact is required");
             return false;
         }

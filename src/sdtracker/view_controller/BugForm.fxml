@@ -9,14 +9,14 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="940.0" styleClass="white-background" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="sdtracker.view_controller.BugFormController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="940.0" styleClass="white-background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.BugFormController">
     <stylesheets>
         <URL value="@main.css" />
     </stylesheets>
    <children>
       <AnchorPane prefHeight="80.0" prefWidth="940.0" styleClass="screen-header">
          <children>
-            <Label fx:id="titleLabel" layoutY="18.0" prefHeight="44.0" prefWidth="940.0" styleClass="pane-header-title" text="Add Bug" />
+            <Label fx:id="titleLabel" layoutY="18.0" prefHeight="44.0" prefWidth="940.0" styleClass="pane-header-title" text="Loading Bug" />
             <ProgressBar fx:id="progressIndicator" layoutX="370.0" layoutY="57.0" prefWidth="200.0" />
          </children>
       </AnchorPane>

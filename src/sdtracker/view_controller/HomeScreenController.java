@@ -225,23 +225,23 @@ public class HomeScreenController implements Initializable {
     private GetAllContactsService getAllContactsService;
     private DeleteContactService deleteContactService;
     
-    private ObservableList<Ticket> allTicketList;
+    private ObservableList<Ticket> allTicketList = FXCollections.observableArrayList();
     private FilteredList<Ticket> filteredTicketList;
     private SortedList<Ticket> sortedTicketList;
     
-    private ObservableList<Bug> allBugList;
+    private ObservableList<Bug> allBugList = FXCollections.observableArrayList();
     private FilteredList<Bug> filteredBugList;
     private SortedList<Bug> sortedBugList;
     
-    private ObservableList<Asset> allAssetList;
+    private ObservableList<Asset> allAssetList = FXCollections.observableArrayList();
     private FilteredList<Asset> filteredAssetList;
     private SortedList<Asset> sortedAssetList;
     
-    private ObservableList<Product> allProductList;
+    private ObservableList<Product> allProductList = FXCollections.observableArrayList();
     private FilteredList<Product> filteredProductList;
     private SortedList<Product> sortedProductList;
     
-    private ObservableList<Contact> allContactList;
+    private ObservableList<Contact> allContactList = FXCollections.observableArrayList();
     private FilteredList<Contact> filteredContactList;
     private SortedList<Contact> sortedContactList;
     
@@ -906,6 +906,7 @@ public class HomeScreenController implements Initializable {
         sortedTicketList = new SortedList<>(filteredTicketList);
         sortedTicketList.comparatorProperty().bind(ticketTableView.comparatorProperty());
         // TODO filters
+        ticketTableView.refresh();
         ticketTableView.setItems(sortedTicketList);
         ticketTableView.getColumns().get(0).setVisible(false);
         ticketTableView.getColumns().get(0).setVisible(true);
@@ -1176,6 +1177,7 @@ public class HomeScreenController implements Initializable {
     
     // Service status event handlers
     private EventHandler<WorkerStateEvent> getAllTicketsSuccess = (event) -> {
+        allTicketList.clear();
         allTicketList = getAllTicketsService.getValue();
         loadTicketTableView();
     };
