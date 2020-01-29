@@ -177,6 +177,10 @@
     -fx-font-style: italic;
 }
 
+.table-cell {
+    -fx-wrap-text: true;
+}
+
 .table-delete-button {
     -fx-font: 6px "System";
     -fx-pref-width: 20;

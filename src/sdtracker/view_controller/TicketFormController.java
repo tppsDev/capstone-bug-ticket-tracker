@@ -61,7 +61,7 @@ public class TicketFormController implements Initializable {
     @FXML private Label ticketNumberLabel;
     @FXML private ComboBox<TicketStatus> ticketStatusComboBox;
     @FXML private ComboBox<TicketPriority> ticketPriorityComboBox;
-    @FXML private ComboBox<Contact> contactComboBox;
+    @FXML private ComboBox<AppUser> contactComboBox;
     @FXML private ComboBox<AppUser> assignedToComboBox;
     @FXML private ComboBox<Asset> assetComboBox;
     @FXML private ComboBox<Product> productComboBox;
@@ -105,10 +105,6 @@ public class TicketFormController implements Initializable {
     private GetAllTicketPrioritiesService getAllTicketPrioritiesService;
     private ObservableList<TicketPriority> allTicketPriorityList = FXCollections.observableArrayList();
     
-    private ContactDbServiceManager contactDbServiceManager = ContactDbServiceManager.getServiceManager();
-    private GetAllContactsService getAllContactsService;
-    private ObservableList<Contact> allContactList = FXCollections.observableArrayList();
-    
     private AssetDbServiceManager assetDbServiceManager = AssetDbServiceManager.getServiceManager();
     private GetAllAssetsService getAllAssetsService;
     private ObservableList<Asset> allAssetList = FXCollections.observableArrayList();
@@ -139,7 +135,6 @@ public class TicketFormController implements Initializable {
         
         getAllTicketStatusesService = ticketStatusDbServiceManager.new GetAllTicketStatusesService();
         getAllTicketPrioritiesService = ticketPriorityDbServiceManager.new GetAllTicketPrioritiesService();
-        getAllContactsService = contactDbServiceManager.new GetAllContactsService();
         getAllAssetsService = assetDbServiceManager.new GetAllAssetsService();
         getAllProductsService = productDbServiceManager.new GetAllProductsService();
         getAllAppUsersService = appUserDbServiceManager.new GetAllAppUsersService();
@@ -160,9 +155,6 @@ public class TicketFormController implements Initializable {
         getAllTicketPrioritiesService.setOnSucceeded(getAllTicketPrioritiesSuccess);
         getAllTicketPrioritiesService.setOnFailed(getAllTicketPrioritiesFailure);
         
-        getAllContactsService.setOnSucceeded(getAllContactsSuccess);
-        getAllContactsService.setOnFailed(getAllContactsFailure);
-        
         getAllAssetsService.setOnSucceeded(getAllAssetsSuccess);
         getAllAssetsService.setOnFailed(getAllAssetsFailure);
 
@@ -179,7 +171,6 @@ public class TicketFormController implements Initializable {
                                      .or(checkForDuplicateTicketService.runningProperty())
                                      .or(getAllTicketStatusesService.runningProperty())    
                                      .or(getAllTicketPrioritiesService.runningProperty())    
-                                     .or(getAllContactsService.runningProperty())
                                      .or(getAllAssetsService.runningProperty())   
                                      .or(getAllProductsService.runningProperty())    
                                      .or(getAllAppUsersService.runningProperty());
@@ -189,9 +180,10 @@ public class TicketFormController implements Initializable {
     private void initializeInputElements() {
         ticketStatusComboBox.getItems().addAll(allTicketStatusList);
         ticketPriorityComboBox.getItems().addAll(allTicketPriorityList);
-        contactComboBox.getItems().addAll(allContactList);
+        contactComboBox.getItems().addAll(allAppUserList);
         assignedToComboBox.getItems().addAll(allAppUserList);
         productComboBox.getItems().addAll(allProductList);
+        assetComboBox.getItems().addAll(allAssetList);
     }
     
     private void applyFormMode() {
@@ -199,7 +191,7 @@ public class TicketFormController implements Initializable {
             ticketNumberLabel.setText(ticket.getTicketNumber());
             ticketStatusComboBox.getSelectionModel().select(ticket.getStatus());
             ticketPriorityComboBox.getSelectionModel().select(ticket.getPriority());
-            contactComboBox.getSelectionModel().select(ticket.getContact());
+            contactComboBox.getSelectionModel().select(ticket.getAssignedAppUser());
             if (ticket.getAssignedAppUser() != null) {
                 assignedToComboBox.getSelectionModel().select(ticket.getAssignedAppUser());
             }
@@ -258,9 +250,13 @@ public class TicketFormController implements Initializable {
         ticket.setAsset(assetComboBox.getValue());
     }
     
-    private void setUpdateMode(Ticket ticket) {
+    public void setUpdateMode(Ticket ticket) {
         formMode = FormMode.UPDATE;
         this.ticket = ticket;
+    }
+    
+    public FormResult getFormResult() {
+        return formResult;
     }
     
     // Service run handlers
@@ -301,14 +297,7 @@ public class TicketFormController implements Initializable {
             getAllTicketPrioritiesService.start();
         }
     }
-    
-    private void runGetAllContactsService() {
-        if (!getAllContactsService.isRunning()) {
-            getAllContactsService.reset();
-            getAllContactsService.start();
-        }
-    }
-    
+
     private void runGetAllAssetsService() {
         if (!getAllAssetsService.isRunning()) {
             getAllAssetsService.reset();
@@ -382,21 +371,11 @@ public class TicketFormController implements Initializable {
     
     private EventHandler<WorkerStateEvent> getAllTicketPrioritiesSuccess = (event) -> {
         allTicketPriorityList = getAllTicketPrioritiesService.getValue();
-        runGetAllContactsService();
+        runGetAllAssetsService();
     };
     
     private EventHandler<WorkerStateEvent> getAllTicketPrioritiesFailure = (event) -> {
         displaySystemMessage("System error loading priorites, please try your request again.", true);
-        runGetAllContactsService();
-    };
-
-    private EventHandler<WorkerStateEvent> getAllContactsSuccess = (event) -> {
-        allContactList = getAllContactsService.getValue();
-        runGetAllAssetsService();
-    };
-    
-    private EventHandler<WorkerStateEvent> getAllContactsFailure = (event) -> {
-        displaySystemMessage("System error loading contacts, please try your request again.", true);
         runGetAllAssetsService();
     };
     
@@ -463,6 +442,7 @@ public class TicketFormController implements Initializable {
         currentStage.close();
     }
     
+    // Focus listeners
     private void startTicketStatusFocusListener() {
         if (ticketStatusFocusListener == null) {
             ticketStatusFocusListener = (observable, oldValue, newValue) -> {

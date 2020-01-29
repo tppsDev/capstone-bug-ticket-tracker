@@ -22,24 +22,9 @@ public class SDTracker extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        //AppUser user = new AppUser(0, "Ben", "Kenobi", null, "oldben@jedicouncil.com", "5555550001", "Cell", 
-//                                    null, null, "test", "test", "salt", "Jedi Master", "Mr", 
-//                                    new Department(6, "Executive Leadership"), null, new SecurityRole(4, "Admin"));
         
-//        AppUserDaoImpl auDaoImpl = AppUserDaoImpl.getAppUserDaoImpl();
-//        
-//
-//        AppUser user =auDaoImpl.getById(3);
-//        
-//        System.out.println(user);
-//
-//        
-//        System.out.println(user.checkPassword("test"));
-        
-        //user.setEncryptedPassword(user.getPassword());
-        
-        //Parent root = FXMLLoader.load(getClass().getResource("view_controller/Login.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("view_controller/AssetForm.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view_controller/Login.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("view_controller/AssetForm.fxml"));
         
         Scene scene = new Scene(root);
         

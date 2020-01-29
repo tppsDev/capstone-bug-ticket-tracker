@@ -25,6 +25,11 @@ public class DateTimeHandler {
      * Date & time DateTimeFormatter pattern of "M/d/YYYY h:mma"
      */
     public static final DateTimeFormatter FULL_DATE_TIME = DateTimeFormatter.ofPattern("M/d/YYYY h:mma");
+    
+    /**
+     * Date & time DateTimeFormatter pattern of "M/d/YYYY\nh:mma"
+     */
+    public static final DateTimeFormatter DATE_OVER_TIME = DateTimeFormatter.ofPattern("M/d/YYYY\nh:mma");
 
     /**
      * Date DateTimeFormatter pattern of "M/d/YYYY"

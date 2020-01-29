@@ -4,6 +4,7 @@
  */
 package sdtracker.view_controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +20,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -31,6 +34,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import sdtracker.Session;
 import sdtracker.database.AssetDbServiceManager;
 import sdtracker.database.AssetDbServiceManager.DeleteAssetService;
@@ -59,6 +65,7 @@ import sdtracker.model.Ticket;
 import sdtracker.model.TicketPriority;
 import sdtracker.model.TicketStatus;
 import sdtracker.utility.DateTimeHandler;
+import static sdtracker.view_controller.FormResult.FormResultStatus.SUCCESS;
 
 /**
  * FXML Controller class
@@ -373,7 +380,7 @@ public class HomeScreenController implements Initializable {
                 protected void updateItem(Ticket ticket, boolean empty) {
                     super.updateItem(ticket, empty);
                     
-                    if (ticket == null) {
+                    if (ticket == null || session.getSessionUser().getSecurityRole().getId() < 2) {
                         setGraphic(null);
                         return;
                     }
@@ -414,7 +421,7 @@ public class HomeScreenController implements Initializable {
         ticketNumberColumn.setCellValueFactory(new PropertyValueFactory<>("ticketNumber"));
         
         // Ticket priority column
-        ticketPriorityColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        ticketPriorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
         ticketPriorityColumn.setCellFactory(ticket -> {
             return new TableCell<Ticket, TicketPriority>(){
                 @Override
@@ -433,7 +440,7 @@ public class HomeScreenController implements Initializable {
         ticketTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         
         // Ticket status column
-        ticketStatusColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        ticketStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         ticketStatusColumn.setCellFactory(ticket -> {
             return new TableCell<Ticket, TicketStatus>(){
                 @Override
@@ -455,7 +462,7 @@ public class HomeScreenController implements Initializable {
                 @Override
                 protected void updateItem(AppUser assignedAppUser, boolean empty) {
                     super.updateItem(assignedAppUser, empty);
-                    if (empty) {
+                    if (empty || assignedAppUser == null) {
                         setText("");
                     } else {
                         setText(assignedAppUser.getDisplayName());
@@ -474,23 +481,27 @@ public class HomeScreenController implements Initializable {
                     if (empty) {
                         setText("");
                     } else {
-                        setText(createdTimestamp.format(DateTimeHandler.DATE_TIME_STAMP));
+                        setWrapText(true);
+                        Text text = new Text(createdTimestamp.format(DateTimeHandler.DATE_OVER_TIME));
+                        setGraphic(text);
                     }
                 }
             };
         });
         
-        // Ticket created date column
+        // Ticket last update date column
         ticketLastUpdatedColumn.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedTimestamp"));
         ticketLastUpdatedColumn.setCellFactory(ticket -> {
             return new TableCell<Ticket, LocalDateTime>() {
                 @Override
                 protected void updateItem(LocalDateTime lastUpdatedTimestamp, boolean empty) {
                     super.updateItem(lastUpdatedTimestamp, empty);
-                    if (empty) {
+                    if (empty || lastUpdatedTimestamp == null) {
                         setText("");
                     } else {
-                        setText(lastUpdatedTimestamp.format(DateTimeHandler.DATE_TIME_STAMP));
+                        setWrapText(true);
+                        Text text = new Text(lastUpdatedTimestamp.format(DateTimeHandler.DATE_OVER_TIME));
+                        setGraphic(text);
                     }
                 }
             };
@@ -896,6 +907,8 @@ public class HomeScreenController implements Initializable {
         sortedTicketList.comparatorProperty().bind(ticketTableView.comparatorProperty());
         // TODO filters
         ticketTableView.setItems(sortedTicketList);
+        ticketTableView.getColumns().get(0).setVisible(false);
+        ticketTableView.getColumns().get(0).setVisible(true);
 
         ticketDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
     }
@@ -970,6 +983,7 @@ public class HomeScreenController implements Initializable {
     private <T> void handleEditButton(T item) {
         if (item.getClass() == Ticket.class) {
             System.out.println("Ticket update clicked");
+            loadTicketForm(FormMode.UPDATE, (Ticket) item);
             return;
         }
         
@@ -1030,6 +1044,58 @@ public class HomeScreenController implements Initializable {
     @FXML
     private void handleSettingsNavButton(ActionEvent event) {
         settingsPane.toFront();
+    }
+    
+    private void loadTicketForm(FormMode formMode, Ticket ticket) {
+        FXMLLoader ticketFormLoader = new FXMLLoader(getClass().getResource("TicketForm.fxml"));
+        Scene ticketFormScene;
+        try {
+            ticketFormScene = new Scene(ticketFormLoader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+        }
+        Stage ticketFormStage = new Stage();
+        ticketFormStage.initOwner(activeUserLabel.getScene().getWindow());
+        ticketFormStage.initModality(Modality.APPLICATION_MODAL);
+        ticketFormStage.setTitle("SDTracker - Ticket");
+        ticketFormStage.setScene(ticketFormScene);
+        TicketFormController ticketFormController = ticketFormLoader.getController();
+        if (formMode.equals(FormMode.UPDATE)) {
+            ticketFormController.setUpdateMode(ticket);
+        }
+        ticketFormStage.showAndWait();
+        FormResult ticketFormResult = ticketFormController.getFormResult();
+        systemMessageLabel.setText(ticketFormResult.getMessage());
+        if (ticketFormResult.getResultStatus().equals(SUCCESS)) {
+            runGetAllTicketsService();
+        }
+    }
+    
+    private void loadBugForm(FormMode formMode, Bug bug) {
+        FXMLLoader bugFormLoader = new FXMLLoader(getClass().getResource("BugForm.fxml"));
+        Scene bugFormScene;
+        try {
+            bugFormScene = new Scene(bugFormLoader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+        }
+        Stage bugFormStage = new Stage();
+        bugFormStage.initOwner(activeUserLabel.getScene().getWindow());
+        bugFormStage.initModality(Modality.APPLICATION_MODAL);
+        bugFormStage.setTitle("SDTracker - Bug");
+        bugFormStage.setScene(bugFormScene);
+        BugFormController bugFormController = bugFormLoader.getController();
+        if (formMode.equals(FormMode.UPDATE)) {
+            bugFormController.setUpdateMode(bug);
+        }
+        bugFormStage.showAndWait();
+        FormResult bugFormResult = bugFormController.getFormResult();
+        systemMessageLabel.setText(bugFormResult.getMessage());
+        if (bugFormResult.getResultStatus().equals(SUCCESS)) {
+            runGetAllBugsService();
+        }
     }
     
     // Service run handlers
@@ -1115,7 +1181,7 @@ public class HomeScreenController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllTicketsFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private EventHandler<WorkerStateEvent> getAllBugsSuccess = (event) -> {

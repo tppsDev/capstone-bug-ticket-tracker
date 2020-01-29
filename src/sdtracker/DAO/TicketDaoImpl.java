@@ -74,9 +74,9 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
                              +"cont.first_name, "
                              +"cont.last_name, "
                              +"cont.email, "
-                             +"cont.phone, "
-                             +"cont.phone_type, "
-                             +"cont.courtest_title, "
+                             +"cont.phone1, "
+                             +"cont.phone1_type, "
+                             +"cont.courtesy_title, "
                              +"aUser.id, "
                              +"aUser.first_name, "
                              +"aUser.last_name, "
@@ -97,14 +97,14 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
                              +"aType.id, "
                              +"aType.name "
                       +"FROM ticket AS tick "
-                        +"INNER JOIN contact AS cont ON tick.contact_id = cont.id "
-                        +"INNER JOIN app_user AS aUser ON tick.assigned_app_user_id = aUser.id "
+                        +"INNER JOIN app_user AS cont ON tick.requestor_app_user_id = cont.id "
                         +"INNER JOIN app_user AS cUser ON tick.created_by_app_user_id = cUser.id "
                         +"INNER JOIN ticket_status AS tStat ON tick.ticket_status_id = tStat.id "
                         +"INNER JOIN ticket_priority AS tPri ON tick.ticket_priority_id = tPri.id "
                         +"LEFT JOIN product AS prod ON tick.product_id = prod.id "
                         +"LEFT JOIN asset AS asst ON tick.asset_id = asst.id "
-                        +"INNER JOIN asset_type AS aType ON asst.asset_type_id = aType.id "
+                        +"LEFT JOIN asset_type AS aType ON asst.asset_type_id = aType.id "
+                        +"LEFT JOIN app_user AS aUser ON tick.assigned_app_user_id = aUser.id "
                         +"LEFT JOIN app_user AS luUser ON tick.last_updated_by_user_id = luUser.id ";
         
         try (Connection conn = DatabaseMgr.getConnection();
@@ -116,29 +116,40 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
                 String title = result.getString("tick.title");
                 String description = result.getString("tick.description");
                 LocalDateTime createdTimestamp = result.getTimestamp("tick.created_timestamp").toLocalDateTime();
-                LocalDateTime lastUpdatedTimestamp = result.getTimestamp("tick.last_updated_timestamp").toLocalDateTime();
+                LocalDateTime lastUpdatedTimestamp = result.getTimestamp("tick.last_updated_timestamp") != null 
+                        ? result.getTimestamp("tick.last_updated_timestamp").toLocalDateTime() : null;
                 String ticketNumber= result.getString("tick.ticket_number");
                 
                 // Product object fields
-                int prodId = result.getInt("prod.id");
-                String prodName= result.getString("prod.name");
-                String prodVersion= result.getString("prod.version");
+                Product product;
+                if (result.getString("prod.name") != null) {
+                    int prodId = result.getInt("prod.id");
+                    String prodName= result.getString("prod.name");
+                    String prodVersion= result.getString("prod.version");
+                    product = new Product(prodId, prodName, prodVersion);
+                } else {
+                    product = null;
+                }
                 
                 // Contact object fields
                 int contId = result.getInt("cont.id");
                 String contFirstName = result.getString("cont.first_name");
                 String contLastName= result.getString("cont.last_name");
                 String contEmail = result.getString("cont.email");
-                String contPhone = result.getString("cont.phone");
-                String contPhoneType = result.getString("cont.phone_type");
-                String contCourtesyTitle = result.getString("cont.courtest_title");
+                String contPhone = result.getString("cont.phone1");
                 
                 // Assigned user fields
-                int aUserId = result.getInt("aUser.id");
-                String aUserFirstName = result.getString("aUser.first_name");
-                String aUserLastName = result.getString("aUser.last_name");
-                String aUserEmail = result.getString("aUser.email");
-                String aUserPhone1= result.getString("aUser.phone1");
+                 AppUser assignedAppUser;
+                if (result.getString("aUser.first_name") != null) {
+                    int aUserId = result.getInt("aUser.id");
+                    String aUserFirstName = result.getString("aUser.first_name");
+                    String aUserLastName = result.getString("aUser.last_name");
+                    String aUserEmail = result.getString("aUser.email");
+                    String aUserPhone1= result.getString("aUser.phone1");
+                    assignedAppUser = new AppUser(aUserId, aUserFirstName, aUserLastName, aUserEmail, aUserPhone1);
+                } else {
+                    assignedAppUser = null;
+                }
                 
                 // Created by user fields
                 int cUserId = result.getInt("cUser.id");
@@ -159,34 +170,39 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
                 String tPriName= result.getString("tPri.name");
                 
                 // Asset fields
-                int asstId = result.getInt("asst.id");
-                String asstName= result.getString("asst.name");
-                
-                // AssetType fields
-                int aTypeId = result.getInt("aType.id");
-                String aTypeName= result.getString("aType.name");
+                AssetType assetType;
+                Asset asset;
+                if (result.getString("asst.name") != null) {
+                    int asstId = result.getInt("asst.id");
+                    String asstName= result.getString("asst.name");
+
+                    // AssetType fields
+                    int aTypeId = result.getInt("aType.id");
+                    String aTypeName= result.getString("aType.name");
+                    assetType = new AssetType(aTypeId, aTypeName);
+                    asset = new Asset(asstId, asstName, assetType);
+                } else {
+                    asset = null;
+                }
                 
                 // Create related object instances
-                Product product = new Product(prodId, prodName, prodVersion);
-                Contact contact = new Contact(contId, contFirstName, contLastName, contEmail, 
-                        contPhone, contPhoneType, contCourtesyTitle);
-                AppUser assignedAppUser = new AppUser(aUserId, aUserFirstName, aUserLastName, aUserEmail, aUserPhone1);
+                AppUser contact = new AppUser(contId, contFirstName, contLastName, contEmail, 
+                        contPhone);
+               
                 AppUser createdByAppUser = new AppUser(cUserId, cUserFirstName, cUserLastName);
                 AppUser lastUpdatedByAppUser = new AppUser(luUserId, luUserFirstName, luUserLastName);
                 TicketStatus ticketStatus = new TicketStatus(tStatId, tStatName);
                 TicketPriority ticketPriority = new TicketPriority(tPriId, tPriName);
-                AssetType assetType = new AssetType(aTypeId, aTypeName);
-                Asset asset = new Asset(asstId, asstName, assetType);
-                
+      
                 // add new Ticket object to list
                 allTickets.add(new Ticket(id, title, description, product, contact, assignedAppUser, 
                         createdTimestamp, createdByAppUser, lastUpdatedTimestamp, lastUpdatedByAppUser, 
                         ticketNumber, asset, ticketStatus, ticketPriority));
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
-        
         return allTickets;
     }
 
@@ -230,7 +246,7 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
                              +"aType.id, "
                              +"aType.name "
                       +"FROM ticket AS tick "
-                        +"INNER JOIN contact AS cont ON tick.contact_id = cont.id "
+                        +"INNER JOIN app_user AS cont ON tick.contact_id = cont.id "
                         +"INNER JOIN app_user AS aUser ON tick.assigned_app_user_id = aUser.id "
                         +"INNER JOIN app_user AS cUser ON tick.created_by_app_user_id = cUser.id "
                         +"INNER JOIN ticket_status AS tStat ON tick.ticket_status_id = tStat.id "
@@ -302,8 +318,8 @@ public class TicketDaoImpl implements CrudDao<Ticket> {
                 
                 // Create related object instances
                 Product product = new Product(prodId, prodName, prodVersion);
-                Contact contact = new Contact(contId, contFirstName, contLastName, contEmail, 
-                        contPhone, contPhoneType, contCourtesyTitle);
+                AppUser contact = new AppUser(contId, contFirstName, contLastName, contEmail, 
+                        contPhone);
                 AppUser assignedAppUser = new AppUser(aUserId, aUserFirstName, aUserLastName, aUserEmail, aUserPhone1);
                 AppUser createdByAppUser = new AppUser(cUserId, cUserFirstName, cUserLastName);
                 AppUser lastUpdatedByAppUser = new AppUser(luUserId, luUserFirstName, luUserLastName);

@@ -15,7 +15,7 @@ public class Ticket {
     private String title;
     private String description;
     private Product product;
-    private Contact contact;
+    private AppUser contact;
     private AppUser assignedAppUser;
     private LocalDateTime createdTimestamp;
     private AppUser createdByAppUser;
@@ -34,7 +34,7 @@ public class Ticket {
     }
     
 
-    public Ticket(int id, String title, String description, Product product, Contact contact, AppUser assignedAppUser, 
+    public Ticket(int id, String title, String description, Product product, AppUser contact, AppUser assignedAppUser, 
             LocalDateTime createdTimestamp, AppUser createdByAppUser, LocalDateTime lastupdatedTimestamp, 
             AppUser lastUpdatedByAppUser, String ticketNumber, Asset asset, 
             TicketStatus ticketStatus, TicketPriority priority) {
@@ -51,6 +51,7 @@ public class Ticket {
         this.ticketNumber = ticketNumber;
         this.asset = asset;
         this.status = ticketStatus;
+        this.priority = priority;
     }
 
     public int getId() {
@@ -85,11 +86,11 @@ public class Ticket {
         this.product = product;
     }
 
-    public Contact getContact() {
+    public AppUser getContact() {
         return contact;
     }
 
-    public void setContact(Contact contact) {
+    public void setContact(AppUser contact) {
         this.contact = contact;
     }
 

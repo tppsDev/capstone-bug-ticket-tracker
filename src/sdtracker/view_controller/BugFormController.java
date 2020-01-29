@@ -239,9 +239,13 @@ public class BugFormController implements Initializable {
         bug.setProduct(productComboBox.getValue());
     }
     
-    private void setUpdateMode(Bug bug) {
+    public void setUpdateMode(Bug bug) {
         formMode = FormMode.UPDATE;
         this.bug = bug;
+    }
+    
+    public FormResult getFormResult() {
+        return formResult;
     }
     
     // Service run handlers
