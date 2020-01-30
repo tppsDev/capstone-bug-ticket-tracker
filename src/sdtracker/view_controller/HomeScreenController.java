@@ -571,7 +571,7 @@ public class HomeScreenController implements Initializable {
         bugNumberColumn.setCellValueFactory(new PropertyValueFactory<>("bugNumber"));
         
         // Bug priority column
-        bugPriorityColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        bugPriorityColumn.setCellValueFactory(new PropertyValueFactory<>("priority"));
         bugPriorityColumn.setCellFactory(bug -> {
             return new TableCell<Bug, BugPriority>(){
                 @Override
@@ -590,7 +590,7 @@ public class HomeScreenController implements Initializable {
         bugTitleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
         
         // Bug status column
-        bugStatusColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        bugStatusColumn.setCellValueFactory(new PropertyValueFactory<>("status"));
         bugStatusColumn.setCellFactory(bug -> {
             return new TableCell<Bug, BugStatus>(){
                 @Override
@@ -612,7 +612,7 @@ public class HomeScreenController implements Initializable {
                 @Override
                 protected void updateItem(AppUser assignedAppUser, boolean empty) {
                     super.updateItem(assignedAppUser, empty);
-                    if (empty) {
+                    if (empty || assignedAppUser == null) {
                         setText("");
                     } else {
                         setText(assignedAppUser.getDisplayName());
@@ -631,7 +631,9 @@ public class HomeScreenController implements Initializable {
                     if (empty) {
                         setText("");
                     } else {
-                        setText(createdTimestamp.format(DateTimeHandler.DATE_TIME_STAMP));
+                        setWrapText(true);
+                        Text text = new Text(createdTimestamp.format(DateTimeHandler.DATE_OVER_TIME));
+                        setGraphic(text);
                     }
                 }
             };
@@ -644,10 +646,12 @@ public class HomeScreenController implements Initializable {
                 @Override
                 protected void updateItem(LocalDateTime lastUpdatedTimestamp, boolean empty) {
                     super.updateItem(lastUpdatedTimestamp, empty);
-                    if (empty) {
+                    if (empty || lastUpdatedTimestamp == null) {
                         setText("");
                     } else {
-                        setText(lastUpdatedTimestamp.format(DateTimeHandler.DATE_TIME_STAMP));
+                        setWrapText(true);
+                        Text text = new Text(lastUpdatedTimestamp.format(DateTimeHandler.DATE_OVER_TIME));
+                        setGraphic(text);
                     }
                 }
             };
@@ -737,7 +741,7 @@ public class HomeScreenController implements Initializable {
                 @Override
                 protected void updateItem(AppUser assignedTo, boolean empty) {
                     super.updateItem(assignedTo, empty);
-                    if (empty) {
+                    if (empty || assignedTo == null) {
                         setText("");
                     } else {
                         setText(assignedTo.getDisplayName());
@@ -919,8 +923,10 @@ public class HomeScreenController implements Initializable {
         sortedBugList = new SortedList<>(filteredBugList);
         sortedBugList.comparatorProperty().bind(bugTableView.comparatorProperty());
         // TODO filters
+        bugTableView.refresh();
         bugTableView.setItems(sortedBugList);
-
+        bugTableView.getColumns().get(0).setVisible(false);
+        bugTableView.getColumns().get(0).setVisible(true);
         bugDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
     }
     
@@ -929,6 +935,7 @@ public class HomeScreenController implements Initializable {
         sortedAssetList = new SortedList<>(filteredAssetList);
         sortedAssetList.comparatorProperty().bind(assetTableView.comparatorProperty());
         // TODO filters
+        assetTableView.refresh();
         assetTableView.setItems(sortedAssetList);
 
         assetDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
@@ -939,6 +946,7 @@ public class HomeScreenController implements Initializable {
         sortedProductList = new SortedList<>(filteredProductList);
         sortedProductList.comparatorProperty().bind(productTableView.comparatorProperty());
         // TODO filters
+        productTableView.refresh();
         productTableView.setItems(sortedProductList);
 
         productDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
@@ -949,6 +957,7 @@ public class HomeScreenController implements Initializable {
         sortedContactList = new SortedList<>(filteredContactList);
         sortedContactList.comparatorProperty().bind(contactTableView.comparatorProperty());
         // TODO filters
+        contactTableView.refresh();
         contactTableView.setItems(sortedContactList);
 
         contactDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
@@ -983,13 +992,12 @@ public class HomeScreenController implements Initializable {
     
     private <T> void handleEditButton(T item) {
         if (item.getClass() == Ticket.class) {
-            System.out.println("Ticket update clicked");
             loadTicketForm(FormMode.UPDATE, (Ticket) item);
             return;
         }
         
         if (item.getClass() == Bug.class) {
-            System.out.println("Bug update clicked");
+            loadBugForm(FormMode.UPDATE, (Bug) item);
             return;
         }
         
@@ -1005,6 +1013,16 @@ public class HomeScreenController implements Initializable {
         if (item.getClass() == Contact.class) {
             System.out.println("Contact update clicked");
         }
+    }
+    
+    @FXML
+    private void handleAddTicketButton() {
+        loadTicketForm(FormMode.INSERT, null);
+    }
+    
+    @FXML
+    private void handleAddBugButton() {
+        loadBugForm(FormMode.INSERT, null);
     }
     
     @FXML
@@ -1187,12 +1205,13 @@ public class HomeScreenController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllBugsSuccess = (event) -> {
+        allBugList.clear();
         allBugList = getAllBugsService.getValue();
         loadBugTableView();
     };
     
     private EventHandler<WorkerStateEvent> getAllBugsFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private EventHandler<WorkerStateEvent> getAllAssetssSuccess = (event) -> {
@@ -1201,7 +1220,7 @@ public class HomeScreenController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllAssetssFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private EventHandler<WorkerStateEvent> getAllProductsSuccess = (event) -> {
@@ -1210,7 +1229,7 @@ public class HomeScreenController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllProductsFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private EventHandler<WorkerStateEvent> getAllContactsSuccess = (event) -> {
@@ -1219,47 +1238,47 @@ public class HomeScreenController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllContactsFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private EventHandler<WorkerStateEvent> deleteTicketSuccess = (event) -> {
-        // TODO
+        runGetAllTicketsService();
     };
     
     private EventHandler<WorkerStateEvent> deleteTicketFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private EventHandler<WorkerStateEvent> deleteBugSuccess = (event) -> {
-        // TODO
+        runGetAllBugsService();
     };
     
     private EventHandler<WorkerStateEvent> deleteBugFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private EventHandler<WorkerStateEvent> deleteAssetSuccess = (event) -> {
-        // TODO
+        runGetAllAssetsService();
     };
     
     private EventHandler<WorkerStateEvent> deleteAssetsFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private EventHandler<WorkerStateEvent> deleteProductSuccess = (event) -> {
-        // TODO
+        runGetAllProductsService();
     };
     
     private EventHandler<WorkerStateEvent> deleteProductFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private EventHandler<WorkerStateEvent> deleteContactSuccess = (event) -> {
-        // TODO
+        runGetAllContactsService();
     };
     
     private EventHandler<WorkerStateEvent> deleteContactFailure = (event) -> {
-        // TODO
+        event.getSource().getException().printStackTrace();
     };
     
     private enum TicketView {

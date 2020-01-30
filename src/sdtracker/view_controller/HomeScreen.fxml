@@ -41,7 +41,7 @@
             <Button fx:id="contactsNavButton" mnemonicParsing="false" onAction="#handleContactsNavButton" prefHeight="25.0" prefWidth="221.0" styleClass="nav-button" text="Contacts" />
             <Button fx:id="reportsNavButton" mnemonicParsing="false" onAction="#handleReportsNavButton" prefHeight="25.0" prefWidth="221.0" styleClass="nav-button" text="Reports" />
             <Button fx:id="settingsNavButton" mnemonicParsing="false" onAction="#handleSettingsNavButton" prefHeight="25.0" prefWidth="221.0" styleClass="nav-button" text="Settings" />
-            <Pane prefHeight="4.0" prefWidth="193.0" styleClass="nav-seperator" />
+            <Pane prefHeight="4.0" prefWidth="193.0" styleClass="nav-separator" />
             <Label fx:id="statBoxUserLabel" prefHeight="17.0" prefWidth="310.0" styleClass="user-box-title" text="Test User">
                <VBox.margin>
                   <Insets top="5.0" />
@@ -86,7 +86,7 @@
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
                      <children>
-                        <Button fx:id="addBugButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Bug" />
+                        <Button fx:id="addBugButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddBugButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Bug" />
                         <Label fx:id="bugPaneTitleLabel" layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Bugs" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
                         <ComboBox fx:id="bugViewComboBox" layoutX="834.0" layoutY="18.0" prefWidth="150.0" />
                      </children>
@@ -262,7 +262,7 @@
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
                      <children>
-                        <Button fx:id="addTicketButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Ticket" />
+                        <Button fx:id="addTicketButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddTicketButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Ticket" />
                         <Label fx:id="ticketPaneTitleLabel" layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Tickets" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
                         <ComboBox fx:id="ticketViewComboBox" layoutX="834.0" layoutY="18.0" prefWidth="150.0" />
                      </children>

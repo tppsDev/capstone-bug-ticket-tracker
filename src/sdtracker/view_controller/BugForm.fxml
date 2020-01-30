@@ -35,7 +35,7 @@
       <Label layoutX="35.0" layoutY="355.0" prefHeight="29.0" prefWidth="92.0" styleClass="form-label" text="Title:" />
       <TextField fx:id="titleTextField" layoutX="136.0" layoutY="355.0" prefHeight="29.0" prefWidth="678.0" styleClass="form-text-field" />
       <Label layoutX="14.0" layoutY="427.0" prefHeight="29.0" prefWidth="113.0" styleClass="form-label" text="Description:" />
-      <TextArea fx:id="descriptionTextArea" layoutX="136.0" layoutY="427.0" prefHeight="200.0" prefWidth="678.0" styleClass="form-text-field" />
+      <TextArea fx:id="descriptionTextArea" layoutX="136.0" layoutY="427.0" prefHeight="200.0" prefWidth="678.0" styleClass="form-text-field" wrapText="true" />
       <Label fx:id="bugStatusErrorLabel" layoutX="136.0" layoutY="134.0" prefHeight="17.0" prefWidth="133.0" styleClass="form-error-label" />
       <Label fx:id="bugPriorityErrorLabel" layoutX="409.0" layoutY="134.0" prefHeight="17.0" prefWidth="133.0" styleClass="form-error-label" />
       <Label fx:id="contactErrorLabel" layoutX="136.0" layoutY="200.0" prefHeight="17.0" prefWidth="304.0" styleClass="form-error-label" />

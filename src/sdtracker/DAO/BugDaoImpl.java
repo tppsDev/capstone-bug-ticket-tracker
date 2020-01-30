@@ -62,42 +62,42 @@ public class BugDaoImpl implements CrudDao<Bug> {
         ObservableList<Bug> allBugs = FXCollections.observableArrayList();
         
         String query = "SELECT b.id, "
-                             +"b.bug_number "
-                             +"b.title "
-                             +"b.description "
-                             +"b.created_timestamp "
-                             +"b.last_updated_timestamp "
-                             +"prod.id "
-                             +"prod.name "
-                             +"prod.version "
-                             +"cont.id "
-                             +"cont.first_name "
-                             +"cont.last_name "
-                             +"cont.email "
-                             +"cont.phone "
-                             +"cont.phone_type "
-                             +"cont.courtest_title "
-                             +"aUser.id "
-                             +"aUser.first_name "
-                             +"aUser.last_name "
-                             +"aUser.email "
-                             +"aUser.phone1 "
-                             +"cUser.id "
-                             +"cUser.first_name "
-                             +"cUser.last_name "
-                             +"luUser.id "
-                             +"luUser.first_name "
-                             +"luUser.last_name "
-                             +"bStat.id "
-                             +"bStat.name "
-                             +"bPri.id "
+                             +"b.bug_number, "
+                             +"b.title, "
+                             +"b.description, "
+                             +"b.created_timestamp, "
+                             +"b.last_updated_timestamp, "
+                             +"prod.id, "
+                             +"prod.name, "
+                             +"prod.version, "
+                             +"cont.id, "
+                             +"cont.first_name, "
+                             +"cont.last_name, "
+                             +"cont.email, "
+                             +"cont.phone, "
+                             +"cont.phone_type, "
+                             +"cont.courtesy_title, "
+                             +"aUser.id, "
+                             +"aUser.first_name, "
+                             +"aUser.last_name, "
+                             +"aUser.email, "
+                             +"aUser.phone1, "
+                             +"cUser.id, "
+                             +"cUser.first_name, "
+                             +"cUser.last_name, "
+                             +"luUser.id, "
+                             +"luUser.first_name, "
+                             +"luUser.last_name, "
+                             +"bStat.id, "
+                             +"bStat.name, "
+                             +"bPri.id, "
                              +"bPri.name "
                       +"FROM bug AS b "
                         +"INNER JOIN contact AS cont ON b.contact_id = cont.id "
-                        +"INNER JOIN app_user AS aUser ON b.assigned_app_user_id = aUser.id "
                         +"INNER JOIN app_user AS cUser ON b.created_by_user_id = cUser.id "
-                        +"INNER JOIN bug_status AS bStat ON b.bug_status_id = tStat.id "
-                        +"INNER JOIN bug_priority AS bPri ON b.bug_priority_id = tPri.id "
+                        +"INNER JOIN bug_status AS bStat ON b.bug_status_id = bStat.id "
+                        +"INNER JOIN bug_priority AS bPri ON b.bug_priority_id = bPri.id "
+                        +"LEFT JOIN app_user AS aUser ON b.assigned_app_user_id = aUser.id "
                         +"LEFT JOIN product AS prod ON b.product_id = prod.id "
                         +"LEFT JOIN app_user AS luUser ON b.last_updated_by_user_id = luUser.id ";
         
@@ -110,13 +110,20 @@ public class BugDaoImpl implements CrudDao<Bug> {
                 String title = result.getString("b.title");
                 String description = result.getString("b.description");
                 LocalDateTime createdTimestamp = result.getTimestamp("b.created_timestamp").toLocalDateTime();
-                LocalDateTime lastUpdatedTimestamp = result.getTimestamp("b.last_updated_timestamp").toLocalDateTime();
+                LocalDateTime lastUpdatedTimestamp = null;
+                if (result.getTimestamp("b.last_updated_timestamp") != null) {
+                    lastUpdatedTimestamp = result.getTimestamp("b.last_updated_timestamp").toLocalDateTime();
+                }
                 String bugNumber= result.getString("b.bug_number");
                 
                 // Product object fields
-                int prodId = result.getInt("prod.id");
-                String prodName= result.getString("prod.name");
-                String prodVersion= result.getString("prod.version");
+                Product product = null;
+                if (result.getString("prod.name") != null) {
+                    int prodId = result.getInt("prod.id");
+                    String prodName= result.getString("prod.name");
+                    String prodVersion= result.getString("prod.version");
+                    product = new Product(prodId, prodName, prodVersion);
+                }
                 
                 // Contact object fields
                 int contId = result.getInt("cont.id");
@@ -125,14 +132,18 @@ public class BugDaoImpl implements CrudDao<Bug> {
                 String contEmail = result.getString("cont.email");
                 String contPhone = result.getString("cont.phone");
                 String contPhoneType = result.getString("cont.phone_type");
-                String contCourtesyTitle = result.getString("cont.courtest_title");
+                String contCourtesyTitle = result.getString("cont.courtesy_title");
                 
                 // Assigned user fields
-                int aUserId = result.getInt("aUser.id");
-                String aUserFirstName = result.getString("aUser.first_name");
-                String aUserLastName = result.getString("aUser.last_name");
-                String aUserEmail = result.getString("aUser.email");
-                String aUserPhone1= result.getString("aUser.phone1");
+                AppUser assignedAppUser = null;
+                if (result.getString("aUser.first_name") != null) {
+                    int aUserId = result.getInt("aUser.id");
+                    String aUserFirstName = result.getString("aUser.first_name");
+                    String aUserLastName = result.getString("aUser.last_name");
+                    String aUserEmail = result.getString("aUser.email");
+                    String aUserPhone1= result.getString("aUser.phone1");
+                    assignedAppUser = new AppUser(aUserId, aUserFirstName, aUserLastName, aUserEmail, aUserPhone1);
+                }
                 
                 // Created by user fields
                 int cUserId = result.getInt("cUser.id");
@@ -140,9 +151,13 @@ public class BugDaoImpl implements CrudDao<Bug> {
                 String cUserLastName = result.getString("cUser.last_name");
                 
                 // Last updated by user fields
-                int luUserId = result.getInt("luUser.id");
-                String luUserFirstName= result.getString("luUser.first_name");
-                String luUserLastName = result.getString("luUser.last_name");
+                AppUser lastUpdatedByAppUser = null;
+                if (result.getString("luUser.first_name") != null) {
+                    int luUserId = result.getInt("luUser.id");
+                    String luUserFirstName= result.getString("luUser.first_name");
+                    String luUserLastName = result.getString("luUser.last_name");
+                    lastUpdatedByAppUser = new AppUser(luUserId, luUserFirstName, luUserLastName);
+                }
                 
                 // BugStatus fields
                 int tStatId = result.getInt("bStat.id");
@@ -153,12 +168,9 @@ public class BugDaoImpl implements CrudDao<Bug> {
                 String tPriName= result.getString("bPri.name");
 
                 // Create related object instances
-                Product product = new Product(prodId, prodName, prodVersion);
                 Contact contact = new Contact(contId, contFirstName, contLastName, contEmail, 
                         contPhone, contPhoneType, contCourtesyTitle);
-                AppUser assignedAppUser = new AppUser(aUserId, aUserFirstName, aUserLastName, aUserEmail, aUserPhone1);
                 AppUser createdByAppUser = new AppUser(cUserId, cUserFirstName, cUserLastName);
-                AppUser lastUpdatedByAppUser = new AppUser(luUserId, luUserFirstName, luUserLastName);
                 BugStatus bugStatus = new BugStatus(tStatId, tStatName);
                 BugPriority bugPriority = new BugPriority(tPriId, tPriName);
                
@@ -168,6 +180,7 @@ public class BugDaoImpl implements CrudDao<Bug> {
                         product, contact, bugPriority, bugNumber));
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
         
@@ -179,42 +192,42 @@ public class BugDaoImpl implements CrudDao<Bug> {
         Bug bug;
         
         String query = "SELECT b.id, "
-                             +"b.bug_number "
-                             +"b.title "
-                             +"b.description "
-                             +"b.created_timestamp "
-                             +"b.last_updated_timestamp "
-                             +"prod.id "
-                             +"prod.name "
-                             +"prod.version "
-                             +"cont.id "
-                             +"cont.first_name "
-                             +"cont.last_name "
-                             +"cont.email "
-                             +"cont.phone "
-                             +"cont.phone_type "
-                             +"cont.courtest_title "
-                             +"aUser.id "
-                             +"aUser.first_name "
-                             +"aUser.last_name "
-                             +"aUser.email "
-                             +"aUser.phone1 "
-                             +"cUser.id "
-                             +"cUser.first_name "
-                             +"cUser.last_name "
-                             +"luUser.id "
-                             +"luUser.first_name "
-                             +"luUser.last_name "
-                             +"bStat.id "
-                             +"bStat.name "
-                             +"bPri.id "
+                             +"b.bug_number, "
+                             +"b.title, "
+                             +"b.description, "
+                             +"b.created_timestamp, "
+                             +"b.last_updated_timestamp, "
+                             +"prod.id, "
+                             +"prod.name, "
+                             +"prod.version, "
+                             +"cont.id, "
+                             +"cont.first_name, "
+                             +"cont.last_name, "
+                             +"cont.email, "
+                             +"cont.phone, "
+                             +"cont.phone_type, "
+                             +"cont.courtesy_title, "
+                             +"aUser.id, "
+                             +"aUser.first_name, "
+                             +"aUser.last_name, "
+                             +"aUser.email, "
+                             +"aUser.phone1, "
+                             +"cUser.id, "
+                             +"cUser.first_name, "
+                             +"cUser.last_name, "
+                             +"luUser.id, "
+                             +"luUser.first_name, "
+                             +"luUser.last_name, "
+                             +"bStat.id, "
+                             +"bStat.name, "
+                             +"bPri.id, "
                              +"bPri.name "
                       +"FROM bug AS b "
                         +"INNER JOIN contact AS cont ON b.contact_id = cont.id "
-                        +"INNER JOIN app_user AS aUser ON b.assigned_app_user_id = aUser.id "
                         +"INNER JOIN app_user AS cUser ON b.created_by_user_id = cUser.id "
-                        +"INNER JOIN bug_status AS bStat ON b.bug_status_id = tStat.id "
-                        +"INNER JOIN bug_priority AS bPri ON b.bug_priority_id = tPri.id "
+                        +"INNER JOIN bug_status AS bStat ON b.bug_status_id = bStat.id "
+                        +"INNER JOIN bug_priority AS bPri ON b.bug_priority_id = bPri.id "
+                        +"LEFT JOIN app_user AS aUser ON b.assigned_app_user_id = aUser.id "
                         +"LEFT JOIN product AS prod ON b.product_id = prod.id "
                         +"LEFT JOIN app_user AS luUser ON b.last_updated_by_user_id = luUser.id "
                       +"WHERE b.id = ? ";
@@ -362,7 +375,7 @@ public class BugDaoImpl implements CrudDao<Bug> {
                                           +"product_id = ?, "
                                           +"contact_id = ?, "
                                           +"assigned_app_user_id = ?, "
-                                          +"last_update_timestamp = ?, "
+                                          +"last_updated_timestamp = ?, "
                                           +"last_updated_by_user_id = ?, "
                                           +"bug_status_id = ?, "
                                           +"bug_number = ?, "
@@ -388,6 +401,7 @@ public class BugDaoImpl implements CrudDao<Bug> {
             stmt.setInt(11, bug.getId());
             stmt.executeUpdate();
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
     }

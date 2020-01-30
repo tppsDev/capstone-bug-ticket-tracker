@@ -506,7 +506,7 @@ public class BugFormController implements Initializable {
     }
 
     private boolean validateBugStatus() {
-        if (bugStatusComboBox.getSelectionModel().isEmpty()) {
+        if (bugStatusComboBox.getValue() == null) {
             bugStatusErrorLabel.setText("Bug Status is required");
             return false;
         }
@@ -516,7 +516,7 @@ public class BugFormController implements Initializable {
     }
 
     private boolean validateBugPriority() {
-        if (bugPriorityComboBox.getSelectionModel().isEmpty()) {
+        if (bugPriorityComboBox.getValue() == null) {
             bugPriorityErrorLabel.setText("Bug Priority is required");
             return false;
         }
@@ -526,7 +526,7 @@ public class BugFormController implements Initializable {
     }
 
     private boolean validateContact() {
-        if (contactComboBox.getSelectionModel().isEmpty()) {
+        if (contactComboBox.getValue() == null) {
             contactErrorLabel.setText("Contact is required");
             return false;
         }
@@ -536,7 +536,7 @@ public class BugFormController implements Initializable {
     }
 
     private boolean validateProduct() {
-        if (productComboBox.getSelectionModel().isEmpty()) {
+        if (productComboBox.getValue() == null) {
             productErrorLabel.setText("Product is required");
             return false;
         }
