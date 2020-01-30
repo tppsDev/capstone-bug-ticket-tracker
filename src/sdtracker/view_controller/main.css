@@ -146,7 +146,7 @@
     
 }
 
-.screen-header label {
+.screen-header-label {
     -fx-text-fill: -primary-color;
     -fx-font: 32px "Cambria";
     -fx-font-weight: bold;
@@ -218,6 +218,12 @@
 
 .table-view .column-header .label {
   -fx-text-alignment: center;
+}
+
+.thin-dark-border {
+    -fx-border-color: -dark-nuetral-color;
+    -fx-border-style: solid;
+    -fx-border-width: 1px 1px 1px 1px;
 }
 
 .user-box-title {

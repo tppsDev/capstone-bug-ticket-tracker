@@ -25,7 +25,7 @@
    <children>
       <AnchorPane prefHeight="80.0" prefWidth="1250.0" styleClass="screen-header">
          <children>
-            <Label layoutX="492.0" layoutY="18.0" styleClass="screen-header" text="SDTracker 1.0" />
+            <Label layoutX="492.0" layoutY="18.0" styleClass="screen-header-label" text="SDTracker 1.0" />
             <Label fx:id="activeUserLabel" layoutX="918.0" layoutY="31.0" prefHeight="19.0" prefWidth="278.0" styleClass="active-user-label" />
             <Label fx:id="currentDateLabel" layoutX="24.0" layoutY="31.0" prefHeight="19.0" prefWidth="278.0" styleClass="current-date-label" />
             <ProgressIndicator fx:id="progressIndicator" layoutX="768.0" layoutY="14.0" styleClass="primary-progress-indicator" />
@@ -117,7 +117,7 @@
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
                      <children>
-                        <Button fx:id="contactAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Contact" />
+                        <Button fx:id="contactAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddContactButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Contact" />
                         <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Contacts" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
                      </children>
                   </AnchorPane>
@@ -138,81 +138,11 @@
                   </TableView>
                </children>
             </AnchorPane>
-            <AnchorPane id="reportsPane" fx:id="reportsPane" prefHeight="200.0" prefWidth="200.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Reports" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                     </children>
-                  </AnchorPane>
-                  <GridPane layoutX="105.0" layoutY="113.0" prefHeight="330.0" prefWidth="822.0">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <Label fx:id="report4Label" prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Report 4" GridPane.columnIndex="1" />
-                        <Label fx:id="report1Label" prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Report 1" />
-                        <Label fx:id="report2Label" prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Report 2" GridPane.rowIndex="1" />
-                        <Label fx:id="report3Label" prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Report 3" GridPane.rowIndex="2" />
-                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="2" />
-                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                     </children>
-                  </GridPane>
-               </children>
-            </AnchorPane>
-            <AnchorPane id="settingsPane" fx:id="settingsPane" prefHeight="200.0" prefWidth="200.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Settings" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                     </children>
-                  </AnchorPane>
-                  <Button fx:id="changePasswordButton" layoutX="424.0" layoutY="126.0" mnemonicParsing="false" styleClass="form-button" text="Change Password" />
-                  <AnchorPane fx:id="systemConfigPane" layoutY="183.0" prefHeight="348.0" prefWidth="1031.0">
-                     <children>
-                        <GridPane layoutX="105.0" layoutY="80.0" prefHeight="234.0" prefWidth="822.0">
-                           <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                           </columnConstraints>
-                           <rowConstraints>
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                           </rowConstraints>
-                           <children>
-                              <Label fx:id="bugStatusConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Bug Statuses" GridPane.columnIndex="1" />
-                              <Label fx:id="ticketStatusConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Ticket Statuses" />
-                              <Label fx:id="ticketPriorityConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Ticket Priorities" GridPane.rowIndex="1" />
-                              <Label fx:id="assetTypeConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Asset Types" GridPane.rowIndex="2" />
-                              <Label fx:id="bugPriorityConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Bug Priorities" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <Label fx:id="contactTypeConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Contact Types" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <Label fx:id="mfgConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Manufacturers" GridPane.columnIndex="2" />
-                              <Label fx:id="deptConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Departments" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                              <Label fx:id="appUserConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="App Users" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-                           </children>
-                        </GridPane>
-                        <Label layoutX="105.0" layoutY="53.0" prefHeight="25.0" prefWidth="822.0" styleClass="pane-header-title" text="System Table Configuration" />
-                     </children>
-                  </AnchorPane>
-               </children>
-            </AnchorPane>
             <AnchorPane id="assetsPane" fx:id="assetsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
                      <children>
-                        <Button fx:id="assetAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Asset" />
+                        <Button fx:id="assetAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddAssetButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Asset" />
                         <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Assets" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
                      </children>
                   </AnchorPane>
@@ -241,7 +171,7 @@
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
                      <children>
-                        <Button fx:id="productAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Product" />
+                        <Button fx:id="productAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddProductButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Product" />
                         <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Products" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
                      </children>
                   </AnchorPane>
@@ -289,8 +219,74 @@
                   <Label layoutX="35.0" layoutY="101.0" prefHeight="17.0" prefWidth="46.0" text="Filters:" />
                </children>
             </AnchorPane>
+            <AnchorPane id="settingsPane" fx:id="settingsPane" prefHeight="200.0" prefWidth="200.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Settings" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                     </children>
+                  </AnchorPane>
+                  <Button fx:id="changePasswordButton" layoutX="424.0" layoutY="126.0" mnemonicParsing="false" styleClass="form-button" text="Change Password" />
+                  <AnchorPane fx:id="systemConfigPane" layoutY="183.0" prefHeight="348.0" prefWidth="1031.0">
+                     <children>
+                        <GridPane layoutX="105.0" layoutY="80.0" prefHeight="234.0" prefWidth="822.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label fx:id="assetTypeConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Asset Types" />
+                              <Label fx:id="contactTypeConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Contact Types" GridPane.rowIndex="1" />
+                              <Label fx:id="mfgConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Manufacturers" GridPane.columnIndex="2" />
+                              <Label fx:id="deptConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="Departments" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="appUserConfigLabel" prefHeight="17.0" prefWidth="285.0" styleClass="system-table-link" text="App Users" GridPane.columnIndex="1" />
+                           </children>
+                        </GridPane>
+                        <Label layoutX="105.0" layoutY="53.0" prefHeight="25.0" prefWidth="822.0" styleClass="pane-header-title" text="System Table Configuration" />
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="reportsPane" fx:id="reportsPane" prefHeight="200.0" prefWidth="200.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Reports" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                     </children>
+                  </AnchorPane>
+                  <GridPane layoutX="105.0" layoutY="113.0" prefHeight="330.0" prefWidth="822.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="1" />
+                        <Label fx:id="report1Label" prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Report 1" />
+                        <Label fx:id="report2Label" prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Report 2" GridPane.rowIndex="1" />
+                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.rowIndex="2" />
+                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="2" />
+                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
+               </children>
+            </AnchorPane>
          </children>
       </StackPane>
-      <Label fx:id="systemMessageLabel" layoutX="234.0" layoutY="682.0" prefHeight="25.0" prefWidth="1000.0" styleClass="system-message-label" text="System messages . . ." />
+      <Label fx:id="systemMessageLabel" layoutX="234.0" layoutY="682.0" prefHeight="25.0" prefWidth="1000.0" styleClass="system-message-label" />
    </children>
 </AnchorPane>

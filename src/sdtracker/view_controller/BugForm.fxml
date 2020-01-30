@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
@@ -9,7 +10,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="940.0" styleClass="white-background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.BugFormController">
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.BugFormController">
     <stylesheets>
         <URL value="@main.css" />
     </stylesheets>
@@ -47,4 +48,8 @@
       <Button fx:id="cancelButton" layoutX="669.0" layoutY="655.0" mnemonicParsing="false" onAction="#handleCancelButton" styleClass="form-button" text="Cancel" />
       <Button fx:id="addSaveButton" layoutX="779.0" layoutY="655.0" mnemonicParsing="false" onAction="#handleAddSaveButton" prefHeight="35.0" prefWidth="84.0" styleClass="form-button" text="Add" />
    </children>
+   <styleClass>
+      <String fx:value="white-background" />
+      <String fx:value="thin-dark-border" />
+   </styleClass>
 </AnchorPane>

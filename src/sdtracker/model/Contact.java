@@ -100,14 +100,14 @@ public class Contact {
     public String getDisplayName() {
         String displayName = "";
         
-        if (!courtesyTitle.isEmpty()) {
+        if (courtesyTitle != null && !courtesyTitle.isEmpty()) {
             displayName = displayName + courtesyTitle;
         }
         
-        if (this.midInitial.isEmpty()) {
-            displayName = displayName + " " + firstName + " " + lastName;
-        } else {
+        if (midInitial != null && !midInitial.isEmpty()) {
             displayName = displayName + " " + firstName + " " + midInitial + " " + lastName;
+        } else {
+            displayName = displayName + " " + firstName + " " + lastName;
         }
         
         return displayName;

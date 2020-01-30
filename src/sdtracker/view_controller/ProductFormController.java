@@ -56,7 +56,6 @@ public class ProductFormController implements Initializable {
         initializeServices();
         establishBindings();
         applyFormMode();
-        setCurrentStage();
     }
     
     private void initializeServices() {
@@ -139,8 +138,7 @@ public class ProductFormController implements Initializable {
         formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Product " 
                 + product.getName()
                 + "was successfully added.");
-        System.out.println("Insert successful");
-        currentStage.close();
+        closeForm();
     };
     
     private EventHandler<WorkerStateEvent> insertProductFailure = (event) -> {
@@ -155,8 +153,7 @@ public class ProductFormController implements Initializable {
         formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Product " 
                 + product.getName()
                 + "was successfully changed.");
-        System.out.println("Update successful");
-        currentStage.close();
+        closeForm();
     };
     
     private EventHandler<WorkerStateEvent> updateProductFailure = (event) -> {
@@ -183,8 +180,8 @@ public class ProductFormController implements Initializable {
     
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        // TODO warning
-        currentStage.close();
+        formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "User cancelled request");
+        closeForm();
     }
     
     @FXML
@@ -194,7 +191,12 @@ public class ProductFormController implements Initializable {
         }
     }
     
-    public void setProduct(Product product) {
+    private void closeForm() {
+        Stage stage = (Stage) titleLabel.getScene().getWindow();
+        stage.close();
+    }
+    
+    public void specifyUpdateMode(Product product) {
         this.product = product;
         formMode = FormMode.UPDATE;
     }

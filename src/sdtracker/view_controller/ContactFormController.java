@@ -21,6 +21,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.stage.Stage;
 import sdtracker.database.ContactDbServiceManager;
 import sdtracker.database.ContactDbServiceManager.*;
 import sdtracker.model.Contact;
@@ -115,12 +116,7 @@ public class ContactFormController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         initializeServices();
         establishBindings();
-        initializeInputElements();
-        applyFormMode();
-        startEventHandlers();
-        // TODO remove after test
-        if (formMode.equals(FormMode.INSERT)) contact = new Contact();
-        
+        runGetAllContactsService();
     }
     
     private void initializeServices() {
@@ -193,6 +189,7 @@ public class ContactFormController implements Initializable {
             
             addSaveButton.setText("Save");
         } else {
+            contact = new Contact();
             addSaveButton.setText("Add");
         }
         
@@ -276,6 +273,9 @@ public class ContactFormController implements Initializable {
     // Service status event handlers
     private EventHandler<WorkerStateEvent> getAllContactsSuccess = (event) -> {
         allContactList = getAllContactsService.getValue();
+        initializeInputElements();
+        applyFormMode();
+        startEventHandlers();
     };
     
     private EventHandler<WorkerStateEvent> getAllContactsFailure = (event) -> {
@@ -289,7 +289,7 @@ public class ContactFormController implements Initializable {
         this.formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Contact for " 
                 + this.contact.getDisplayName()
                 + "was successfully added.");
-        System.out.println("Insert successful");
+        closeForm();
     };
     
     private EventHandler<WorkerStateEvent> insertContactFailure = (event) -> {
@@ -301,10 +301,10 @@ public class ContactFormController implements Initializable {
     
     private EventHandler<WorkerStateEvent> updateContactSuccess = (event) -> {
         // TODO create form result and close
-        this.formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Contact for " 
+        formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "Contact for " 
                 + this.contact.getDisplayName()
                 + "was successfully changed.");
-        System.out.println("Update successful");
+        closeForm();
     };
     
     private EventHandler<WorkerStateEvent> updateContactFailure = (event) -> {
@@ -316,7 +316,8 @@ public class ContactFormController implements Initializable {
     // Button event handlers
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        
+        formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Cancelled by user");
+        closeForm();
     }
     
     @FXML
@@ -332,6 +333,11 @@ public class ContactFormController implements Initializable {
             systemMessageLabel.getStyleClass().removeAll("system-message-label");
             systemMessageLabel.getStyleClass().add("system-message-label-error");
         }
+    }
+    
+    private void closeForm() {
+        Stage stage = (Stage) titleLabel.getScene().getWindow();
+        stage.close();
     }
     
     // Change listeners. Start focus listeners are created in a way that in the future they could be stopped if desired
@@ -600,7 +606,7 @@ public class ContactFormController implements Initializable {
     }
 
     private boolean validatePhoneType() {
-        if (phoneTypeComboBox.getSelectionModel().isEmpty()) {
+        if (phoneTypeComboBox.getValue() == null) {
             phoneTypeErrorLabel.setText("Phone type is required");
             return false;
         } else {
@@ -651,7 +657,7 @@ public class ContactFormController implements Initializable {
     }
 
     private boolean validateState() {
-        if (stateComboBox.getSelectionModel().isEmpty()) {
+        if (stateComboBox.getValue() == null) {
             stateErrorLabel.setText("State is required");
             return false;
         } else {
@@ -700,11 +706,7 @@ public class ContactFormController implements Initializable {
     
     // Getters & setters
 
-    public void setFormModeInsert() {
-        this.formMode = FormMode.INSERT;
-    }
-    
-    public void setFormModeUpdate(Contact contact) {
+    public void specifyUpdateMode(Contact contact) {
         this.formMode = FormMode.UPDATE;
         this.contact = contact;
     }

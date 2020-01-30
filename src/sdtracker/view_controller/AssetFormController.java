@@ -333,7 +333,7 @@ public class AssetFormController implements Initializable {
         currentStage.close();
     }
 
-    public void setAsset(Asset asset) {
+    public void specifyUpdateMode(Asset asset) {
         this.asset = asset;
         formMode = FormMode.UPDATE;
     }
@@ -378,7 +378,7 @@ public class AssetFormController implements Initializable {
     }
     
     private boolean validateAssetType() {
-        if (assetTypeComboBox.getSelectionModel().isEmpty()) {
+        if (assetTypeComboBox.getValue() == null) {
             assetTypeErrorLabel.setText("Asset Type required");
             return false;
         }
@@ -410,7 +410,7 @@ public class AssetFormController implements Initializable {
     }
     
     private boolean validateMfg() {
-        if (mfgComboBox.getSelectionModel().isEmpty()) {
+        if (mfgComboBox.getValue() == null) {
             mfgErrorLabel.setText("Manufacturer required");
             return false;
         }

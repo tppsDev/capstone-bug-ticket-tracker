@@ -37,6 +37,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import sdtracker.Session;
 import sdtracker.database.AssetDbServiceManager;
 import sdtracker.database.AssetDbServiceManager.DeleteAssetService;
@@ -184,20 +186,14 @@ public class HomeScreenController implements Initializable {
     
     //Reports pane elements
     @FXML private AnchorPane reportsPane;
-    @FXML private Label report4Label;
     @FXML private Label report1Label;
     @FXML private Label report2Label;
-    @FXML private Label report3Label;
     
     // Settings pane elements
     @FXML private AnchorPane settingsPane;
     @FXML private Button changePasswordButton;
     @FXML private AnchorPane systemConfigPane;
-    @FXML private Label bugStatusConfigLabel;
-    @FXML private Label ticketStatusConfigLabel;
-    @FXML private Label ticketPriorityConfigLabel;
     @FXML private Label assetTypeConfigLabel;
-    @FXML private Label bugPriorityConfigLabel;
     @FXML private Label contactTypeConfigLabel;
     @FXML private Label mfgConfigLabel;
     @FXML private Label deptConfigLabel;
@@ -735,16 +731,16 @@ public class HomeScreenController implements Initializable {
         });
         
         // Asset assigned to column
-        assetAssignedToColumn.setCellValueFactory(new PropertyValueFactory<>("assignedTo"));
+        assetAssignedToColumn.setCellValueFactory(new PropertyValueFactory<>("assignedToAppUser"));
         assetAssignedToColumn.setCellFactory(bug -> {
             return new TableCell<Asset, AppUser>(){
                 @Override
-                protected void updateItem(AppUser assignedTo, boolean empty) {
-                    super.updateItem(assignedTo, empty);
-                    if (empty || assignedTo == null) {
+                protected void updateItem(AppUser assignedToAppUser, boolean empty) {
+                    super.updateItem(assignedToAppUser, empty);
+                    if (empty || assignedToAppUser == null) {
                         setText("");
                     } else {
-                        setText(assignedTo.getDisplayName());
+                        setText(assignedToAppUser.getDisplayName());
                     }
                 }
             };
@@ -898,6 +894,10 @@ public class HomeScreenController implements Initializable {
               }
             };
         });
+        
+        contactEmailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
+        contactPhoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        contactCompanyColumn.setCellValueFactory(new PropertyValueFactory<>("company"));
     }
     
     private void initializeContactFilters() {
@@ -1002,16 +1002,16 @@ public class HomeScreenController implements Initializable {
         }
         
         if (item.getClass() == Asset.class) {
-            System.out.println("Asset update clicked");
+            loadAssetForm(FormMode.UPDATE, (Asset) item);
             return;
         }
         if (item.getClass() == Product.class) {
-            System.out.println("Product update clicked");
+            loadProductForm(FormMode.UPDATE, (Product) item);
             return;
         }
         
         if (item.getClass() == Contact.class) {
-            System.out.println("Contact update clicked");
+            loadContactForm(FormMode.UPDATE, (Contact) item);
         }
     }
     
@@ -1023,6 +1023,21 @@ public class HomeScreenController implements Initializable {
     @FXML
     private void handleAddBugButton() {
         loadBugForm(FormMode.INSERT, null);
+    }
+    
+    @FXML
+    private void handleAddAssetButton() {
+        loadAssetForm(FormMode.INSERT, null);
+    }
+    
+    @FXML
+    private void handleAddProductButton() {
+        loadProductForm(FormMode.INSERT, null);
+    }
+    
+    @FXML
+    private void handleAddContactButton() {
+        loadContactForm(FormMode.INSERT, null);
     }
     
     @FXML
@@ -1078,6 +1093,9 @@ public class HomeScreenController implements Initializable {
         ticketFormStage.initOwner(activeUserLabel.getScene().getWindow());
         ticketFormStage.initModality(Modality.APPLICATION_MODAL);
         ticketFormStage.setTitle("SDTracker - Ticket");
+        ticketFormStage.setOnCloseRequest((WindowEvent event) -> {
+            event.consume();
+        });
         ticketFormStage.setScene(ticketFormScene);
         TicketFormController ticketFormController = ticketFormLoader.getController();
         if (formMode.equals(FormMode.UPDATE)) {
@@ -1104,6 +1122,9 @@ public class HomeScreenController implements Initializable {
         bugFormStage.initOwner(activeUserLabel.getScene().getWindow());
         bugFormStage.initModality(Modality.APPLICATION_MODAL);
         bugFormStage.setTitle("SDTracker - Bug");
+        bugFormStage.setOnCloseRequest((WindowEvent event) -> {
+            event.consume();
+        });
         bugFormStage.setScene(bugFormScene);
         BugFormController bugFormController = bugFormLoader.getController();
         if (formMode.equals(FormMode.UPDATE)) {
@@ -1114,6 +1135,93 @@ public class HomeScreenController implements Initializable {
         systemMessageLabel.setText(bugFormResult.getMessage());
         if (bugFormResult.getResultStatus().equals(SUCCESS)) {
             runGetAllBugsService();
+        }
+    }
+    
+    private void loadAssetForm(FormMode formMode, Asset asset) {
+        FXMLLoader assetFormLoader = new FXMLLoader(getClass().getResource("AssetForm.fxml"));
+        Scene assetFormScene;
+        try {
+            assetFormScene = new Scene(assetFormLoader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+        }
+        Stage assetFormStage = new Stage();
+        assetFormStage.initOwner(activeUserLabel.getScene().getWindow());
+        assetFormStage.initModality(Modality.APPLICATION_MODAL);
+        assetFormStage.setTitle("SDTracker - Asset");
+        assetFormStage.setOnCloseRequest((WindowEvent event) -> {
+            event.consume();
+        });
+        assetFormStage.setScene(assetFormScene);
+        AssetFormController assetFormController = assetFormLoader.getController();
+        if (formMode.equals(FormMode.UPDATE)) {
+            assetFormController.specifyUpdateMode(asset);
+        }
+        assetFormStage.showAndWait();
+        FormResult assetFormResult = assetFormController.getFormResult();
+        systemMessageLabel.setText(assetFormResult.getMessage());
+        if (assetFormResult.getResultStatus().equals(SUCCESS)) {
+            runGetAllAssetsService();
+        }
+    }
+    
+    private void loadProductForm(FormMode formMode, Product product) {
+        FXMLLoader productFormLoader = new FXMLLoader(getClass().getResource("ProductForm.fxml"));
+        Scene productFormScene;
+        try {
+            productFormScene = new Scene(productFormLoader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+        }
+        Stage productFormStage = new Stage();
+        productFormStage.initOwner(activeUserLabel.getScene().getWindow());
+        productFormStage.initModality(Modality.APPLICATION_MODAL);
+        productFormStage.setTitle("SDTracker - Product");
+        productFormStage.setOnCloseRequest((WindowEvent event) -> {
+            event.consume();
+        });
+        productFormStage.setScene(productFormScene);
+        ProductFormController productFormController = productFormLoader.getController();
+        if (formMode.equals(FormMode.UPDATE)) {
+            productFormController.specifyUpdateMode(product);
+        }
+        productFormStage.showAndWait();
+        FormResult productFormResult = productFormController.getFormResult();
+        systemMessageLabel.setText(productFormResult.getMessage());
+        if (productFormResult.getResultStatus().equals(SUCCESS)) {
+            runGetAllProductsService();
+        }
+    }
+    
+    private void loadContactForm(FormMode formMode, Contact contact) {
+        FXMLLoader contactFormLoader = new FXMLLoader(getClass().getResource("ContactForm.fxml"));
+        Scene contactFormScene;
+        try {
+            contactFormScene = new Scene(contactFormLoader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+        }
+        Stage contactFormStage = new Stage();
+        contactFormStage.initOwner(activeUserLabel.getScene().getWindow());
+        contactFormStage.initModality(Modality.APPLICATION_MODAL);
+        contactFormStage.setTitle("SDTracker - Contact");
+        contactFormStage.setOnCloseRequest((WindowEvent event) -> {
+            event.consume();
+        });
+        contactFormStage.setScene(contactFormScene);
+        ContactFormController contactFormController = contactFormLoader.getController();
+        if (formMode.equals(FormMode.UPDATE)) {
+            contactFormController.specifyUpdateMode(contact);
+        }
+        contactFormStage.showAndWait();
+        FormResult contactFormResult = contactFormController.getFormResult();
+        systemMessageLabel.setText(contactFormResult.getMessage());
+        if (contactFormResult.getResultStatus().equals(SUCCESS)) {
+            runGetAllContactsService();
         }
     }
     

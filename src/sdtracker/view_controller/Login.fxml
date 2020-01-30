@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -15,7 +16,11 @@
         <URL value="@main.css" />
     </stylesheets>
    <children>
-      <Label layoutX="-1.0" layoutY="-1.0" prefHeight="60.0" prefWidth="600.0" styleClass="screen-header" text="SDTracker 1.0" />
+      <Label layoutX="-1.0" layoutY="-1.0" prefHeight="60.0" prefWidth="600.0" text="SDTracker 1.0">
+         <styleClass>
+            <String fx:value="screen-header-label" />
+            <String fx:value="screen-header" />
+         </styleClass></Label>
       <Label layoutY="59.0" prefHeight="40.0" prefWidth="600.0" styleClass="form-instruction" text="PLEASE ENTER YOUR LOGIN CREDENTIALS:" />
       <Label layoutX="108.0" layoutY="151.0" styleClass="form-label" text="Username:" />
       <Label layoutX="120.0" layoutY="194.0" styleClass="form-label" text="Pasword:" />
