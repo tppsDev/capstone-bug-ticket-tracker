@@ -94,8 +94,8 @@ public class AppUserDaoImpl implements CrudDao<AppUser> {
                 String email = result.getString("user.email");
                 String phone1 = result.getString("user.phone1");
                 String phone1Type = result.getString("user.phone1_type");
-                String phone2 = result.getString("user.phone1");
-                String phone2Type = result.getString("user.phone1_type");
+                String phone2 = result.getString("user.phone2");
+                String phone2Type = result.getString("user.phone2_type");
                 String username = result.getString("user.username");
                 String password = result.getString("user.password");
                 String salt = result.getString("user.salt");
@@ -103,14 +103,20 @@ public class AppUserDaoImpl implements CrudDao<AppUser> {
                 String courtesyTitle = result.getString("user.courtesy_title");
                 int deptId = result.getInt("dept.id");
                 String deptName = result.getString("dept.name");
-                int mgrId = result.getInt("mgr.id");
-                String mgrFirstName = result.getString("mgr.first_name");
-                String mgrLastName = result.getString("mgr.last_name");
+                AppUser mgr;
+                if (result.getString("mgr.first_name") != null) {
+                    int mgrId = result.getInt("mgr.id");
+                    String mgrFirstName = result.getString("mgr.first_name");
+                    String mgrLastName = result.getString("mgr.last_name");
+                    mgr = new AppUser(mgrId, mgrFirstName, mgrLastName);
+                } else {
+                    mgr = null;
+                }
                 int sRoleId = result.getInt("sRole.id");
                 String sRoleName = result.getString("sRole.name");
                 
                 Department department = new Department(deptId, deptName);
-                AppUser mgr = new AppUser(mgrId, mgrFirstName, mgrLastName);
+                
                 SecurityRole securityRole = new SecurityRole(sRoleId, sRoleName);
                                 
                 appUserList.add(new AppUser(id, firstName, lastName, midInitial, email, 
@@ -338,10 +344,10 @@ public class AppUserDaoImpl implements CrudDao<AppUser> {
             stmt.setString(11, appUser.getJobTitle());
             stmt.setString(12, appUser.getCourtesyTitle());
             stmt.setInt(13, appUser.getDepartment().getId());
-            if (appUser.getMgr() == null) {
+            if (appUser.getManager() == null) {
                 stmt.setNull(14, Types.INTEGER);
             } else {
-                stmt.setInt(14, appUser.getMgr().getId());
+                stmt.setInt(14, appUser.getManager().getId());
             }
             stmt.setInt(15, appUser.getSecurityRole().getId());
             stmt.setString(16, appUser.getSalt());
@@ -387,10 +393,10 @@ public class AppUserDaoImpl implements CrudDao<AppUser> {
             stmt.setString(11, appUser.getJobTitle());
             stmt.setString(12, appUser.getCourtesyTitle());
             stmt.setInt(13, appUser.getDepartment().getId());
-            if (appUser.getMgr() == null) {
+            if (appUser.getManager() == null) {
                 stmt.setNull(14, Types.INTEGER);
             } else {
-                stmt.setInt(14, appUser.getMgr().getId());
+                stmt.setInt(14, appUser.getManager().getId());
             }
             stmt.setInt(15, appUser.getSecurityRole().getId());
             stmt.setString(16, appUser.getSalt());
