@@ -342,8 +342,8 @@ public class AssetFormController implements Initializable {
         return formResult;
     }
     
-    private void displaySystemMessage(String message, boolean errorMessage) {
-        if (errorMessage) {
+    private void displaySystemMessage(String message, boolean isError) {
+        if (isError) {
             systemMessageLabel.getStyleClass().removeAll("system-message-label");
             systemMessageLabel.getStyleClass().add("system-message-label-error");
         } else {

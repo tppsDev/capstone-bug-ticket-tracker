@@ -248,23 +248,16 @@ public class HomeScreenController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        // 1) initialize services
         initalizeServices();
-        // 2) initialize user specific configuration
         initializeUserEnvironment();
-        // 3) establish bindings
         establishBindings();
-        // 4) initialize panes
         initializeTicketsPane();
         initializeBugsPane();
         initializeAssetsPane();
         initializeProductsPane();
         initializeContactsPane();
-        // 5) load ticket table
         runGetAllTicketsService();
-        // 6) TODO generate stats for team & user
-        
+        startLabelClickHandlers();
     }
     
     private void initalizeServices() {
@@ -356,7 +349,7 @@ public class HomeScreenController implements Initializable {
         initializeContactTableView();
         initializeContactFilters();
     }
-    
+
     // Pane inialization methods
     // Ticket Pane
     private void initializeTicketViewComboBox() {
@@ -1079,7 +1072,50 @@ public class HomeScreenController implements Initializable {
     private void handleSettingsNavButton(ActionEvent event) {
         settingsPane.toFront();
     }
-    
+            
+    private void startLabelClickHandlers() {
+        report1Label.setOnMouseClicked((event) -> {
+            
+        });
+        
+        report2Label.setOnMouseClicked((event) -> {
+            
+        });
+        
+        assetTypeConfigLabel.setOnMouseClicked((event) -> {
+            FXMLLoader assetTypeConfigLoader = new FXMLLoader(getClass().getResource("AssetTypeConfigScreen.fxml"));
+            Scene assetTypeConfigScene;
+            try {
+                assetTypeConfigScene = new Scene(assetTypeConfigLoader.load());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            Stage assetTypeConfigStage = new Stage();
+            assetTypeConfigStage.initOwner(activeUserLabel.getScene().getWindow());
+            assetTypeConfigStage.initModality(Modality.APPLICATION_MODAL);
+            assetTypeConfigStage.setTitle("SDTracker - Asset Type Configuration");
+            assetTypeConfigStage.setScene(assetTypeConfigScene);
+            assetTypeConfigStage.showAndWait();
+        });
+        
+        contactTypeConfigLabel.setOnMouseClicked((event) -> {
+            
+        });
+        
+        mfgConfigLabel.setOnMouseClicked((event) -> {
+            
+        });
+        
+        deptConfigLabel.setOnMouseClicked((event) -> {
+            
+        });
+        
+        appUserConfigLabel.setOnMouseClicked((event) -> {
+            
+        });
+    }
+        
     private void loadTicketForm(FormMode formMode, Ticket ticket) {
         FXMLLoader ticketFormLoader = new FXMLLoader(getClass().getResource("TicketForm.fxml"));
         Scene ticketFormScene;

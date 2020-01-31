@@ -53,7 +53,6 @@ public class AssetTypeFormController implements Initializable {
         initializeServices();
         establishBindings();
         applyFormMode();
-        setCurrentStage();
     }
     
     private void initializeServices() {
@@ -90,8 +89,9 @@ public class AssetTypeFormController implements Initializable {
         }
     }
     
-    private void setCurrentStage() {
+    private void closeWindow() {
         currentStage = (Stage) titleLabel.getScene().getWindow();
+        currentStage.close();
     }
     
     private void buildAssetType() {
@@ -135,7 +135,7 @@ public class AssetTypeFormController implements Initializable {
                 + assetType.getName()
                 + "was successfully added.");
         System.out.println("Insert successful");
-        currentStage.close();
+        closeWindow();
     };
     
     private EventHandler<WorkerStateEvent> insertAssetTypeFailure = (event) -> {
@@ -151,7 +151,7 @@ public class AssetTypeFormController implements Initializable {
                 + assetType.getName()
                 + "was successfully changed.");
         System.out.println("Update successful");
-        currentStage.close();
+        closeWindow();
     };
     
     private EventHandler<WorkerStateEvent> updateAssetTypeFailure = (event) -> {
@@ -178,8 +178,8 @@ public class AssetTypeFormController implements Initializable {
     
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        // TODO warning
-        currentStage.close();
+        formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Action cancelled by user");
+        closeWindow();
     }
     
     @FXML
@@ -189,9 +189,10 @@ public class AssetTypeFormController implements Initializable {
         }
     }
     
-    public void setAssetType(AssetType assetType) {
+    public void specifyUpdateMode(AssetType assetType) {
         this.assetType = assetType;
         formMode = FormMode.UPDATE;
+        applyFormMode();
     }
     
     public FormResult getFormResult() {
