@@ -13,8 +13,7 @@ import javafx.beans.property.SimpleIntegerProperty;
  *
  * @author Tim Smith
  */
-public final class TeamStatBoard {
-
+public final class UserStatBoard {
     private final IntegerProperty totalNotClosedTickets = new SimpleIntegerProperty();
     private final IntegerProperty totalOpenTickets = new SimpleIntegerProperty();
     private final IntegerProperty totalNotClosedBugs = new SimpleIntegerProperty();
@@ -22,10 +21,10 @@ public final class TeamStatBoard {
     private final DoubleProperty averageTicketResolutionTime = new SimpleDoubleProperty();
     private final DoubleProperty averageBugResolutionTime = new SimpleDoubleProperty();
 
-    public TeamStatBoard() {
+    public UserStatBoard() {
     }
     
-    public TeamStatBoard(int totalNotClosedTickets, int totalOpenTickets, int totalNotClosedBugs, int totalOpenBugs) {
+    public UserStatBoard(int totalNotClosedTickets, int totalOpenTickets, int totalNotClosedBugs, int totalOpenBugs) {
         setTotalNotClosedTickets(totalNotClosedTickets);
         setTotalOpenTickets(totalOpenTickets);
         setTotalNotClosedBugs(totalNotClosedBugs);
@@ -104,4 +103,9 @@ public final class TeamStatBoard {
         return averageBugResolutionTime;
     }
     
+    @Override
+    public String toString() {
+        return "Assigned Tickets: " + String.valueOf(getTotalOpenTickets()) + "\n"
+              +"Assigned Bugs:    " + String.valueOf(getTotalOpenBugs());
+    }
 }

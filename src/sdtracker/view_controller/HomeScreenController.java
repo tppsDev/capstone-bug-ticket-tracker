@@ -56,6 +56,8 @@ import sdtracker.database.TeamStatBoardDbServiceManager;
 import sdtracker.database.TeamStatBoardDbServiceManager.GetTeamStatBoardService;
 import sdtracker.database.TicketDbServiceManager;
 import sdtracker.database.TicketDbServiceManager.*;
+import sdtracker.database.UserStatBoardDbServiceManager;
+import sdtracker.database.UserStatBoardDbServiceManager.GetUserStatBoardService;
 import sdtracker.model.AppUser;
 import sdtracker.model.Asset;
 import sdtracker.model.AssetType;
@@ -69,6 +71,7 @@ import sdtracker.model.TeamStatBoard;
 import sdtracker.model.Ticket;
 import sdtracker.model.TicketPriority;
 import sdtracker.model.TicketStatus;
+import sdtracker.model.UserStatBoard;
 import sdtracker.utility.DateTimeHandler;
 import static sdtracker.view_controller.FormResult.FormResultStatus.SUCCESS;
 
@@ -233,6 +236,11 @@ public class HomeScreenController implements Initializable {
     private GetTeamStatBoardService getTeamStatBoardService;
     private TeamStatBoard teamStatBoard;
     
+    private UserStatBoardDbServiceManager userStatBoardDbServiceManager = UserStatBoardDbServiceManager.
+            getServiceManager();
+    private GetUserStatBoardService getUserStatBoardService;
+    private UserStatBoard userStatBoard;
+    
     private ObservableList<Ticket> allTicketList = FXCollections.observableArrayList();
     private FilteredList<Ticket> filteredTicketList;
     private SortedList<Ticket> sortedTicketList;
@@ -270,7 +278,6 @@ public class HomeScreenController implements Initializable {
         initializeContactsPane();
         runGetAllTicketsService();
         startLabelClickHandlers();
-        displayStats();
     }
     
     private void initalizeServices() {
@@ -285,6 +292,7 @@ public class HomeScreenController implements Initializable {
         getAllContactsService = contactDbServiceManager.new GetAllContactsService();
         deleteContactService = contactDbServiceManager.new DeleteContactService();
         getTeamStatBoardService = teamStatBoardDbServiceManager.new GetTeamStatBoardService();
+        getUserStatBoardService = userStatBoardDbServiceManager.new GetUserStatBoardService();
         
         getAllTicketsService.setOnSucceeded(getAllTicketsSuccess);
         getAllTicketsService.setOnFailed(getAllTicketsFailure);
@@ -298,6 +306,9 @@ public class HomeScreenController implements Initializable {
         getAllContactsService.setOnFailed(getAllContactsFailure);
         getTeamStatBoardService.setOnSucceeded(getTeamStatBoardSuccess);
         getTeamStatBoardService.setOnFailed(getTeamStatBoardFailure);
+        
+        getUserStatBoardService.setOnSucceeded(getUserStatBoardSuccess);
+        getUserStatBoardService.setOnFailed(getUserStatBoardFailure);
         
         deleteTicketService.setOnSucceeded(deleteTicketSuccess);
         deleteTicketService.setOnFailed(deleteTicketFailure);
@@ -323,6 +334,8 @@ public class HomeScreenController implements Initializable {
     
     private void establishBindings() {
         BooleanBinding servicesRunning = getAllTicketsService.runningProperty()
+                                     .or(getTeamStatBoardService.runningProperty())
+                                     .or(getUserStatBoardService.runningProperty())
                                      .or(deleteTicketService.runningProperty())
                                      .or(getAllBugsService.runningProperty())
                                      .or(deleteBugService.runningProperty())
@@ -368,11 +381,10 @@ public class HomeScreenController implements Initializable {
     
     private void displayStats() {
         runGetTeamStatBoardService();
-        displayUserStats();
+        runGetUserStatBoardService();
     }
     
     private void displayTeamStats() {
-        //statusBarHBox
         totalNotClosedTickets.setText(String.valueOf(teamStatBoard.getTotalNotClosedTickets()));
         totalOpenTickets.setText(String.valueOf(teamStatBoard.getTotalOpenTickets()));
         totalNotClosedBugs.setText(String.valueOf(teamStatBoard.getTotalNotClosedBugs()));
@@ -380,7 +392,8 @@ public class HomeScreenController implements Initializable {
     }
     
     private void displayUserStats() {
-        
+        ticketsAssignedLabel.setText(String.valueOf(userStatBoard.getTotalOpenTickets()));
+        bugsAssignedLabel.setText(String.valueOf(userStatBoard.getTotalOpenBugs()));
     }
 
     // Pane inialization methods
@@ -1429,11 +1442,20 @@ public class HomeScreenController implements Initializable {
         }
     }
     
+    private void runGetUserStatBoardService() {
+        if (!getUserStatBoardService.isRunning()) {
+            getUserStatBoardService.reset();
+            userStatBoardDbServiceManager.setAppUser(session.getSessionUser());
+            getUserStatBoardService.start();
+        }
+    }
+    
     // Service status event handlers
     private EventHandler<WorkerStateEvent> getAllTicketsSuccess = (event) -> {
         allTicketList.clear();
         allTicketList = getAllTicketsService.getValue();
         loadTicketTableView();
+        displayStats();
     };
     
     private EventHandler<WorkerStateEvent> getAllTicketsFailure = (event) -> {
@@ -1444,6 +1466,7 @@ public class HomeScreenController implements Initializable {
         allBugList.clear();
         allBugList = getAllBugsService.getValue();
         loadBugTableView();
+        displayStats();
     };
     
     private EventHandler<WorkerStateEvent> getAllBugsFailure = (event) -> {
@@ -1519,12 +1542,20 @@ public class HomeScreenController implements Initializable {
     
     private EventHandler<WorkerStateEvent> getTeamStatBoardSuccess = (event) -> {
         teamStatBoard = getTeamStatBoardService.getValue();
-        System.out.println(getTeamStatBoardService.getValue());
         displayTeamStats();
     };
     
     private EventHandler<WorkerStateEvent> getTeamStatBoardFailure = (event) -> {
-        
+        event.getSource().getException().printStackTrace();
+    };
+    
+    private EventHandler<WorkerStateEvent> getUserStatBoardSuccess = (event) -> {
+        userStatBoard = getUserStatBoardService.getValue();
+        displayUserStats();
+    };
+    
+    private EventHandler<WorkerStateEvent> getUserStatBoardFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
     };
     
     private enum TicketView {
