@@ -26,7 +26,7 @@ public class AppUser {
     private String jobTitle;
     private String courtesyTitle;
     private Department department;
-    private AppUser mgr;
+    private AppUser manager;
     private SecurityRole securityRole;
 
     public AppUser() {
@@ -75,7 +75,7 @@ public class AppUser {
         this.jobTitle = jobTitle;
         this.courtesyTitle = courtesyTitle;
         this.department = department;
-        this.mgr = mgr;
+        this.manager = mgr;
         this.securityRole = securityRole;
     }
     
@@ -230,12 +230,12 @@ public class AppUser {
         this.department = department;
     }
 
-    public AppUser getMgr() {
-        return mgr;
+    public AppUser getManager() {
+        return manager;
     }
 
-    public void setMgr(AppUser mgr) {
-        this.mgr = mgr;
+    public void setManager(AppUser manager) {
+        this.manager = manager;
     }
 
     public SecurityRole getSecurityRole() {

@@ -54,7 +54,6 @@ public class MfgFormController implements Initializable {
         initializeServices();
         establishBindings();
         applyFormMode();
-        setCurrentStage();
     }
     
     private void initializeServices() {
@@ -91,8 +90,9 @@ public class MfgFormController implements Initializable {
         }
     }
     
-    private void setCurrentStage() {
+    private void closeWindow() {
         currentStage = (Stage) titleLabel.getScene().getWindow();
+        currentStage.close();
     }
     
     private void buildMfg() {
@@ -136,7 +136,7 @@ public class MfgFormController implements Initializable {
                 + mfg.getName()
                 + "was successfully added.");
         System.out.println("Insert successful");
-        currentStage.close();
+        closeWindow();
     };
     
     private EventHandler<WorkerStateEvent> insertMfgFailure = (event) -> {
@@ -152,7 +152,7 @@ public class MfgFormController implements Initializable {
                 + mfg.getName()
                 + "was successfully changed.");
         System.out.println("Update successful");
-        currentStage.close();
+        closeWindow();
     };
     
     private EventHandler<WorkerStateEvent> updateMfgFailure = (event) -> {
@@ -179,8 +179,8 @@ public class MfgFormController implements Initializable {
     
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        // TODO warning
-        currentStage.close();
+        formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Action cancelled by user");
+        closeWindow();
     }
     
     @FXML
@@ -190,9 +190,10 @@ public class MfgFormController implements Initializable {
         }
     }
     
-    public void setMfg(Mfg mfg) {
+    public void specifyUpdateMode(Mfg mfg) {
         this.mfg = mfg;
         formMode = FormMode.UPDATE;
+        applyFormMode();
     }
     
     public FormResult getFormResult() {

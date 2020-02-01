@@ -286,7 +286,7 @@ public class AppUserDaoImpl implements CrudDao<AppUser> {
         return appUser;
     }
     
-    public boolean checkForDuplicate(String username) throws DaoException, Exception {
+    public boolean checkForDuplicate(String username) throws DaoException {
         int recCount = 0;
         String query = "SELECT COUNT(*) AS recCount "
                       +"FROM app_user AS user "

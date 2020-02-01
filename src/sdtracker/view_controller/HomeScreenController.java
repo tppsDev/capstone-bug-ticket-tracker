@@ -52,6 +52,8 @@ import sdtracker.database.ContactDbServiceManager.GetAllContactsService;
 import sdtracker.database.ProductDbServiceManager;
 import sdtracker.database.ProductDbServiceManager.DeleteProductService;
 import sdtracker.database.ProductDbServiceManager.GetAllProductsService;
+import sdtracker.database.TeamStatBoardDbServiceManager;
+import sdtracker.database.TeamStatBoardDbServiceManager.GetTeamStatBoardService;
 import sdtracker.database.TicketDbServiceManager;
 import sdtracker.database.TicketDbServiceManager.*;
 import sdtracker.model.AppUser;
@@ -63,6 +65,7 @@ import sdtracker.model.BugStatus;
 import sdtracker.model.Contact;
 import sdtracker.model.Mfg;
 import sdtracker.model.Product;
+import sdtracker.model.TeamStatBoard;
 import sdtracker.model.Ticket;
 import sdtracker.model.TicketPriority;
 import sdtracker.model.TicketStatus;
@@ -81,6 +84,10 @@ public class HomeScreenController implements Initializable {
     @FXML private Label statBoxUserLabel;
     @FXML private ProgressIndicator progressIndicator;
     @FXML private HBox statusBarHBox;
+    @FXML private Label totalNotClosedTickets;
+    @FXML private Label totalOpenTickets;
+    @FXML private Label totalNotClosedBugs;
+    @FXML private Label totalOpenBugs;
     @FXML private VBox navVBox;
     @FXML private Button ticketsNavButton;
     @FXML private Button bugsNavButton;
@@ -221,6 +228,11 @@ public class HomeScreenController implements Initializable {
     private GetAllContactsService getAllContactsService;
     private DeleteContactService deleteContactService;
     
+    private TeamStatBoardDbServiceManager teamStatBoardDbServiceManager = TeamStatBoardDbServiceManager.
+            getServiceManager();
+    private GetTeamStatBoardService getTeamStatBoardService;
+    private TeamStatBoard teamStatBoard;
+    
     private ObservableList<Ticket> allTicketList = FXCollections.observableArrayList();
     private FilteredList<Ticket> filteredTicketList;
     private SortedList<Ticket> sortedTicketList;
@@ -258,6 +270,7 @@ public class HomeScreenController implements Initializable {
         initializeContactsPane();
         runGetAllTicketsService();
         startLabelClickHandlers();
+        displayStats();
     }
     
     private void initalizeServices() {
@@ -271,6 +284,7 @@ public class HomeScreenController implements Initializable {
         deleteProductService = productDbServiceManager.new DeleteProductService();
         getAllContactsService = contactDbServiceManager.new GetAllContactsService();
         deleteContactService = contactDbServiceManager.new DeleteContactService();
+        getTeamStatBoardService = teamStatBoardDbServiceManager.new GetTeamStatBoardService();
         
         getAllTicketsService.setOnSucceeded(getAllTicketsSuccess);
         getAllTicketsService.setOnFailed(getAllTicketsFailure);
@@ -282,6 +296,8 @@ public class HomeScreenController implements Initializable {
         getAllProductsService.setOnFailed(getAllProductsFailure);
         getAllContactsService.setOnSucceeded(getAllContactsSuccess);
         getAllContactsService.setOnFailed(getAllContactsFailure);
+        getTeamStatBoardService.setOnSucceeded(getTeamStatBoardSuccess);
+        getTeamStatBoardService.setOnFailed(getTeamStatBoardFailure);
         
         deleteTicketService.setOnSucceeded(deleteTicketSuccess);
         deleteTicketService.setOnFailed(deleteTicketFailure);
@@ -348,6 +364,23 @@ public class HomeScreenController implements Initializable {
     private void initializeContactsPane() {
         initializeContactTableView();
         initializeContactFilters();
+    }
+    
+    private void displayStats() {
+        runGetTeamStatBoardService();
+        displayUserStats();
+    }
+    
+    private void displayTeamStats() {
+        //statusBarHBox
+        totalNotClosedTickets.setText(String.valueOf(teamStatBoard.getTotalNotClosedTickets()));
+        totalOpenTickets.setText(String.valueOf(teamStatBoard.getTotalOpenTickets()));
+        totalNotClosedBugs.setText(String.valueOf(teamStatBoard.getTotalNotClosedBugs()));
+        totalOpenBugs.setText(String.valueOf(teamStatBoard.getTotalOpenBugs()));
+    }
+    
+    private void displayUserStats() {
+        
     }
 
     // Pane inialization methods
@@ -1100,19 +1133,71 @@ public class HomeScreenController implements Initializable {
         });
         
         contactTypeConfigLabel.setOnMouseClicked((event) -> {
-            
+            FXMLLoader contactTypeConfigLoader = new FXMLLoader(getClass().getResource("ContactTypeConfigScreen.fxml"));
+            Scene contactTypeConfigScene;
+            try {
+                contactTypeConfigScene = new Scene(contactTypeConfigLoader.load());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            Stage contactTypeConfigStage = new Stage();
+            contactTypeConfigStage.initOwner(activeUserLabel.getScene().getWindow());
+            contactTypeConfigStage.initModality(Modality.APPLICATION_MODAL);
+            contactTypeConfigStage.setTitle("SDTracker - Contact Type Configuration");
+            contactTypeConfigStage.setScene(contactTypeConfigScene);
+            contactTypeConfigStage.showAndWait();
         });
         
         mfgConfigLabel.setOnMouseClicked((event) -> {
-            
+            FXMLLoader mfgConfigLoader = new FXMLLoader(getClass().getResource("MfgConfigScreen.fxml"));
+            Scene mfgConfigScene;
+            try {
+                mfgConfigScene = new Scene(mfgConfigLoader.load());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            Stage mfgConfigStage = new Stage();
+            mfgConfigStage.initOwner(activeUserLabel.getScene().getWindow());
+            mfgConfigStage.initModality(Modality.APPLICATION_MODAL);
+            mfgConfigStage.setTitle("SDTracker - Manufacturer Configuration");
+            mfgConfigStage.setScene(mfgConfigScene);
+            mfgConfigStage.showAndWait();
         });
         
         deptConfigLabel.setOnMouseClicked((event) -> {
-            
+            FXMLLoader departmentConfigLoader = new FXMLLoader(getClass().getResource("DepartmentConfigScreen.fxml"));
+            Scene departmentConfigScene;
+            try {
+                departmentConfigScene = new Scene(departmentConfigLoader.load());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            Stage departmentConfigStage = new Stage();
+            departmentConfigStage.initOwner(activeUserLabel.getScene().getWindow());
+            departmentConfigStage.initModality(Modality.APPLICATION_MODAL);
+            departmentConfigStage.setTitle("SDTracker - Department Configuration");
+            departmentConfigStage.setScene(departmentConfigScene);
+            departmentConfigStage.showAndWait();
         });
         
         appUserConfigLabel.setOnMouseClicked((event) -> {
-            
+            FXMLLoader appUserConfigLoader = new FXMLLoader(getClass().getResource("AppUserConfigScreen.fxml"));
+            Scene appUserConfigScene;
+            try {
+                appUserConfigScene = new Scene(appUserConfigLoader.load());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            Stage appUserConfigStage = new Stage();
+            appUserConfigStage.initOwner(activeUserLabel.getScene().getWindow());
+            appUserConfigStage.initModality(Modality.APPLICATION_MODAL);
+            appUserConfigStage.setTitle("SDTracker - User Configuration");
+            appUserConfigStage.setScene(appUserConfigScene);
+            appUserConfigStage.showAndWait();
         });
     }
         
@@ -1337,6 +1422,13 @@ public class HomeScreenController implements Initializable {
         }
     }
     
+    private void runGetTeamStatBoardService() {
+        if (!getTeamStatBoardService.isRunning()) {
+            getTeamStatBoardService.reset();
+            getTeamStatBoardService.start();
+        }
+    }
+    
     // Service status event handlers
     private EventHandler<WorkerStateEvent> getAllTicketsSuccess = (event) -> {
         allTicketList.clear();
@@ -1423,6 +1515,16 @@ public class HomeScreenController implements Initializable {
     
     private EventHandler<WorkerStateEvent> deleteContactFailure = (event) -> {
         event.getSource().getException().printStackTrace();
+    };
+    
+    private EventHandler<WorkerStateEvent> getTeamStatBoardSuccess = (event) -> {
+        teamStatBoard = getTeamStatBoardService.getValue();
+        System.out.println(getTeamStatBoardService.getValue());
+        displayTeamStats();
+    };
+    
+    private EventHandler<WorkerStateEvent> getTeamStatBoardFailure = (event) -> {
+        
     };
     
     private enum TicketView {

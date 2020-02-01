@@ -121,7 +121,7 @@ public class AppUserFormController implements Initializable {
     private ObservableList<AppUser> allAppUserList = FXCollections.observableArrayList();
     private ObservableList<SecurityRole> securityRoleList = FXCollections.observableArrayList();
     private ObservableList<Department> departmentList = FXCollections.observableArrayList();
-    private AppUser appUser;
+    private AppUser appUser = new AppUser();;
     private boolean passwordSet = false;
     private FormResult formResult;
     
@@ -135,8 +135,6 @@ public class AppUserFormController implements Initializable {
         initializeInputElements();
         applyFormMode();
         startEventHandlers();
-        // TODO remove after test
-        if (formMode.equals(FormMode.INSERT)) appUser = new AppUser();
     }
     
     private void initializeServices() {
@@ -207,8 +205,8 @@ public class AppUserFormController implements Initializable {
             }
             jobTitleTextField.setText(appUser.getJobTitle());
             deptComboBox.getSelectionModel().select(appUser.getDepartment());
-            if (appUser.getMgr() != null) {
-                mgrComboBox.getSelectionModel().select(appUser.getMgr());
+            if (appUser.getManager() != null) {
+                mgrComboBox.getSelectionModel().select(appUser.getManager());
             }
             phone1TextField.setText(appUser.getPhone1());
             switch (appUser.getPhone1Type()) {
@@ -244,9 +242,11 @@ public class AppUserFormController implements Initializable {
             }
             emailTextField.setText(appUser.getEmail());
             
+            titleLabel.setText("Update User");
             addSaveButton.setText("Save");
         } else {
             setPasswordButton.setVisible(false);
+            titleLabel.setText("Add User");
             addSaveButton.setText("Add");
         }
     }
@@ -285,7 +285,7 @@ public class AppUserFormController implements Initializable {
         appUser.setCourtesyTitle(courtesyTitleTextField.getText());
         appUser.setJobTitle(jobTitleTextField.getText());
         appUser.setDepartment(deptComboBox.getValue());
-        appUser.setMgr(mgrComboBox.getValue());
+        appUser.setManager(mgrComboBox.getValue());
         appUser.setPhone1(phone1TextField.getText());
         appUser.setPhone1Type(getPhone1TypeRadioSelection());
         appUser.setPhone2(phone2TextField.getText());
@@ -388,8 +388,7 @@ public class AppUserFormController implements Initializable {
         formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "AppUser for " 
                 + appUser.getDisplayName()
                 + " was successfully added.");
-        Stage currentStage = (Stage) titleLabel.getScene().getWindow();
-        currentStage.close();
+        closeWindow();
     };
     
     private EventHandler<WorkerStateEvent> insertAppUserFailure = (event) -> {
@@ -404,8 +403,7 @@ public class AppUserFormController implements Initializable {
         formResult = new FormResult(FormResult.FormResultStatus.SUCCESS, "AppUser for " 
                 + appUser.getDisplayName()
                 + " was successfully changed.");
-        Stage currentStage = (Stage) titleLabel.getScene().getWindow();
-        currentStage.close();
+        closeWindow();
     };
     
     private EventHandler<WorkerStateEvent> updateAppUserFailure = (event) -> {
@@ -485,9 +483,8 @@ public class AppUserFormController implements Initializable {
     
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        Stage currentStage = (Stage) titleLabel.getScene().getWindow();
-        // TODO warning
-        currentStage.close();
+        formResult = new FormResult(FormResultStatus.FAILURE, "Action cancelled by user");
+        closeWindow();
     }
     
     @FXML
@@ -503,6 +500,21 @@ public class AppUserFormController implements Initializable {
             systemMessageLabel.getStyleClass().removeAll("system-message-label");
             systemMessageLabel.getStyleClass().add("system-message-label-error");
         }
+    }
+    
+    public void specifyUpdateMode(AppUser appUser) {
+        formMode = FormMode.UPDATE;
+        this.appUser = appUser;
+        applyFormMode();
+    }
+    
+    public FormResult getFormResult() {
+        return formResult;
+    }
+    
+    private void closeWindow() {
+        Stage currentStage = (Stage) titleLabel.getScene().getWindow();
+        currentStage.close();
     }
     
     // Change listeners. Start focus listeners are created in a way that in the future they could be stopped if desired    
@@ -661,7 +673,7 @@ public class AppUserFormController implements Initializable {
     }
     
     private boolean validateSecurityRole() {
-        if (securityRoleComboBox.getSelectionModel().isEmpty()) {
+        if (securityRoleComboBox.getValue() == null) {
             securityRoleErrorLabel.setText("Security Role is required");
             return false;
         }
@@ -741,7 +753,7 @@ public class AppUserFormController implements Initializable {
     }
     
     private boolean validateDept() {
-        if (deptComboBox.getSelectionModel().isEmpty()) {
+        if (deptComboBox.getValue() == null) {
             deptErrorLabel.setText("Department is required");
             return false;
         } else {

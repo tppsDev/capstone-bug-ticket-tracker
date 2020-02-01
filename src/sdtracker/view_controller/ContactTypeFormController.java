@@ -52,7 +52,6 @@ public class ContactTypeFormController implements Initializable {
         initializeServices();
         establishBindings();
         applyFormMode();
-        setCurrentStage();
     }
     
     private void initializeServices() {
@@ -89,8 +88,9 @@ public class ContactTypeFormController implements Initializable {
         }
     }
     
-    private void setCurrentStage() {
+    private void closeWindow() {
         currentStage = (Stage) titleLabel.getScene().getWindow();
+        currentStage.close();
     }
     
     private void buildContactType() {
@@ -134,7 +134,7 @@ public class ContactTypeFormController implements Initializable {
                 + contactType.getName()
                 + "was successfully added.");
         System.out.println("Insert successful");
-        currentStage.close();
+        closeWindow();
     };
     
     private EventHandler<WorkerStateEvent> insertContactTypeFailure = (event) -> {
@@ -150,7 +150,7 @@ public class ContactTypeFormController implements Initializable {
                 + contactType.getName()
                 + "was successfully changed.");
         System.out.println("Update successful");
-        currentStage.close();
+        closeWindow();
     };
     
     private EventHandler<WorkerStateEvent> updateContactTypeFailure = (event) -> {
@@ -177,8 +177,8 @@ public class ContactTypeFormController implements Initializable {
     
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        // TODO warning
-        currentStage.close();
+        formResult = new FormResult(FormResult.FormResultStatus.FAILURE, "Action cancelled by user");
+        closeWindow();
     }
     
     @FXML
@@ -188,9 +188,10 @@ public class ContactTypeFormController implements Initializable {
         }
     }
     
-    public void setContactType(ContactType contactType) {
+    public void specifyUpdateMode(ContactType contactType) {
         this.contactType = contactType;
         formMode = FormMode.UPDATE;
+        applyFormMode();
     }
     
     public FormResult getFormResult() {

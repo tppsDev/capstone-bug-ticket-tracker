@@ -31,7 +31,17 @@
             <ProgressIndicator fx:id="progressIndicator" layoutX="768.0" layoutY="14.0" styleClass="primary-progress-indicator" />
          </children>
       </AnchorPane>
-      <HBox fx:id="statusBarHBox" layoutY="80.0" prefHeight="60.0" prefWidth="1250.0" styleClass="status-bar" />
+      <HBox fx:id="statusBarHBox" layoutY="80.0" prefHeight="60.0" prefWidth="1250.0" spacing="15.0" styleClass="status-bar">
+         <children>
+            <Label styleClass="status-bar-label" text="Total Current Tickets:" />
+            <Label fx:id="totalNotClosedTickets" prefWidth="35.0" styleClass="status-bar-text-normal" />
+            <Label styleClass="status-bar-label" text="Total Open Tickets:" />
+            <Label fx:id="totalOpenTickets" prefWidth="35.0" styleClass="status-bar-text-normal" />
+            <Label styleClass="status-bar-label" text="Total Current Bugs:" />
+            <Label fx:id="totalNotClosedBugs" prefWidth="35.0" styleClass="status-bar-text-normal" />
+            <Label styleClass="status-bar-label" text="Total Open Bugs:" />
+            <Label fx:id="totalOpenBugs" prefWidth="35.0" styleClass="status-bar-text-normal" />
+         </children></HBox>
       <VBox fx:id="navVBox" layoutY="140.0" prefHeight="581.0" prefWidth="220.0" styleClass="nav-vbox">
          <children>
             <Button fx:id="ticketsNavButton" mnemonicParsing="false" onAction="#handleTicketsNavButton" prefHeight="25.0" prefWidth="221.0" styleClass="nav-button" text="Tickets" />
@@ -66,10 +76,10 @@
                <children>
                   <Label prefHeight="37.0" prefWidth="171.0" styleClass="user-box-item" text="Tickets Assigned:" />
                   <Label prefHeight="37.0" prefWidth="226.0" styleClass="user-box-item" text="Bugs Assigned:" GridPane.rowIndex="1" />
-                  <Label prefHeight="37.0" prefWidth="232.0" styleClass="user-box-item" text="Avg Tkt Close Time:" GridPane.rowIndex="2" />
-                  <Label prefHeight="37.0" prefWidth="195.0" styleClass="user-box-item" text="Avg Bug Close Time:" GridPane.rowIndex="3" />
-                  <Label prefHeight="37.0" prefWidth="195.0" styleClass="user-box-item" text="30 Day Tkt Closures:" GridPane.rowIndex="4" />
-                  <Label prefHeight="36.0" prefWidth="191.0" styleClass="user-box-item" text="30 Day Bug Closures:" GridPane.rowIndex="5" />
+                  <Label prefHeight="37.0" prefWidth="232.0" styleClass="user-box-item" text="Avg Tkt Close Time:" visible="false" GridPane.rowIndex="2" />
+                  <Label prefHeight="37.0" prefWidth="195.0" styleClass="user-box-item" text="Avg Bug Close Time:" visible="false" GridPane.rowIndex="3" />
+                  <Label prefHeight="37.0" prefWidth="195.0" styleClass="user-box-item" text="30 Day Tkt Closures:" visible="false" GridPane.rowIndex="4" />
+                  <Label prefHeight="36.0" prefWidth="191.0" styleClass="user-box-item" text="30 Day Bug Closures:" visible="false" GridPane.rowIndex="5" />
                   <Label fx:id="ticketsAssignedLabel" alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="127.0" styleClass="user-box-item" GridPane.columnIndex="1" />
                   <Label fx:id="bugsAssignedLabel" alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="127.0" styleClass="user-box-item" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label fx:id="avgTicketCloseTimeLabel" alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="127.0" styleClass="user-box-item" GridPane.columnIndex="1" GridPane.rowIndex="2" />
@@ -188,37 +198,6 @@
                   </TableView>
                </children>
             </AnchorPane>
-            <AnchorPane id="ticketsPane" fx:id="ticketsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Button fx:id="addTicketButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddTicketButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Ticket" />
-                        <Label fx:id="ticketPaneTitleLabel" layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Tickets" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                        <ComboBox fx:id="ticketViewComboBox" layoutX="834.0" layoutY="18.0" prefWidth="150.0" />
-                     </children>
-                  </AnchorPane>
-                  <TextField fx:id="ticketNumberSearchField" layoutX="91.0" layoutY="97.0" prefHeight="25.0" prefWidth="88.0" />
-                  <ComboBox fx:id="ticketPriorityFilterComboBox" layoutX="186.0" layoutY="97.0" prefHeight="25.0" prefWidth="74.0" />
-                  <TextField fx:id="ticketInfoSearchField" layoutX="268.0" layoutY="97.0" prefHeight="25.0" prefWidth="321.0" />
-                  <ComboBox fx:id="ticketStatusFilterComboBox" layoutX="598.0" layoutY="97.0" prefHeight="25.0" prefWidth="74.0" />
-                  <TextField fx:id="ticketAssignedToSearchField" layoutX="690.0" layoutY="97.0" />
-                  <TableView fx:id="ticketTableView" layoutX="14.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
-                    <columns>
-                      <TableColumn fx:id="ticketDeleteColumn" editable="false" prefWidth="35.0" />
-                      <TableColumn fx:id="ticketEditColumn" editable="false" prefWidth="35.0" />
-                        <TableColumn fx:id="ticketNumberColumn" editable="false" prefWidth="100.0" text="TICKET #" />
-                        <TableColumn fx:id="ticketPriorityColumn" editable="false" text="PRIORITY" />
-                        <TableColumn fx:id="ticketTitleColumn" editable="false" prefWidth="330.0" text="TITLE" />
-                        <TableColumn fx:id="ticketStatusColumn" editable="false" text="STATUS" />
-                        <TableColumn fx:id="ticketAssignedToColumn" editable="false" prefWidth="180.0" text="ASSIGNED TO" />
-                        <TableColumn fx:id="ticketCreatedColumn" editable="false" text="OPENED&#10;DATE" />
-                        <TableColumn fx:id="ticketLastUpdatedColumn" editable="false" text="LAST&#10;UPDATED" />
-                    </columns>
-                  </TableView>
-                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="268.0" layoutY="73.0" prefHeight="17.0" prefWidth="321.0" text="Searches title and description" />
-                  <Label layoutX="35.0" layoutY="101.0" prefHeight="17.0" prefWidth="46.0" text="Filters:" />
-               </children>
-            </AnchorPane>
             <AnchorPane id="settingsPane" fx:id="settingsPane" prefHeight="200.0" prefWidth="200.0" styleClass="home-page-subpane">
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
@@ -283,6 +262,37 @@
                         <Label prefHeight="17.0" prefWidth="285.0" styleClass="report-link" text="Future Report" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="ticketsPane" fx:id="ticketsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Button fx:id="addTicketButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddTicketButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Ticket" />
+                        <Label fx:id="ticketPaneTitleLabel" layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Tickets" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                        <ComboBox fx:id="ticketViewComboBox" layoutX="834.0" layoutY="18.0" prefWidth="150.0" />
+                     </children>
+                  </AnchorPane>
+                  <TextField fx:id="ticketNumberSearchField" layoutX="91.0" layoutY="97.0" prefHeight="25.0" prefWidth="88.0" />
+                  <ComboBox fx:id="ticketPriorityFilterComboBox" layoutX="186.0" layoutY="97.0" prefHeight="25.0" prefWidth="74.0" />
+                  <TextField fx:id="ticketInfoSearchField" layoutX="268.0" layoutY="97.0" prefHeight="25.0" prefWidth="321.0" />
+                  <ComboBox fx:id="ticketStatusFilterComboBox" layoutX="598.0" layoutY="97.0" prefHeight="25.0" prefWidth="74.0" />
+                  <TextField fx:id="ticketAssignedToSearchField" layoutX="690.0" layoutY="97.0" />
+                  <TableView fx:id="ticketTableView" layoutX="14.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
+                    <columns>
+                      <TableColumn fx:id="ticketDeleteColumn" editable="false" prefWidth="35.0" />
+                      <TableColumn fx:id="ticketEditColumn" editable="false" prefWidth="35.0" />
+                        <TableColumn fx:id="ticketNumberColumn" editable="false" prefWidth="100.0" text="TICKET #" />
+                        <TableColumn fx:id="ticketPriorityColumn" editable="false" text="PRIORITY" />
+                        <TableColumn fx:id="ticketTitleColumn" editable="false" prefWidth="330.0" text="TITLE" />
+                        <TableColumn fx:id="ticketStatusColumn" editable="false" text="STATUS" />
+                        <TableColumn fx:id="ticketAssignedToColumn" editable="false" prefWidth="180.0" text="ASSIGNED TO" />
+                        <TableColumn fx:id="ticketCreatedColumn" editable="false" text="OPENED&#10;DATE" />
+                        <TableColumn fx:id="ticketLastUpdatedColumn" editable="false" text="LAST&#10;UPDATED" />
+                    </columns>
+                  </TableView>
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="268.0" layoutY="73.0" prefHeight="17.0" prefWidth="321.0" text="Searches title and description" />
+                  <Label layoutX="35.0" layoutY="101.0" prefHeight="17.0" prefWidth="46.0" text="Filters:" />
                </children>
             </AnchorPane>
          </children>
