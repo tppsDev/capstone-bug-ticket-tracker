@@ -164,6 +164,30 @@
     -fx-border-width: 2px 0 4px 0;
 }
 
+.status-bar-label {
+    -fx-font: 14px "Verdana";
+    -fx-font-weight: bold;
+}
+
+.status-bar-text-normal {
+    -fx-font: 14px "Verdana";
+    -fx-font-weight: bold;
+}
+
+.status-bar-text-yellow {
+    -fx-font: 14px "Verdana";
+    -fx-font-weight: bold;
+    -fx-text-fill: yellow;
+    -fx-background-color: black;
+}
+
+.status-bar-text-red {
+    -fx-font: 14px "Verdana";
+    -fx-font-weight: bold;
+    -fx-text-fill: -system-message-error-color;
+    -fx-background-color: black;
+}
+
 .system-table-link {
     -fx-padding: 8px 10px 8px 10px;
     -fx-text-fill: -dark-nuetral-color;
