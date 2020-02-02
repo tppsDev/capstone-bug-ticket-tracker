@@ -5,6 +5,7 @@
 package sdtracker.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *
@@ -164,6 +165,37 @@ public class Ticket {
 
     public void setPriority(TicketPriority priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public String toString() {
+        return ticketNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 29 * hash + this.id;
+        hash = 29 * hash + Objects.hashCode(this.ticketNumber);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Ticket other = (Ticket) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
     }
     
 }

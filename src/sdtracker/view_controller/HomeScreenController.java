@@ -9,8 +9,12 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -31,13 +35,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import sdtracker.Session;
 import sdtracker.database.AssetDbServiceManager;
@@ -46,6 +50,10 @@ import sdtracker.database.AssetDbServiceManager.GetAllAssetsService;
 import sdtracker.database.BugDbServiceManager;
 import sdtracker.database.BugDbServiceManager.DeleteBugService;
 import sdtracker.database.BugDbServiceManager.GetAllBugsService;
+import sdtracker.database.BugPriorityDbServiceManager;
+import sdtracker.database.BugPriorityDbServiceManager.GetAllBugPrioritiesService;
+import sdtracker.database.BugStatusDbServiceManager;
+import sdtracker.database.BugStatusDbServiceManager.GetAllBugStatusesService;
 import sdtracker.database.ContactDbServiceManager;
 import sdtracker.database.ContactDbServiceManager.DeleteContactService;
 import sdtracker.database.ContactDbServiceManager.GetAllContactsService;
@@ -56,6 +64,10 @@ import sdtracker.database.TeamStatBoardDbServiceManager;
 import sdtracker.database.TeamStatBoardDbServiceManager.GetTeamStatBoardService;
 import sdtracker.database.TicketDbServiceManager;
 import sdtracker.database.TicketDbServiceManager.*;
+import sdtracker.database.TicketPriorityDbServiceManager;
+import sdtracker.database.TicketPriorityDbServiceManager.GetAllTicketPrioritiesService;
+import sdtracker.database.TicketStatusDbServiceManager;
+import sdtracker.database.TicketStatusDbServiceManager.GetAllTicketStatusesService;
 import sdtracker.database.UserStatBoardDbServiceManager;
 import sdtracker.database.UserStatBoardDbServiceManager.GetUserStatBoardService;
 import sdtracker.model.AppUser;
@@ -74,6 +86,7 @@ import sdtracker.model.TicketStatus;
 import sdtracker.model.UserStatBoard;
 import sdtracker.utility.DateTimeHandler;
 import static sdtracker.view_controller.FormResult.FormResultStatus.SUCCESS;
+
 
 /**
  * FXML Controller class
@@ -115,7 +128,6 @@ public class HomeScreenController implements Initializable {
     @FXML private ComboBox<TicketPriority> ticketPriorityFilterComboBox;
     @FXML private TextField ticketInfoSearchField;
     @FXML private ComboBox<TicketStatus> ticketStatusFilterComboBox;
-    @FXML private TextField ticketAssignedToSearchField;
     @FXML private TableView<Ticket> ticketTableView;
     @FXML private TableColumn<Ticket, Ticket> ticketDeleteColumn;
     @FXML private TableColumn<Ticket, Ticket> ticketEditColumn;
@@ -126,7 +138,20 @@ public class HomeScreenController implements Initializable {
     @FXML private TableColumn<Ticket, AppUser> ticketAssignedToColumn;
     @FXML private TableColumn<Ticket, LocalDateTime> ticketCreatedColumn;
     @FXML private TableColumn<Ticket, LocalDateTime> ticketLastUpdatedColumn;
+    @FXML private ImageView ticketStatusClearFilterImageView;
+    @FXML private ImageView ticketPriorityClearFilterImageView;
+    @FXML private ImageView ticketNumberClearFilterImageView;
+    @FXML private ImageView ticketContentClearFilterImageView;
     @FXML private Label systemMessageLabel;
+    
+    private ObjectProperty<Predicate<Ticket>> myTicketsFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Ticket>> ticketNumberFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Ticket>> ticketPriorityFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Ticket>> ticketContentFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Ticket>> ticketStatusFilter = new SimpleObjectProperty<>();
+    
+    private ObservableList<TicketPriority> allTicketPrioritiesList = FXCollections.observableArrayList();
+    private ObservableList<TicketStatus> allTicketStatusesList = FXCollections.observableArrayList();
     
     // Bugs pane elements
     @FXML private AnchorPane bugsPane;
@@ -137,7 +162,6 @@ public class HomeScreenController implements Initializable {
     @FXML private ComboBox<BugPriority> bugPriorityFilterComboBox;
     @FXML private TextField bugInfoSearchField;
     @FXML private ComboBox<BugStatus> bugStatusFilterComboBox;
-    @FXML private TextField bugAssignedToSearchField;
     @FXML private TableView<Bug> bugTableView;
     @FXML private TableColumn<Bug, Bug> bugDeleteColumn;
     @FXML private TableColumn<Bug, Bug> bugEditColumn;
@@ -148,6 +172,19 @@ public class HomeScreenController implements Initializable {
     @FXML private TableColumn<Bug, AppUser> bugAssignedToColumn;
     @FXML private TableColumn<Bug, LocalDateTime> bugCreatedColumn;
     @FXML private TableColumn<Bug, LocalDateTime> bugLastUpdatedColumn;
+    @FXML private ImageView bugStatusClearFilterImageView;
+    @FXML private ImageView bugPriorityClearFilterImageView;
+    @FXML private ImageView bugNumberClearFilterImageView;
+    @FXML private ImageView bugContentClearFilterImageView;
+    
+    ObjectProperty<Predicate<Bug>> myBugsFilter = new SimpleObjectProperty<>();
+    ObjectProperty<Predicate<Bug>> bugNumberFilter = new SimpleObjectProperty<>();
+    ObjectProperty<Predicate<Bug>> bugPriorityFilter = new SimpleObjectProperty<>();
+    ObjectProperty<Predicate<Bug>> bugContentFilter = new SimpleObjectProperty<>();
+    ObjectProperty<Predicate<Bug>> bugStatusFilter = new SimpleObjectProperty<>();
+    
+    private ObservableList<BugPriority> allBugPrioritiesList = FXCollections.observableArrayList();
+    private ObservableList<BugStatus> allBugStatusesList = FXCollections.observableArrayList();
     
     // Assets pane elements
     @FXML private AnchorPane assetsPane;
@@ -215,9 +252,21 @@ public class HomeScreenController implements Initializable {
     private GetAllTicketsService getAllTicketsService;
     private DeleteTicketService deleteTicketService;
     
+    private TicketPriorityDbServiceManager ticketPriorityDbServiceManager = TicketPriorityDbServiceManager.getServiceManager();
+    private GetAllTicketPrioritiesService getAllTicketPrioritiesService;
+    
+    private TicketStatusDbServiceManager ticketStatusDbServiceManager = TicketStatusDbServiceManager.getServiceManager();
+    private GetAllTicketStatusesService getAllTicketStatusesService;
+    
     private BugDbServiceManager bugDbServiceManager = BugDbServiceManager.getServiceManager();
     private GetAllBugsService getAllBugsService;
     private DeleteBugService deleteBugService;
+    
+    private BugPriorityDbServiceManager bugPriorityDbServiceManager = BugPriorityDbServiceManager.getServiceManager();
+    private GetAllBugPrioritiesService getAllBugPrioritiesService;
+    
+    private BugStatusDbServiceManager bugStatusDbServiceManager = BugStatusDbServiceManager.getServiceManager();
+    private GetAllBugStatusesService getAllBugStatusesService;
     
     private AssetDbServiceManager assetDbServiceManager = AssetDbServiceManager.getServiceManager();
     private GetAllAssetsService getAllAssetsService;
@@ -277,33 +326,59 @@ public class HomeScreenController implements Initializable {
         initializeProductsPane();
         initializeContactsPane();
         runGetAllTicketsService();
-        startLabelClickHandlers();
+        runGetAllTicketPrioritiesService();
+        runGetAllTicketStatusesService();
+        runGetAllBugPrioritiesService();
+        runGetAllBugStatusesService();
+        startClickHandlers();
     }
     
     private void initalizeServices() {
         getAllTicketsService = ticketDbServiceManager.new GetAllTicketsService();
         deleteTicketService = ticketDbServiceManager.new DeleteTicketService();
+        getAllTicketPrioritiesService = ticketPriorityDbServiceManager.new GetAllTicketPrioritiesService();
+        getAllTicketStatusesService = ticketStatusDbServiceManager.new GetAllTicketStatusesService();
+        
         getAllBugsService = bugDbServiceManager.new GetAllBugsService();
         deleteBugService = bugDbServiceManager.new DeleteBugService();
+        getAllBugPrioritiesService = bugPriorityDbServiceManager.new GetAllBugPrioritiesService();
+        getAllBugStatusesService = bugStatusDbServiceManager.new GetAllBugStatusesService();
+        
         getAllAssetsService = assetDbServiceManager.new GetAllAssetsService();
         deleteAssetService = assetDbServiceManager.new DeleteAssetService();
+        
         getAllProductsService = productDbServiceManager.new GetAllProductsService();
         deleteProductService = productDbServiceManager.new DeleteProductService();
+        
         getAllContactsService = contactDbServiceManager.new GetAllContactsService();
         deleteContactService = contactDbServiceManager.new DeleteContactService();
+       
         getTeamStatBoardService = teamStatBoardDbServiceManager.new GetTeamStatBoardService();
         getUserStatBoardService = userStatBoardDbServiceManager.new GetUserStatBoardService();
         
         getAllTicketsService.setOnSucceeded(getAllTicketsSuccess);
         getAllTicketsService.setOnFailed(getAllTicketsFailure);
+        getAllTicketPrioritiesService.setOnSucceeded(getAllTicketPrioritiesSuccess);
+        getAllTicketPrioritiesService.setOnFailed(getAllTicketPrioritiesFailure);
+        getAllTicketStatusesService.setOnSucceeded(getAllTicketStatusesSuccess);
+        getAllTicketStatusesService.setOnFailed(getAllTicketStatusesFailure);
+        
         getAllBugsService.setOnSucceeded(getAllBugsSuccess);
         getAllBugsService.setOnFailed(getAllBugsFailure);
+        getAllBugPrioritiesService.setOnSucceeded(getAllBugPrioritiesSuccess);
+        getAllBugPrioritiesService.setOnFailed(getAllBugPrioritiesFailure);
+        getAllBugStatusesService.setOnSucceeded(getAllBugStatusesSuccess);
+        getAllBugStatusesService.setOnFailed(getAllBugStatusesFailure);
+        
         getAllAssetsService.setOnSucceeded(getAllAssetssSuccess);
         getAllAssetsService.setOnFailed(getAllAssetssFailure);
+        
         getAllProductsService.setOnSucceeded(getAllProductsSuccess);
         getAllProductsService.setOnFailed(getAllProductsFailure);
+        
         getAllContactsService.setOnSucceeded(getAllContactsSuccess);
         getAllContactsService.setOnFailed(getAllContactsFailure);
+        
         getTeamStatBoardService.setOnSucceeded(getTeamStatBoardSuccess);
         getTeamStatBoardService.setOnFailed(getTeamStatBoardFailure);
         
@@ -351,6 +426,87 @@ public class HomeScreenController implements Initializable {
         bugPaneTitleLabel.textProperty().bind(bugViewComboBox.valueProperty().asString());
     }
     
+    private void bindTicketFilters() {
+        myTicketsFilter.bind(Bindings.createObjectBinding(() ->
+            ticket -> {
+                if (ticketViewComboBox.getValue().equals(TicketView.MY_TICKETS)) {
+                    return ticket.getAssignedAppUser() != null ?
+                        ticket.getAssignedAppUser().getId() == session.getSessionUser().getId()
+                            :
+                        false;
+                } else {
+                    return true;
+                }
+        },
+            ticketViewComboBox.valueProperty()
+        ));
+        
+        ticketNumberFilter.bind(Bindings.createObjectBinding(() ->
+            ticket -> {
+                if (ticketNumberSearchField.getText() != null || !ticketNumberSearchField.getText().isEmpty()) {
+                    return ticket.getTicketNumber().contains(ticketNumberSearchField.getText());
+                } else {
+                    return true;
+                }
+            },
+            ticketNumberSearchField.textProperty()
+        ));
+        
+        ticketPriorityFilter.bind(Bindings.createObjectBinding(() ->
+            ticket -> {
+                if (ticketPriorityFilterComboBox.getValue() != null) {
+                    System.out.println("Ticket Row:" + ticket.getPriority());
+                    System.out.println("Filter:" + ticketPriorityFilterComboBox.getValue());
+                    System.out.println("Result: " + ticket.getPriority().equals(ticketPriorityFilterComboBox.getValue()));
+                    return ticket.getPriority().equals(ticketPriorityFilterComboBox.getValue());
+                } else {
+                    return true;
+                }
+            },
+            ticketPriorityFilterComboBox.valueProperty()
+        ));
+        
+        ticketContentFilter.bind(Bindings.createObjectBinding(() ->
+            ticket -> {
+                if (ticketInfoSearchField.getText() != null || !ticketInfoSearchField.getText().isEmpty()) {
+                    return ticket.getTitle().toLowerCase().contains(ticketInfoSearchField.getText().toLowerCase())
+                        || ticket.getDescription().toLowerCase().contains(ticketInfoSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            ticketInfoSearchField.textProperty()
+        ));
+        
+        ticketStatusFilter.bind(Bindings.createObjectBinding(() ->
+            ticket -> {
+                if (ticketStatusFilterComboBox.getValue() != null) {
+                    return ticket.getStatus().equals(ticketStatusFilterComboBox.getValue());
+                } else {
+                    return true;
+                }
+            },
+            ticketStatusFilterComboBox.valueProperty()
+        ));
+        
+        filteredTicketList.predicateProperty().bind(Bindings.createObjectBinding(
+            () -> myTicketsFilter.get()
+                .and(ticketNumberFilter.get())
+                .and(ticketPriorityFilter.get())
+                .and(ticketContentFilter.get())
+                .and(ticketStatusFilter.get()),
+            myTicketsFilter, ticketNumberFilter, ticketPriorityFilter, ticketContentFilter, ticketStatusFilter)
+        );
+        
+        filteredTicketList.predicateProperty().addListener((observable) -> {
+            ticketTableView.refresh();
+        });
+    }
+    
+    private void bindBugFilters() {
+        
+    }
+    
     private void initializeTicketsPane() {
         initializeTicketViewComboBox();
         initializeTicketTableView();
@@ -395,7 +551,7 @@ public class HomeScreenController implements Initializable {
         ticketsAssignedLabel.setText(String.valueOf(userStatBoard.getTotalOpenTickets()));
         bugsAssignedLabel.setText(String.valueOf(userStatBoard.getTotalOpenBugs()));
     }
-
+    
     // Pane inialization methods
     // Ticket Pane
     private void initializeTicketViewComboBox() {
@@ -955,6 +1111,7 @@ public class HomeScreenController implements Initializable {
         ticketTableView.getColumns().get(0).setVisible(true);
 
         ticketDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
+        bindTicketFilters();
     }
     
     private void loadBugTableView() {
@@ -1119,7 +1276,39 @@ public class HomeScreenController implements Initializable {
         settingsPane.toFront();
     }
             
-    private void startLabelClickHandlers() {
+    private void startClickHandlers() {
+        ticketNumberClearFilterImageView.setOnMouseClicked((event) -> {
+            ticketNumberSearchField.clear();
+        });
+        
+        ticketPriorityClearFilterImageView.setOnMouseClicked((event) -> {
+            ticketPriorityFilterComboBox.getSelectionModel().clearSelection();
+        });
+        
+        ticketContentClearFilterImageView.setOnMouseClicked((event) -> {
+            ticketInfoSearchField.clear();
+        });
+        
+        ticketStatusClearFilterImageView.setOnMouseClicked((event) -> {
+            ticketStatusFilterComboBox.getSelectionModel().clearSelection();
+        });
+        
+//        bugNumberClearFilterImageView.setOnMouseClicked((event) -> {
+//            bugNumberSearchField.clear();
+//        });
+//        
+//        bugPriorityClearFilterImageView.setOnMouseClicked((event) -> {
+//            bugPriorityFilterComboBox.getSelectionModel().clearSelection();
+//        });
+
+//        bugContentClearFilterImageView.setOnMouseClicked((event) -> {
+//            bugInfoSearchField.clear();
+//        });
+//        
+//        bugStatusClearFilterImageView.setOnMouseClicked((event) -> {
+//            bugStatusFilterComboBox.getSelectionModel().clearSelection();
+//        });
+        
         report1Label.setOnMouseClicked((event) -> {
             
         });
@@ -1375,6 +1564,20 @@ public class HomeScreenController implements Initializable {
         }
     }
     
+    private void runGetAllTicketPrioritiesService() {
+        if (!getAllTicketPrioritiesService.isRunning()) {
+            getAllTicketPrioritiesService.reset();
+            getAllTicketPrioritiesService.start();
+        }
+    }
+    
+    private void runGetAllTicketStatusesService() {
+        if (!getAllTicketStatusesService.isRunning()) {
+            getAllTicketStatusesService.reset();
+            getAllTicketStatusesService.start();
+        }
+    }
+    
     private void runGetAllBugsService() {
         if (!getAllBugsService.isRunning()) {
             getAllBugsService.reset();
@@ -1387,6 +1590,20 @@ public class HomeScreenController implements Initializable {
             deleteBugService.reset();
             deleteBugService.setBug(bug);
             deleteBugService.start();
+        }
+    }
+    
+    private void runGetAllBugPrioritiesService() {
+        if (!getAllBugPrioritiesService.isRunning()) {
+            getAllBugPrioritiesService.reset();
+            getAllBugPrioritiesService.start();
+        }
+    }
+    
+    private void runGetAllBugStatusesService() {
+        if (!getAllBugStatusesService.isRunning()) {
+            getAllBugStatusesService.reset();
+            getAllBugStatusesService.start();
         }
     }
     
@@ -1462,6 +1679,26 @@ public class HomeScreenController implements Initializable {
         event.getSource().getException().printStackTrace();
     };
     
+    private EventHandler<WorkerStateEvent> getAllTicketPrioritiesSuccess = (event) -> {
+        allTicketPrioritiesList.clear();
+        allTicketPrioritiesList = getAllTicketPrioritiesService.getValue();
+        ticketPriorityFilterComboBox.getItems().addAll(allTicketPrioritiesList);
+    };
+    
+    private EventHandler<WorkerStateEvent> getAllTicketPrioritiesFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
+    };
+    
+        private EventHandler<WorkerStateEvent> getAllTicketStatusesSuccess = (event) -> {
+        allTicketStatusesList.clear();
+        allTicketStatusesList = getAllTicketStatusesService.getValue();
+        ticketStatusFilterComboBox.getItems().addAll(allTicketStatusesList);
+    };
+    
+    private EventHandler<WorkerStateEvent> getAllTicketStatusesFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
+    };
+    
     private EventHandler<WorkerStateEvent> getAllBugsSuccess = (event) -> {
         allBugList.clear();
         allBugList = getAllBugsService.getValue();
@@ -1470,6 +1707,26 @@ public class HomeScreenController implements Initializable {
     };
     
     private EventHandler<WorkerStateEvent> getAllBugsFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
+    };
+    
+    private EventHandler<WorkerStateEvent> getAllBugPrioritiesSuccess = (event) -> {
+        allBugPrioritiesList.clear();
+        allBugPrioritiesList = getAllBugPrioritiesService.getValue();
+        bugPriorityFilterComboBox.getItems().addAll(allBugPrioritiesList);
+    };
+    
+    private EventHandler<WorkerStateEvent> getAllBugPrioritiesFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
+    };
+    
+    private EventHandler<WorkerStateEvent> getAllBugStatusesSuccess = (event) -> {
+        allBugStatusesList.clear();
+        allBugStatusesList = getAllBugStatusesService.getValue();
+        bugStatusFilterComboBox.getItems().addAll(allBugStatusesList);
+    };
+    
+    private EventHandler<WorkerStateEvent> getAllBugStatusesFailure = (event) -> {
         event.getSource().getException().printStackTrace();
     };
     
@@ -1560,10 +1817,7 @@ public class HomeScreenController implements Initializable {
     
     private enum TicketView {
         MY_TICKETS("My Tickets"),
-        ALL_TICKETS("All Tickets"),
-        MY_OPEN_TICKETS("My Open Tickets"),
-        ALL_OPEN_TICKETS("All Open Tickets"),
-        NEW_TICKETS("New Tickets");
+        ALL_TICKETS("All Tickets");
         
         private String label;
         
@@ -1579,10 +1833,7 @@ public class HomeScreenController implements Initializable {
     
     private enum BugView {
         MY_BUGS("My Bugs"),
-        ALL_BUGS("All Bugs"),
-        MY_OPEN_BUGS("My Open Bugs"),
-        ALL_OPEN_BUGS("All Open Bugs"),
-        NEW_BUGS("New Bugs");
+        ALL_BUGS("All Bugs");
         
         private String label;
         

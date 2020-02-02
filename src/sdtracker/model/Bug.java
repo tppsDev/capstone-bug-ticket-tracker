@@ -5,6 +5,7 @@
 package sdtracker.model;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  *
@@ -152,6 +153,37 @@ public class Bug {
 
     public void setBugNumber(String bugNumber) {
         this.bugNumber = bugNumber;
+    }
+
+    @Override
+    public String toString() {
+        return bugNumber;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + this.id;
+        hash = 97 * hash + Objects.hashCode(this.bugNumber);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Bug other = (Bug) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
     }
     
 }

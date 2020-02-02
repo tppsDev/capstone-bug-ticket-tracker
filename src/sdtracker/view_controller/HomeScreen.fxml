@@ -9,6 +9,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -92,112 +94,6 @@
       </VBox>
       <StackPane layoutX="220.0" layoutY="140.0" prefHeight="532.0" prefWidth="1031.0">
          <children>
-            <AnchorPane id="bugsPane" fx:id="bugsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Button fx:id="addBugButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddBugButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Bug" />
-                        <Label fx:id="bugPaneTitleLabel" layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Bugs" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                        <ComboBox fx:id="bugViewComboBox" layoutX="834.0" layoutY="18.0" prefWidth="150.0" />
-                     </children>
-                  </AnchorPane>
-                  <TextField fx:id="bugNumberSearchField" layoutX="91.0" layoutY="97.0" prefHeight="25.0" prefWidth="88.0" />
-                  <ComboBox fx:id="bugPriorityFilterComboBox" layoutX="186.0" layoutY="97.0" prefHeight="25.0" prefWidth="74.0" />
-                  <TextField fx:id="bugInfoSearchField" layoutX="268.0" layoutY="97.0" prefHeight="25.0" prefWidth="321.0" />
-                  <ComboBox fx:id="bugStatusFilterComboBox" layoutX="598.0" layoutY="97.0" prefHeight="25.0" prefWidth="74.0" />
-                  <TextField fx:id="bugAssignedToSearchField" layoutX="690.0" layoutY="97.0" />
-                  <TableView fx:id="bugTableView" layoutX="14.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
-                     <columns>
-                        <TableColumn fx:id="bugDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
-                        <TableColumn fx:id="bugEditColumn" editable="false" prefWidth="35.0" sortable="false" />
-                        <TableColumn fx:id="bugNumberColumn" editable="false" prefWidth="100.0" text="TICKET #" />
-                        <TableColumn fx:id="bugPriorityColumn" editable="false" text="PRIORITY" />
-                        <TableColumn fx:id="bugTitleColumn" editable="false" prefWidth="330.0" text="TITLE" />
-                        <TableColumn fx:id="bugStatusColumn" editable="false" text="STATUS" />
-                        <TableColumn fx:id="bugAssignedToColumn" editable="false" prefWidth="180.0" text="ASSIGNED TO" />
-                        <TableColumn fx:id="bugCreatedColumn" editable="false" text="OPENED&#10;DATE" />
-                        <TableColumn fx:id="bugLastUpdatedColumn" editable="false" text="LAST&#10;UPDATED" />
-                     </columns>
-                  </TableView>
-                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="268.0" layoutY="73.0" prefHeight="17.0" prefWidth="321.0" text="Searches title and description" />
-                  <Label layoutX="35.0" layoutY="101.0" prefHeight="17.0" prefWidth="46.0" text="Filters:" />
-               </children>
-            </AnchorPane>
-            <AnchorPane id="contactsPane" fx:id="contactsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Button fx:id="contactAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddContactButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Contact" />
-                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Contacts" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                     </children>
-                  </AnchorPane>
-                  <Label layoutX="49.0" layoutY="103.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
-                  <TextField fx:id="contactNameSearchField" layoutX="101.0" layoutY="99.0" prefHeight="25.0" prefWidth="271.0" />
-                  <TextField fx:id="contactEmailSearchField" layoutX="392.0" layoutY="99.0" prefHeight="25.0" prefWidth="259.0" />
-                  <TextField fx:id="contactPhoneSearchField" layoutX="664.0" layoutY="99.0" prefHeight="25.0" prefWidth="110.0" />
-                  <TextField fx:id="contactCompanySearchField" layoutX="786.0" layoutY="99.0" prefHeight="25.0" prefWidth="220.0" />
-                  <TableView fx:id="contactTableView" layoutX="13.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
-                    <columns>
-                      <TableColumn fx:id="contactDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
-                      <TableColumn fx:id="contactEditColumn" editable="false" prefWidth="35.0" sortable="false" />
-                        <TableColumn fx:id="contactNameColumn" editable="false" prefWidth="300.0" text="NAME" />
-                        <TableColumn fx:id="contactEmailColumn" editable="false" prefWidth="275.0" text="EMAIL" />
-                        <TableColumn fx:id="contactPhoneColumn" editable="false" prefWidth="120.0" text="PHONE" />
-                        <TableColumn fx:id="contactCompanyColumn" editable="false" prefWidth="235.0" text="COMPANY" />
-                    </columns>
-                  </TableView>
-               </children>
-            </AnchorPane>
-            <AnchorPane id="assetsPane" fx:id="assetsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Button fx:id="assetAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddAssetButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Asset" />
-                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Assets" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                     </children>
-                  </AnchorPane>
-                  <TextField fx:id="assetNumberSearchField" layoutX="88.0" layoutY="99.0" prefHeight="25.0" prefWidth="88.0" />
-                  <TextField fx:id="assetNameSearchField" layoutX="190.0" layoutY="99.0" prefHeight="25.0" prefWidth="110.0" />
-                  <ComboBox fx:id="assetTypeComboBox" layoutX="310.0" layoutY="99.0" prefWidth="150.0" />
-                  <TextField fx:id="assetAssignedToSearchField" layoutX="471.0" layoutY="99.0" prefHeight="25.0" prefWidth="198.0" />
-                  <ComboBox fx:id="assetMfgComboBox" layoutX="681.0" layoutY="99.0" prefHeight="25.0" prefWidth="168.0" />
-                  <TextField fx:id="assetModelNumberSearchField" layoutX="858.0" layoutY="99.0" />
-                  <TableView fx:id="assetTableView" layoutX="14.0" layoutY="131.0" prefHeight="390.0" prefWidth="1000.0">
-                    <columns>
-                      <TableColumn fx:id="assetDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
-                      <TableColumn fx:id="assetEditColumn" editable="false" prefWidth="35.0" sortable="false" />
-                        <TableColumn fx:id="assetNumberColumn" editable="false" prefWidth="100.0" text="ASSET #" />
-                        <TableColumn fx:id="assetNameColumn" editable="false" prefWidth="120.0" text="NAME" />
-                        <TableColumn fx:id="assetTypeColumn" editable="false" prefWidth="160.0" text="ASSET TYPE" />
-                        <TableColumn fx:id="assetAssignedToColumn" editable="false" prefWidth="210.0" text="ASSIGNED TO" />
-                        <TableColumn fx:id="assetMfgColumn" editable="false" prefWidth="180.0" text="MANUFACTURER" />
-                        <TableColumn fx:id="assetModelNumberColumn" editable="false" prefWidth="160.0" text="MODEL #" />
-                    </columns>
-                  </TableView>
-                  <Label layoutX="23.0" layoutY="103.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
-               </children>
-            </AnchorPane>
-            <AnchorPane id="productsPane" fx:id="productsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Button fx:id="productAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddProductButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Product" />
-                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Products" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                     </children>
-                  </AnchorPane>
-                  <Label layoutX="49.0" layoutY="103.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
-                  <TextField fx:id="productNameSearchField" layoutX="122.0" layoutY="99.0" prefHeight="25.0" prefWidth="362.0" />
-                  <TextField fx:id="productVersionSearchField" layoutX="568.0" layoutY="99.0" prefHeight="25.0" prefWidth="369.0" />
-                  <TableView fx:id="productTableView" layoutX="14.0" layoutY="133.0" prefHeight="390.0" prefWidth="1000.0">
-                    <columns>
-                      <TableColumn fx:id="productDeleteColumn" editable="false" prefWidth="50.0" sortable="false" />
-                      <TableColumn fx:id="productEditColumn" editable="false" prefWidth="50.0" sortable="false" />
-                        <TableColumn fx:id="productNameColumn" editable="false" prefWidth="450.0" text="NAME" />
-                        <TableColumn fx:id="productVersionColumn" editable="false" prefWidth="450.0" text="VERSION" />
-                    </columns>
-                  </TableView>
-               </children>
-            </AnchorPane>
             <AnchorPane id="settingsPane" fx:id="settingsPane" prefHeight="200.0" prefWidth="200.0" styleClass="home-page-subpane">
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
@@ -264,6 +160,114 @@
                   </GridPane>
                </children>
             </AnchorPane>
+            <AnchorPane id="assetsPane" fx:id="assetsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Button fx:id="assetAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddAssetButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Asset" />
+                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Assets" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                     </children>
+                  </AnchorPane>
+                  <TextField fx:id="assetNumberSearchField" layoutX="88.0" layoutY="99.0" prefHeight="25.0" prefWidth="88.0" />
+                  <TextField fx:id="assetNameSearchField" layoutX="190.0" layoutY="99.0" prefHeight="25.0" prefWidth="110.0" />
+                  <ComboBox fx:id="assetTypeComboBox" layoutX="310.0" layoutY="99.0" prefWidth="150.0" />
+                  <TextField fx:id="assetAssignedToSearchField" layoutX="471.0" layoutY="99.0" prefHeight="25.0" prefWidth="198.0" />
+                  <ComboBox fx:id="assetMfgComboBox" layoutX="681.0" layoutY="99.0" prefHeight="25.0" prefWidth="168.0" />
+                  <TextField fx:id="assetModelNumberSearchField" layoutX="858.0" layoutY="99.0" />
+                  <TableView fx:id="assetTableView" layoutX="14.0" layoutY="131.0" prefHeight="390.0" prefWidth="1000.0">
+                    <columns>
+                      <TableColumn fx:id="assetDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
+                      <TableColumn fx:id="assetEditColumn" editable="false" prefWidth="35.0" sortable="false" />
+                        <TableColumn fx:id="assetNumberColumn" editable="false" prefWidth="100.0" text="ASSET #" />
+                        <TableColumn fx:id="assetNameColumn" editable="false" prefWidth="120.0" text="NAME" />
+                        <TableColumn fx:id="assetTypeColumn" editable="false" prefWidth="160.0" text="ASSET TYPE" />
+                        <TableColumn fx:id="assetAssignedToColumn" editable="false" prefWidth="210.0" text="ASSIGNED TO" />
+                        <TableColumn fx:id="assetMfgColumn" editable="false" prefWidth="180.0" text="MANUFACTURER" />
+                        <TableColumn fx:id="assetModelNumberColumn" editable="false" prefWidth="160.0" text="MODEL #" />
+                    </columns>
+                  </TableView>
+                  <Label layoutX="23.0" layoutY="103.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
+               </children>
+            </AnchorPane>
+            <AnchorPane id="productsPane" fx:id="productsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Button fx:id="productAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddProductButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Product" />
+                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Products" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                     </children>
+                  </AnchorPane>
+                  <Label layoutX="49.0" layoutY="103.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
+                  <TextField fx:id="productNameSearchField" layoutX="122.0" layoutY="99.0" prefHeight="25.0" prefWidth="362.0" />
+                  <TextField fx:id="productVersionSearchField" layoutX="568.0" layoutY="99.0" prefHeight="25.0" prefWidth="369.0" />
+                  <TableView fx:id="productTableView" layoutX="14.0" layoutY="133.0" prefHeight="390.0" prefWidth="1000.0">
+                    <columns>
+                      <TableColumn fx:id="productDeleteColumn" editable="false" prefWidth="50.0" sortable="false" />
+                      <TableColumn fx:id="productEditColumn" editable="false" prefWidth="50.0" sortable="false" />
+                        <TableColumn fx:id="productNameColumn" editable="false" prefWidth="450.0" text="NAME" />
+                        <TableColumn fx:id="productVersionColumn" editable="false" prefWidth="450.0" text="VERSION" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="contactsPane" fx:id="contactsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Button fx:id="contactAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddContactButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Contact" />
+                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Contacts" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                     </children>
+                  </AnchorPane>
+                  <Label layoutX="49.0" layoutY="103.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
+                  <TextField fx:id="contactNameSearchField" layoutX="101.0" layoutY="99.0" prefHeight="25.0" prefWidth="271.0" />
+                  <TextField fx:id="contactEmailSearchField" layoutX="392.0" layoutY="99.0" prefHeight="25.0" prefWidth="259.0" />
+                  <TextField fx:id="contactPhoneSearchField" layoutX="664.0" layoutY="99.0" prefHeight="25.0" prefWidth="110.0" />
+                  <TextField fx:id="contactCompanySearchField" layoutX="786.0" layoutY="99.0" prefHeight="25.0" prefWidth="220.0" />
+                  <TableView fx:id="contactTableView" layoutX="13.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
+                    <columns>
+                      <TableColumn fx:id="contactDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
+                      <TableColumn fx:id="contactEditColumn" editable="false" prefWidth="35.0" sortable="false" />
+                        <TableColumn fx:id="contactNameColumn" editable="false" prefWidth="300.0" text="NAME" />
+                        <TableColumn fx:id="contactEmailColumn" editable="false" prefWidth="275.0" text="EMAIL" />
+                        <TableColumn fx:id="contactPhoneColumn" editable="false" prefWidth="120.0" text="PHONE" />
+                        <TableColumn fx:id="contactCompanyColumn" editable="false" prefWidth="235.0" text="COMPANY" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="bugsPane" fx:id="bugsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Button fx:id="addBugButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddBugButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Bug" />
+                        <Label fx:id="bugPaneTitleLabel" layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Bugs" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                        <ComboBox fx:id="bugViewComboBox" layoutX="834.0" layoutY="18.0" prefWidth="150.0" />
+                     </children>
+                  </AnchorPane>
+                  <TextField fx:id="bugNumberSearchField" layoutX="91.0" layoutY="97.0" prefHeight="25.0" prefWidth="88.0" />
+                  <ComboBox fx:id="bugPriorityFilterComboBox" layoutX="198.0" layoutY="97.0" prefHeight="25.0" prefWidth="178.0" />
+                  <TextField fx:id="bugInfoSearchField" layoutX="397.0" layoutY="97.0" prefHeight="25.0" prefWidth="321.0" />
+                  <ComboBox fx:id="bugStatusFilterComboBox" layoutX="751.0" layoutY="96.0" prefHeight="25.0" prefWidth="184.0" />
+                  <TableView fx:id="bugTableView" layoutX="14.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
+                     <columns>
+                        <TableColumn fx:id="bugDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
+                        <TableColumn fx:id="bugEditColumn" editable="false" prefWidth="35.0" sortable="false" />
+                        <TableColumn fx:id="bugNumberColumn" editable="false" prefWidth="100.0" text="TICKET #" />
+                        <TableColumn fx:id="bugPriorityColumn" editable="false" text="PRIORITY" />
+                        <TableColumn fx:id="bugTitleColumn" editable="false" prefWidth="330.0" text="TITLE" />
+                        <TableColumn fx:id="bugStatusColumn" editable="false" text="STATUS" />
+                        <TableColumn fx:id="bugAssignedToColumn" editable="false" prefWidth="180.0" text="ASSIGNED TO" />
+                        <TableColumn fx:id="bugCreatedColumn" editable="false" text="OPENED&#10;DATE" />
+                        <TableColumn fx:id="bugLastUpdatedColumn" editable="false" text="LAST&#10;UPDATED" />
+                     </columns>
+                  </TableView>
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="397.0" layoutY="81.0" prefHeight="17.0" prefWidth="321.0" text="Searches title and description" />
+                  <Label layoutX="35.0" layoutY="101.0" prefHeight="17.0" prefWidth="46.0" text="Filters:" />
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="91.0" layoutY="82.0" prefHeight="17.0" prefWidth="88.0" text="Ticket #" />
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="751.0" layoutY="81.0" prefHeight="17.0" prefWidth="184.0" text="Status" />
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="198.0" layoutY="81.0" prefHeight="17.0" prefWidth="178.0" text="Priority" />
+               </children>
+            </AnchorPane>
             <AnchorPane id="ticketsPane" fx:id="ticketsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
@@ -274,10 +278,9 @@
                      </children>
                   </AnchorPane>
                   <TextField fx:id="ticketNumberSearchField" layoutX="91.0" layoutY="97.0" prefHeight="25.0" prefWidth="88.0" />
-                  <ComboBox fx:id="ticketPriorityFilterComboBox" layoutX="186.0" layoutY="97.0" prefHeight="25.0" prefWidth="74.0" />
-                  <TextField fx:id="ticketInfoSearchField" layoutX="268.0" layoutY="97.0" prefHeight="25.0" prefWidth="321.0" />
-                  <ComboBox fx:id="ticketStatusFilterComboBox" layoutX="598.0" layoutY="97.0" prefHeight="25.0" prefWidth="74.0" />
-                  <TextField fx:id="ticketAssignedToSearchField" layoutX="690.0" layoutY="97.0" />
+                  <ComboBox fx:id="ticketPriorityFilterComboBox" layoutX="219.0" layoutY="97.0" prefHeight="25.0" prefWidth="171.0" />
+                  <TextField fx:id="ticketInfoSearchField" layoutX="442.0" layoutY="96.0" prefHeight="25.0" prefWidth="278.0" />
+                  <ComboBox fx:id="ticketStatusFilterComboBox" layoutX="776.0" layoutY="96.0" prefHeight="25.0" prefWidth="204.0" />
                   <TableView fx:id="ticketTableView" layoutX="14.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
                     <columns>
                       <TableColumn fx:id="ticketDeleteColumn" editable="false" prefWidth="35.0" />
@@ -291,8 +294,31 @@
                         <TableColumn fx:id="ticketLastUpdatedColumn" editable="false" text="LAST&#10;UPDATED" />
                     </columns>
                   </TableView>
-                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="268.0" layoutY="73.0" prefHeight="17.0" prefWidth="321.0" text="Searches title and description" />
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="442.0" layoutY="81.0" prefHeight="17.0" prefWidth="278.0" text="Searches title and description" />
                   <Label layoutX="35.0" layoutY="101.0" prefHeight="17.0" prefWidth="46.0" text="Filters:" />
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="91.0" layoutY="82.0" prefHeight="17.0" prefWidth="88.0" text="Ticket #" />
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="776.0" layoutY="81.0" prefHeight="17.0" prefWidth="204.0" text="Status" />
+                  <ImageView fx:id="ticketStatusClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="988.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ticketPriorityClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="396.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="219.0" layoutY="81.0" prefHeight="17.0" prefWidth="171.0" text="Priority" />
+                  <ImageView fx:id="ticketNumberClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="185.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="ticketContentClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="729.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
          </children>

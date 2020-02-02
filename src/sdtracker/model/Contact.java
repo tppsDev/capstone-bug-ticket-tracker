@@ -4,6 +4,8 @@
  */
 package sdtracker.model;
 
+import java.util.Objects;
+
 /**
  *
  * @author Tim Smith
@@ -212,6 +214,32 @@ public class Contact {
     @Override
     public String toString() {
         return lastName + ", " + firstName;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 83 * hash + this.id;
+        hash = 83 * hash + Objects.hashCode(this.email);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Contact other = (Contact) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
     }
     
 }

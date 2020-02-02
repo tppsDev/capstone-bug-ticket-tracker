@@ -4,6 +4,7 @@
  */
 package sdtracker.model;
 
+import java.util.Objects;
 import sdtracker.utility.PasswordUtil;
 
 /**
@@ -106,6 +107,32 @@ public class AppUser {
     @Override
     public String toString() {
         return lastName + ", " + firstName;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + this.id;
+        hash = 79 * hash + Objects.hashCode(this.username);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AppUser other = (AppUser) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
     }
 
     // Getter and Setter Methods for class properties
