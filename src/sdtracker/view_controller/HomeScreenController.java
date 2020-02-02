@@ -409,8 +409,6 @@ public class HomeScreenController implements Initializable {
     
     private void establishBindings() {
         BooleanBinding servicesRunning = getAllTicketsService.runningProperty()
-                                     .or(getTeamStatBoardService.runningProperty())
-                                     .or(getUserStatBoardService.runningProperty())
                                      .or(deleteTicketService.runningProperty())
                                      .or(getAllBugsService.runningProperty())
                                      .or(deleteBugService.runningProperty())
@@ -455,9 +453,6 @@ public class HomeScreenController implements Initializable {
         ticketPriorityFilter.bind(Bindings.createObjectBinding(() ->
             ticket -> {
                 if (ticketPriorityFilterComboBox.getValue() != null) {
-                    System.out.println("Ticket Row:" + ticket.getPriority());
-                    System.out.println("Filter:" + ticketPriorityFilterComboBox.getValue());
-                    System.out.println("Result: " + ticket.getPriority().equals(ticketPriorityFilterComboBox.getValue()));
                     return ticket.getPriority().equals(ticketPriorityFilterComboBox.getValue());
                 } else {
                     return true;
@@ -504,7 +499,77 @@ public class HomeScreenController implements Initializable {
     }
     
     private void bindBugFilters() {
+        myBugsFilter.bind(Bindings.createObjectBinding(() ->
+            bug -> {
+                if (bugViewComboBox.getValue().equals(BugView.MY_BUGS)) {
+                    return bug.getAssignedAppUser() != null ?
+                        bug.getAssignedAppUser().getId() == session.getSessionUser().getId()
+                            :
+                        false;
+                } else {
+                    return true;
+                }
+        },
+            bugViewComboBox.valueProperty()
+        ));
         
+        bugNumberFilter.bind(Bindings.createObjectBinding(() ->
+            bug -> {
+                if (bugNumberSearchField.getText() != null || !bugNumberSearchField.getText().isEmpty()) {
+                    return bug.getBugNumber().contains(bugNumberSearchField.getText());
+                } else {
+                    return true;
+                }
+            },
+            bugNumberSearchField.textProperty()
+        ));
+        
+        bugPriorityFilter.bind(Bindings.createObjectBinding(() ->
+            bug -> {
+                if (bugPriorityFilterComboBox.getValue() != null) {
+                    return bug.getPriority().equals(bugPriorityFilterComboBox.getValue());
+                } else {
+                    return true;
+                }
+            },
+            bugPriorityFilterComboBox.valueProperty()
+        ));
+        
+        bugContentFilter.bind(Bindings.createObjectBinding(() ->
+            bug -> {
+                if (bugInfoSearchField.getText() != null || !bugInfoSearchField.getText().isEmpty()) {
+                    return bug.getTitle().toLowerCase().contains(bugInfoSearchField.getText().toLowerCase())
+                        || bug.getDescription().toLowerCase().contains(bugInfoSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            bugInfoSearchField.textProperty()
+        ));
+        
+        bugStatusFilter.bind(Bindings.createObjectBinding(() ->
+            bug -> {
+                if (bugStatusFilterComboBox.getValue() != null) {
+                    return bug.getStatus().equals(bugStatusFilterComboBox.getValue());
+                } else {
+                    return true;
+                }
+            },
+            bugStatusFilterComboBox.valueProperty()
+        ));
+        
+        filteredBugList.predicateProperty().bind(Bindings.createObjectBinding(
+            () -> myBugsFilter.get()
+                .and(bugNumberFilter.get())
+                .and(bugPriorityFilter.get())
+                .and(bugContentFilter.get())
+                .and(bugStatusFilter.get()),
+            myBugsFilter, bugNumberFilter, bugPriorityFilter, bugContentFilter, bugStatusFilter)
+        );
+        
+        filteredBugList.predicateProperty().addListener((observable) -> {
+            bugTableView.refresh();
+        });
     }
     
     private void initializeTicketsPane() {
@@ -1124,6 +1189,7 @@ public class HomeScreenController implements Initializable {
         bugTableView.getColumns().get(0).setVisible(false);
         bugTableView.getColumns().get(0).setVisible(true);
         bugDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
+        bindBugFilters();
     }
     
     private void loadAssetTableView() {
@@ -1293,21 +1359,21 @@ public class HomeScreenController implements Initializable {
             ticketStatusFilterComboBox.getSelectionModel().clearSelection();
         });
         
-//        bugNumberClearFilterImageView.setOnMouseClicked((event) -> {
-//            bugNumberSearchField.clear();
-//        });
-//        
-//        bugPriorityClearFilterImageView.setOnMouseClicked((event) -> {
-//            bugPriorityFilterComboBox.getSelectionModel().clearSelection();
-//        });
+        bugNumberClearFilterImageView.setOnMouseClicked((event) -> {
+            bugNumberSearchField.clear();
+        });
+        
+        bugPriorityClearFilterImageView.setOnMouseClicked((event) -> {
+            bugPriorityFilterComboBox.getSelectionModel().clearSelection();
+        });
 
-//        bugContentClearFilterImageView.setOnMouseClicked((event) -> {
-//            bugInfoSearchField.clear();
-//        });
-//        
-//        bugStatusClearFilterImageView.setOnMouseClicked((event) -> {
-//            bugStatusFilterComboBox.getSelectionModel().clearSelection();
-//        });
+        bugContentClearFilterImageView.setOnMouseClicked((event) -> {
+            bugInfoSearchField.clear();
+        });
+        
+        bugStatusClearFilterImageView.setOnMouseClicked((event) -> {
+            bugStatusFilterComboBox.getSelectionModel().clearSelection();
+        });
         
         report1Label.setOnMouseClicked((event) -> {
             
