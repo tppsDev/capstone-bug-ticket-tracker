@@ -603,6 +603,79 @@ public class HomeScreenController implements Initializable {
         });
     }
     
+    private void bindAssetfilters() {
+        assetTypeFilter.bind(Bindings.createObjectBinding(() ->
+            asset ->{
+                if (assetTypeComboBox.getValue() != null) {
+                    return asset.getAssetType().equals(assetTypeComboBox.getValue());
+                } else {
+                    return true;
+                }
+            },
+            assetTypeComboBox.valueProperty()
+        ));
+        
+        assetNumberFilter.bind(Bindings.createObjectBinding(() ->
+            asset ->{
+                if (assetNumberSearchField.getText() != null || !assetNumberSearchField.getText().isEmpty()) {
+                    return asset.getAssetNumber().toLowerCase().contains(assetNumberSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            assetNumberSearchField.textProperty()
+        ));
+        
+        assetAssignedToFilter.bind(Bindings.createObjectBinding(() ->
+            asset ->{
+                if (assetAssignedToSearchField.getText() != null || !assetAssignedToSearchField.getText().isEmpty()) {
+                    return asset.getAssignedToAppUser().getDisplayName().toLowerCase()
+                            .contains(assetNumberSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            assetAssignedToSearchField.textProperty()
+        ));
+        
+        assetInfoFilter.bind(Bindings.createObjectBinding(() ->
+            asset ->{
+                if (assetInfoSearchField.getText() != null || !assetInfoSearchField.getText().isEmpty()) {
+                    return asset.getName().toLowerCase().contains(assetInfoSearchField.getText().toLowerCase())
+                        || asset.getModelNumber().toLowerCase().contains(assetInfoSearchField.getText().toLowerCase())
+                        || asset.getSerialNumber().toLowerCase().contains(assetInfoSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            assetInfoSearchField.textProperty()
+        ));
+        
+        assetMfgFilter.bind(Bindings.createObjectBinding(() ->
+            asset ->{
+                if (assetMfgComboBox.getValue() != null) {
+                    return asset.getMfg().equals(assetMfgComboBox.getValue());
+                } else {
+                    return true;
+                }
+            },
+            assetMfgComboBox.valueProperty()
+        ));
+        
+        filteredAssetList.predicateProperty().bind(Bindings.createObjectBinding(
+            () -> assetTypeFilter.get()
+             .and(assetNumberFilter.get())
+             .and(assetAssignedToFilter.get())
+             .and(assetInfoFilter.get())
+             .and(assetMfgFilter.get()),
+            assetTypeFilter, assetNumberFilter, assetAssignedToFilter, assetInfoFilter, assetMfgFilter)
+        );
+        
+        filteredAssetList.predicateProperty().addListener((observable) -> {
+            assetTableView.refresh();
+        });
+    }
+    
     private void initializeTicketsPane() {
         initializeTicketViewComboBox();
         initializeTicketTableView();
@@ -1232,6 +1305,7 @@ public class HomeScreenController implements Initializable {
         assetTableView.setItems(sortedAssetList);
 
         assetDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
+        bindAssetfilters();
     }
     
     private void loadProductTableView() {
@@ -1404,6 +1478,26 @@ public class HomeScreenController implements Initializable {
         
         bugStatusClearFilterImageView.setOnMouseClicked((event) -> {
             bugStatusFilterComboBox.getSelectionModel().clearSelection();
+        });
+        
+        assetAssignedToClearFilterImageView.setOnMouseClicked((event) -> {
+            assetAssignedToSearchField.clear();
+        });
+        
+        assetTypeClearFilterImageView.setOnMouseClicked((event) -> {
+            assetTypeComboBox.getSelectionModel().clearSelection();
+        });
+        
+        assetMfgClearFilterImageView.setOnMouseClicked((event) -> {
+            assetMfgComboBox.getSelectionModel().clearSelection();
+        });
+        
+        assetNumberClearFilterImageView.setOnMouseClicked((event) -> {
+            assetNumberSearchField.clear();
+        });
+        
+        assetInfoClearFilterImageView.setOnMouseClicked((event) -> {
+            assetInfoSearchField.clear();
         });
         
         report1Label.setOnMouseClicked((event) -> {

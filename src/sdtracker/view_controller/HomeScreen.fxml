@@ -367,7 +367,7 @@
                   <Label alignment="CENTER" layoutX="340.0" layoutY="73.0" prefHeight="17.0" prefWidth="246.0" text="Assigned To" />
                   <Label alignment="CENTER" layoutX="662.0" layoutY="73.0" prefHeight="17.0" prefWidth="259.0" text="Searches Name, Model # or Serial #" />
                   <Label alignment="CENTER" layoutX="87.0" layoutY="124.0" prefHeight="17.0" prefWidth="313.0" text="Asset Type" />
-                  <Label alignment="CENTER" layoutX="472.0" layoutY="124.0" prefHeight="17.0" prefWidth="313.0" text="Assigned To" />
+                  <Label alignment="CENTER" layoutX="472.0" layoutY="124.0" prefHeight="17.0" prefWidth="313.0" text="Manufacturer" />
                </children>
             </AnchorPane>
          </children>
