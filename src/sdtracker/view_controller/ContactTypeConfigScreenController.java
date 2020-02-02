@@ -7,8 +7,12 @@ package sdtracker.view_controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -28,6 +32,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -48,11 +53,14 @@ public class ContactTypeConfigScreenController implements Initializable {
     @FXML private ProgressBar progressIndicator;
     @FXML private Button addContactTypeButton;
     @FXML private TextField searchTextField;
+    @FXML private ImageView clearSearchImageView;
     @FXML private TableView<ContactType> contactTypeTableView;
     @FXML private TableColumn<ContactType, ContactType> deleteColumn;
     @FXML private TableColumn<ContactType, ContactType> editColumn;
     @FXML private TableColumn<ContactType, String> nameColumn;
     @FXML private Label systemMessageLabel;
+    
+    private ObjectProperty<Predicate<ContactType>> searchFilter = new SimpleObjectProperty<>();
 
     Session session = Session.getSession();
     
@@ -72,6 +80,7 @@ public class ContactTypeConfigScreenController implements Initializable {
         establishBindings();
         initializeContactTypeTableView();
         runGetAllContactTypesService();
+        startClickListeners();
     }
 
     private void initializeServices() {
@@ -150,6 +159,13 @@ public class ContactTypeConfigScreenController implements Initializable {
         contactTypeTableView.setItems(sortedContactTypeList);
 
         deleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
+        bindFilters();
+    }
+    
+    private void startClickListeners() {
+        clearSearchImageView.setOnMouseClicked((event) -> {
+            searchTextField.clear();
+        });
     }
     
     private void handleDeleteButton(ContactType contactType) {
@@ -204,6 +220,25 @@ public class ContactTypeConfigScreenController implements Initializable {
         if (contactFormResult.getResultStatus().equals(SUCCESS)) {
             runGetAllContactTypesService();
         }
+    }
+    
+    private void bindFilters() {
+        searchFilter.bind(Bindings.createObjectBinding(() ->
+            contactType -> {
+                if (searchTextField.getText() != null && !searchTextField.getText().isEmpty()) {
+                    return contactType.getName().toLowerCase().contains(searchTextField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            searchTextField.textProperty()
+        ));
+        
+        filteredContactTypeList.predicateProperty().bind(searchFilter);
+        
+        filteredContactTypeList.predicateProperty().addListener((observable) -> {
+            contactTypeTableView.refresh();
+        });
     }
 
 /***************************************************************************************

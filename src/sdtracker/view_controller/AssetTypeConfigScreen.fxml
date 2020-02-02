@@ -7,6 +7,8 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane id="AnchorPane" prefHeight="588.0" prefWidth="450.0" styleClass="white-background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.AssetTypeConfigScreenController">
@@ -22,7 +24,7 @@
       </AnchorPane>
       <Button fx:id="addAssetTypeButton" layoutX="14.0" layoutY="91.0" mnemonicParsing="false" onAction="#handleAddAssetTypeButton" styleClass="form-button" text="Add Asset Type" />
       <Label layoutX="40.0" layoutY="140.0" prefHeight="18.0" prefWidth="73.0" styleClass="form-label" text="Search:" />
-      <TextField fx:id="searchTextField" layoutX="120.0" layoutY="135.0" prefHeight="25.0" prefWidth="288.0" styleClass="form-text-field" />
+      <TextField fx:id="searchTextField" layoutX="120.0" layoutY="135.0" prefHeight="29.0" prefWidth="278.0" styleClass="form-text-field" />
       <TableView fx:id="assetTypeTableView" layoutX="15.0" layoutY="172.0" prefHeight="354.0" prefWidth="421.0">
         <columns>
           <TableColumn fx:id="deleteColumn" editable="false" prefWidth="50.0" />
@@ -31,5 +33,10 @@
         </columns>
       </TableView>
       <Label fx:id="systemMessageLabel" layoutX="15.0" layoutY="536.0" prefHeight="35.0" prefWidth="421.0" styleClass="system-message-label" wrapText="true" />
+      <ImageView fx:id="clearSearchImageView" fitHeight="25.0" fitWidth="26.0" layoutX="410.0" layoutY="137.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/clear-filter.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

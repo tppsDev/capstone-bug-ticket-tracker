@@ -7,8 +7,12 @@ package sdtracker.view_controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -28,6 +32,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -47,11 +52,14 @@ public class AssetTypeConfigScreenController implements Initializable {
     @FXML private ProgressBar progressIndicator;
     @FXML private Button addAssetTypeButton;
     @FXML private TextField searchTextField;
+    @FXML private ImageView clearSearchImageView;
     @FXML private TableView<AssetType> assetTypeTableView;
     @FXML private TableColumn<AssetType, AssetType> deleteColumn;
     @FXML private TableColumn<AssetType, AssetType> editColumn;
     @FXML private TableColumn<AssetType, String> nameColumn;
     @FXML private Label systemMessageLabel;
+    
+    private ObjectProperty<Predicate<AssetType>> searchFilter = new SimpleObjectProperty<>();
 
     Session session = Session.getSession();
     
@@ -71,6 +79,7 @@ public class AssetTypeConfigScreenController implements Initializable {
         establishBindings();
         initializeAssetTypeTableView();
         runGetAllAssetTypesService();
+        startClickListeners();
     }
 
     private void initializeServices() {
@@ -149,6 +158,13 @@ public class AssetTypeConfigScreenController implements Initializable {
         assetTypeTableView.setItems(sortedAssetTypeList);
 
         deleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
+        bindFilters();
+    }
+    
+    private void startClickListeners() {
+        clearSearchImageView.setOnMouseClicked((event) -> {
+            searchTextField.clear();
+        });
     }
     
     private void handleDeleteButton(AssetType assetType) {
@@ -203,6 +219,25 @@ public class AssetTypeConfigScreenController implements Initializable {
         if (assetFormResult.getResultStatus().equals(SUCCESS)) {
             runGetAllAssetTypesService();
         }
+    }
+    
+    private void bindFilters() {
+        searchFilter.bind(Bindings.createObjectBinding(() ->
+            assetType -> {
+                if (searchTextField.getText() != null && !searchTextField.getText().isEmpty()) {
+                    return assetType.getName().toLowerCase().contains(searchTextField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            searchTextField.textProperty()
+        ));
+        
+        filteredAssetTypeList.predicateProperty().bind(searchFilter);
+        
+        filteredAssetTypeList.predicateProperty().addListener((observable) -> {
+            assetTypeTableView.refresh();
+        });
     }
 
 /***************************************************************************************
