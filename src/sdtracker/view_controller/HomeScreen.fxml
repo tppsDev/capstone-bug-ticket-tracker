@@ -160,52 +160,6 @@
                   </GridPane>
                </children>
             </AnchorPane>
-            <AnchorPane id="productsPane" fx:id="productsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Button fx:id="productAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddProductButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Product" />
-                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Products" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                     </children>
-                  </AnchorPane>
-                  <Label layoutX="49.0" layoutY="103.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
-                  <TextField fx:id="productNameSearchField" layoutX="122.0" layoutY="99.0" prefHeight="25.0" prefWidth="362.0" />
-                  <TextField fx:id="productVersionSearchField" layoutX="568.0" layoutY="99.0" prefHeight="25.0" prefWidth="369.0" />
-                  <TableView fx:id="productTableView" layoutX="14.0" layoutY="133.0" prefHeight="390.0" prefWidth="1000.0">
-                    <columns>
-                      <TableColumn fx:id="productDeleteColumn" editable="false" prefWidth="50.0" sortable="false" />
-                      <TableColumn fx:id="productEditColumn" editable="false" prefWidth="50.0" sortable="false" />
-                        <TableColumn fx:id="productNameColumn" editable="false" prefWidth="450.0" text="NAME" />
-                        <TableColumn fx:id="productVersionColumn" editable="false" prefWidth="450.0" text="VERSION" />
-                    </columns>
-                  </TableView>
-               </children>
-            </AnchorPane>
-            <AnchorPane id="contactsPane" fx:id="contactsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Button fx:id="contactAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddContactButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Contact" />
-                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Contacts" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                     </children>
-                  </AnchorPane>
-                  <Label layoutX="49.0" layoutY="103.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
-                  <TextField fx:id="contactNameSearchField" layoutX="101.0" layoutY="99.0" prefHeight="25.0" prefWidth="271.0" />
-                  <TextField fx:id="contactEmailSearchField" layoutX="392.0" layoutY="99.0" prefHeight="25.0" prefWidth="259.0" />
-                  <TextField fx:id="contactPhoneSearchField" layoutX="664.0" layoutY="99.0" prefHeight="25.0" prefWidth="110.0" />
-                  <TextField fx:id="contactCompanySearchField" layoutX="786.0" layoutY="99.0" prefHeight="25.0" prefWidth="220.0" />
-                  <TableView fx:id="contactTableView" layoutX="13.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
-                    <columns>
-                      <TableColumn fx:id="contactDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
-                      <TableColumn fx:id="contactEditColumn" editable="false" prefWidth="35.0" sortable="false" />
-                        <TableColumn fx:id="contactNameColumn" editable="false" prefWidth="300.0" text="NAME" />
-                        <TableColumn fx:id="contactEmailColumn" editable="false" prefWidth="275.0" text="EMAIL" />
-                        <TableColumn fx:id="contactPhoneColumn" editable="false" prefWidth="120.0" text="PHONE" />
-                        <TableColumn fx:id="contactCompanyColumn" editable="false" prefWidth="235.0" text="COMPANY" />
-                    </columns>
-                  </TableView>
-               </children>
-            </AnchorPane>
             <AnchorPane id="ticketsPane" fx:id="ticketsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
@@ -259,59 +213,6 @@
                   </ImageView>
                </children>
             </AnchorPane>
-            <AnchorPane id="bugsPane" fx:id="bugsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
-               <children>
-                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
-                     <children>
-                        <Button fx:id="addBugButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddBugButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Bug" />
-                        <Label fx:id="bugPaneTitleLabel" layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Bugs" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
-                        <ComboBox fx:id="bugViewComboBox" layoutX="834.0" layoutY="18.0" prefWidth="150.0" />
-                     </children>
-                  </AnchorPane>
-                  <TextField fx:id="bugNumberSearchField" layoutX="91.0" layoutY="97.0" prefHeight="25.0" prefWidth="88.0" />
-                  <ComboBox fx:id="bugPriorityFilterComboBox" layoutX="230.0" layoutY="97.0" prefHeight="25.0" prefWidth="171.0" />
-                  <TextField fx:id="bugInfoSearchField" layoutX="451.0" layoutY="97.0" prefHeight="25.0" prefWidth="274.0" />
-                  <ComboBox fx:id="bugStatusFilterComboBox" layoutX="778.0" layoutY="96.0" prefHeight="25.0" prefWidth="198.0" />
-                  <TableView fx:id="bugTableView" layoutX="14.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
-                     <columns>
-                        <TableColumn fx:id="bugDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
-                        <TableColumn fx:id="bugEditColumn" editable="false" prefWidth="35.0" sortable="false" />
-                        <TableColumn fx:id="bugNumberColumn" editable="false" prefWidth="100.0" text="TICKET #" />
-                        <TableColumn fx:id="bugPriorityColumn" editable="false" text="PRIORITY" />
-                        <TableColumn fx:id="bugTitleColumn" editable="false" prefWidth="330.0" text="TITLE" />
-                        <TableColumn fx:id="bugStatusColumn" editable="false" text="STATUS" />
-                        <TableColumn fx:id="bugAssignedToColumn" editable="false" prefWidth="180.0" text="ASSIGNED TO" />
-                        <TableColumn fx:id="bugCreatedColumn" editable="false" text="OPENED&#10;DATE" />
-                        <TableColumn fx:id="bugLastUpdatedColumn" editable="false" text="LAST&#10;UPDATED" />
-                     </columns>
-                  </TableView>
-                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="451.0" layoutY="81.0" prefHeight="17.0" prefWidth="274.0" text="Searches title and description" />
-                  <Label layoutX="35.0" layoutY="101.0" prefHeight="17.0" prefWidth="46.0" text="Filters:" />
-                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="91.0" layoutY="82.0" prefHeight="17.0" prefWidth="88.0" text="Ticket #" />
-                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="792.0" layoutY="81.0" prefHeight="17.0" prefWidth="184.0" text="Status" />
-                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="230.0" layoutY="82.0" prefHeight="17.0" prefWidth="171.0" text="Priority" />
-                  <ImageView fx:id="bugStatusClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="988.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../img/clear-filter.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="bugContentClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="733.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../img/clear-filter.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="bugPriorityClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="409.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../img/clear-filter.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="bugNumberClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="185.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../img/clear-filter.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
             <AnchorPane id="assetsPane" fx:id="assetsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
                <children>
                   <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
@@ -321,10 +222,10 @@
                      </children>
                   </AnchorPane>
                   <TextField fx:id="assetNumberSearchField" layoutX="89.0" layoutY="90.0" prefHeight="25.0" prefWidth="171.0" />
-                  <ComboBox fx:id="assetTypeComboBox" layoutX="87.0" layoutY="141.0" prefHeight="25.0" prefWidth="313.0" />
                   <TextField fx:id="assetAssignedToSearchField" layoutX="340.0" layoutY="90.0" prefHeight="25.0" prefWidth="246.0" />
-                  <ComboBox fx:id="assetMfgComboBox" layoutX="472.0" layoutY="141.0" prefHeight="25.0" prefWidth="313.0" />
                   <TextField fx:id="assetInfoSearchField" layoutX="661.0" layoutY="90.0" prefHeight="25.0" prefWidth="259.0" />
+                  <ComboBox fx:id="assetTypeComboBox" layoutX="87.0" layoutY="141.0" prefHeight="25.0" prefWidth="313.0" />
+                  <ComboBox fx:id="assetMfgComboBox" layoutX="472.0" layoutY="141.0" prefHeight="25.0" prefWidth="313.0" />
                   <TableView fx:id="assetTableView" layoutX="14.0" layoutY="173.0" prefHeight="348.0" prefWidth="1000.0">
                     <columns>
                       <TableColumn fx:id="assetDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
@@ -368,6 +269,139 @@
                   <Label alignment="CENTER" layoutX="662.0" layoutY="73.0" prefHeight="17.0" prefWidth="259.0" text="Searches Name, Model # or Serial #" />
                   <Label alignment="CENTER" layoutX="87.0" layoutY="124.0" prefHeight="17.0" prefWidth="313.0" text="Asset Type" />
                   <Label alignment="CENTER" layoutX="472.0" layoutY="124.0" prefHeight="17.0" prefWidth="313.0" text="Manufacturer" />
+               </children>
+            </AnchorPane>
+            <AnchorPane id="bugsPane" fx:id="bugsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Button fx:id="addBugButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddBugButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Bug" />
+                        <Label fx:id="bugPaneTitleLabel" layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Bugs" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                        <ComboBox fx:id="bugViewComboBox" layoutX="834.0" layoutY="18.0" prefWidth="150.0" />
+                     </children>
+                  </AnchorPane>
+                  <TextField fx:id="bugNumberSearchField" layoutX="91.0" layoutY="97.0" prefHeight="25.0" prefWidth="88.0" />
+                  <ComboBox fx:id="bugPriorityFilterComboBox" layoutX="230.0" layoutY="97.0" prefHeight="25.0" prefWidth="171.0" />
+                  <TextField fx:id="bugInfoSearchField" layoutX="451.0" layoutY="97.0" prefHeight="25.0" prefWidth="274.0" />
+                  <ComboBox fx:id="bugStatusFilterComboBox" layoutX="778.0" layoutY="96.0" prefHeight="25.0" prefWidth="198.0" />
+                  <TableView fx:id="bugTableView" layoutX="14.0" layoutY="134.0" prefHeight="390.0" prefWidth="1000.0">
+                     <columns>
+                        <TableColumn fx:id="bugDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
+                        <TableColumn fx:id="bugEditColumn" editable="false" prefWidth="35.0" sortable="false" />
+                        <TableColumn fx:id="bugNumberColumn" editable="false" prefWidth="100.0" text="TICKET #" />
+                        <TableColumn fx:id="bugPriorityColumn" editable="false" text="PRIORITY" />
+                        <TableColumn fx:id="bugTitleColumn" editable="false" prefWidth="330.0" text="TITLE" />
+                        <TableColumn fx:id="bugStatusColumn" editable="false" text="STATUS" />
+                        <TableColumn fx:id="bugAssignedToColumn" editable="false" prefWidth="180.0" text="ASSIGNED TO" />
+                        <TableColumn fx:id="bugCreatedColumn" editable="false" text="OPENED&#10;DATE" />
+                        <TableColumn fx:id="bugLastUpdatedColumn" editable="false" text="LAST&#10;UPDATED" />
+                     </columns>
+                  </TableView>
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="451.0" layoutY="81.0" prefHeight="17.0" prefWidth="274.0" text="Searches title and description" />
+                  <Label layoutX="35.0" layoutY="101.0" prefHeight="17.0" prefWidth="46.0" text="Filters:" />
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="91.0" layoutY="82.0" prefHeight="17.0" prefWidth="88.0" text="Ticket #" />
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="792.0" layoutY="81.0" prefHeight="17.0" prefWidth="184.0" text="Status" />
+                  <Label alignment="CENTER" contentDisplay="TOP" layoutX="230.0" layoutY="82.0" prefHeight="17.0" prefWidth="171.0" text="Priority" />
+                  <ImageView fx:id="bugNumberClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="185.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="bugPriorityClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="409.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="bugContentClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="733.0" layoutY="96.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="bugStatusClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="988.0" layoutY="97.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="productsPane" fx:id="productsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Button fx:id="productAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddProductButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Product" />
+                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Products" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                     </children>
+                  </AnchorPane>
+                  <Label layoutX="49.0" layoutY="103.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
+                  <TextField fx:id="productNameSearchField" layoutX="122.0" layoutY="99.0" prefHeight="25.0" prefWidth="362.0" />
+                  <TextField fx:id="productVersionSearchField" layoutX="568.0" layoutY="99.0" prefHeight="25.0" prefWidth="369.0" />
+                  <TableView fx:id="productTableView" layoutX="14.0" layoutY="133.0" prefHeight="390.0" prefWidth="1000.0">
+                    <columns>
+                      <TableColumn fx:id="productDeleteColumn" editable="false" prefWidth="50.0" sortable="false" />
+                      <TableColumn fx:id="productEditColumn" editable="false" prefWidth="50.0" sortable="false" />
+                        <TableColumn fx:id="productNameColumn" editable="false" prefWidth="450.0" text="NAME" />
+                        <TableColumn fx:id="productVersionColumn" editable="false" prefWidth="450.0" text="VERSION" />
+                    </columns>
+                  </TableView>
+                  <ImageView fx:id="productNameClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="494.0" layoutY="98.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="productVersionClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="945.0" layoutY="99.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane id="contactsPane" fx:id="contactsPane" prefHeight="543.0" prefWidth="1000.0" styleClass="home-page-subpane">
+               <children>
+                  <AnchorPane prefHeight="60.0" prefWidth="1031.0" styleClass="pane-header">
+                     <children>
+                        <Button fx:id="contactAddButton" layoutX="35.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleAddContactButton" prefHeight="35.0" prefWidth="140.0" styleClass="form-button" text="Add Contact" />
+                        <Label layoutX="293.0" layoutY="1.0" prefHeight="64.0" prefWidth="445.0" styleClass="pane-header-title" text="Contacts" AnchorPane.bottomAnchor="1.0" AnchorPane.topAnchor="1.0" />
+                     </children>
+                  </AnchorPane>
+                  <Label layoutX="26.0" layoutY="104.0" prefHeight="17.0" prefWidth="52.0" text="Filters:" />
+                  <TextField fx:id="contactNameSearchField" layoutX="99.0" layoutY="87.0" prefHeight="25.0" prefWidth="271.0" />
+                  <TextField fx:id="contactCompanySearchField" layoutX="441.0" layoutY="87.0" prefHeight="25.0" prefWidth="259.0" />
+                  <TextField fx:id="contactEmailSearchField" layoutX="99.0" layoutY="131.0" prefHeight="25.0" prefWidth="271.0" />
+                  <TextField fx:id="contactPhoneSearchField" layoutX="441.0" layoutY="131.0" prefHeight="25.0" prefWidth="259.0" />
+                  <TableView fx:id="contactTableView" layoutX="13.0" layoutY="169.0" prefHeight="355.0" prefWidth="1000.0">
+                    <columns>
+                      <TableColumn fx:id="contactDeleteColumn" editable="false" prefWidth="35.0" sortable="false" />
+                      <TableColumn fx:id="contactEditColumn" editable="false" prefWidth="35.0" sortable="false" />
+                        <TableColumn fx:id="contactNameColumn" editable="false" prefWidth="300.0" text="NAME" />
+                        <TableColumn fx:id="contactEmailColumn" editable="false" prefWidth="275.0" text="EMAIL" />
+                        <TableColumn fx:id="contactPhoneColumn" editable="false" prefWidth="120.0" text="PHONE" />
+                        <TableColumn fx:id="contactCompanyColumn" editable="false" prefWidth="234.0" text="COMPANY" />
+                    </columns>
+                  </TableView>
+                  <Label alignment="CENTER" layoutX="99.0" layoutY="70.0" prefHeight="17.0" prefWidth="271.0" text="Name" />
+                  <Label alignment="CENTER" layoutX="99.0" layoutY="113.0" prefHeight="17.0" prefWidth="271.0" text="Email" />
+                  <Label alignment="CENTER" layoutX="441.0" layoutY="70.0" prefHeight="17.0" prefWidth="259.0" text="Company" />
+                  <Label alignment="CENTER" layoutX="441.0" layoutY="113.0" prefHeight="17.0" prefWidth="259.0" text="Phone" />
+                  <ImageView fx:id="contactNameClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="374.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="contactEmailClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="374.0" layoutY="131.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="contactCompanyClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="707.0" layoutY="87.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="contactPhoneClearFilterImageView" fitHeight="25.0" fitWidth="26.0" layoutX="707.0" layoutY="131.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/clear-filter.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
          </children>

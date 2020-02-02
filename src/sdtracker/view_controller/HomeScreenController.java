@@ -227,11 +227,16 @@ public class HomeScreenController implements Initializable {
     @FXML private Button productAddButton;
     @FXML private TextField productNameSearchField;
     @FXML private TextField productVersionSearchField;
+    @FXML private ImageView productNameClearFilterImageView;
+    @FXML private ImageView productVersionClearFilterImageView;
     @FXML private TableView<Product> productTableView;
     @FXML private TableColumn<Product, Product> productDeleteColumn;
     @FXML private TableColumn<Product, Product> productEditColumn;
     @FXML private TableColumn<Product, String> productNameColumn;
     @FXML private TableColumn<Product, String> productVersionColumn;
+    
+    private ObjectProperty<Predicate<Product>> productNameFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Product>> productVersionFilter = new SimpleObjectProperty<>();
     
     // Contacts pane elements
     @FXML private AnchorPane contactsPane;
@@ -240,6 +245,10 @@ public class HomeScreenController implements Initializable {
     @FXML private TextField contactEmailSearchField;
     @FXML private TextField contactPhoneSearchField;
     @FXML private TextField contactCompanySearchField;
+    @FXML private ImageView contactNameClearFilterImageView;
+    @FXML private ImageView contactEmailClearFilterImageView;
+    @FXML private ImageView contactPhoneClearFilterImageView;
+    @FXML private ImageView contactCompanyClearFilterImageView;
     @FXML private TableView<Contact> contactTableView;
     @FXML private TableColumn<Contact, Contact> contactDeleteColumn;
     @FXML private TableColumn<Contact, Contact> contactEditColumn;
@@ -247,6 +256,11 @@ public class HomeScreenController implements Initializable {
     @FXML private TableColumn<Contact, String> contactEmailColumn;
     @FXML private TableColumn<Contact, String> contactPhoneColumn;
     @FXML private TableColumn<Contact, String> contactCompanyColumn;
+    
+    private ObjectProperty<Predicate<Contact>> contactNameFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Contact>> contactEmailFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Contact>> contactPhoneFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Contact>> contactCompanyFilter = new SimpleObjectProperty<>();
     
     //Reports pane elements
     @FXML private AnchorPane reportsPane;
@@ -472,7 +486,7 @@ public class HomeScreenController implements Initializable {
         
         ticketNumberFilter.bind(Bindings.createObjectBinding(() ->
             ticket -> {
-                if (ticketNumberSearchField.getText() != null || !ticketNumberSearchField.getText().isEmpty()) {
+                if (ticketNumberSearchField.getText() != null && !ticketNumberSearchField.getText().isEmpty()) {
                     return ticket.getTicketNumber().toLowerCase().contains(ticketNumberSearchField.getText().toLowerCase());
                 } else {
                     return true;
@@ -494,9 +508,9 @@ public class HomeScreenController implements Initializable {
         
         ticketContentFilter.bind(Bindings.createObjectBinding(() ->
             ticket -> {
-                if (ticketInfoSearchField.getText() != null || !ticketInfoSearchField.getText().isEmpty()) {
+                if (ticketInfoSearchField.getText() != null && !ticketInfoSearchField.getText().isEmpty()) {
                     return ticket.getTitle().toLowerCase().contains(ticketInfoSearchField.getText().toLowerCase())
-                        || ticket.getDescription().toLowerCase().contains(ticketInfoSearchField.getText().toLowerCase());
+                        && ticket.getDescription().toLowerCase().contains(ticketInfoSearchField.getText().toLowerCase());
                 } else {
                     return true;
                 }
@@ -546,7 +560,7 @@ public class HomeScreenController implements Initializable {
         
         bugNumberFilter.bind(Bindings.createObjectBinding(() ->
             bug -> {
-                if (bugNumberSearchField.getText() != null || !bugNumberSearchField.getText().isEmpty()) {
+                if (bugNumberSearchField.getText() != null && !bugNumberSearchField.getText().isEmpty()) {
                     return bug.getBugNumber().toLowerCase().contains(bugNumberSearchField.getText().toLowerCase());
                 } else {
                     return true;
@@ -568,9 +582,9 @@ public class HomeScreenController implements Initializable {
         
         bugContentFilter.bind(Bindings.createObjectBinding(() ->
             bug -> {
-                if (bugInfoSearchField.getText() != null || !bugInfoSearchField.getText().isEmpty()) {
+                if (bugInfoSearchField.getText() != null && !bugInfoSearchField.getText().isEmpty()) {
                     return bug.getTitle().toLowerCase().contains(bugInfoSearchField.getText().toLowerCase())
-                        || bug.getDescription().toLowerCase().contains(bugInfoSearchField.getText().toLowerCase());
+                        && bug.getDescription().toLowerCase().contains(bugInfoSearchField.getText().toLowerCase());
                 } else {
                     return true;
                 }
@@ -617,7 +631,7 @@ public class HomeScreenController implements Initializable {
         
         assetNumberFilter.bind(Bindings.createObjectBinding(() ->
             asset ->{
-                if (assetNumberSearchField.getText() != null || !assetNumberSearchField.getText().isEmpty()) {
+                if (assetNumberSearchField.getText() != null && !assetNumberSearchField.getText().isEmpty()) {
                     return asset.getAssetNumber().toLowerCase().contains(assetNumberSearchField.getText().toLowerCase());
                 } else {
                     return true;
@@ -628,7 +642,7 @@ public class HomeScreenController implements Initializable {
         
         assetAssignedToFilter.bind(Bindings.createObjectBinding(() ->
             asset ->{
-                if (assetAssignedToSearchField.getText() != null || !assetAssignedToSearchField.getText().isEmpty()) {
+                if (assetAssignedToSearchField.getText() != null && !assetAssignedToSearchField.getText().isEmpty()) {
                     return asset.getAssignedToAppUser().getDisplayName().toLowerCase()
                             .contains(assetAssignedToSearchField.getText().toLowerCase());
                 } else {
@@ -640,7 +654,7 @@ public class HomeScreenController implements Initializable {
         
         assetInfoFilter.bind(Bindings.createObjectBinding(() ->
             asset ->{
-                if (assetInfoSearchField.getText() != null || !assetInfoSearchField.getText().isEmpty()) {
+                if (assetInfoSearchField.getText() != null && !assetInfoSearchField.getText().isEmpty()) {
                     return asset.getName().toLowerCase().contains(assetInfoSearchField.getText().toLowerCase())
                         || asset.getModelNumber().toLowerCase().contains(assetInfoSearchField.getText().toLowerCase())
                         || asset.getSerialNumber().toLowerCase().contains(assetInfoSearchField.getText().toLowerCase());
@@ -676,32 +690,121 @@ public class HomeScreenController implements Initializable {
         });
     }
     
+    private void bindProductFilters() {
+        productNameFilter.bind(Bindings.createObjectBinding(() ->
+            product ->{
+                if (productNameSearchField.getText() != null && !productNameSearchField.getText().isEmpty()) {
+                    return product.getName().toLowerCase().contains(productNameSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            productNameSearchField.textProperty()
+        ));
+        
+        productVersionFilter.bind(Bindings.createObjectBinding(() ->
+            product ->{
+                if (productVersionSearchField.getText() != null && !productVersionSearchField.getText().isEmpty()) {
+                    return product.getVersion().toLowerCase().contains(productVersionSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            productVersionSearchField.textProperty()
+        ));
+        
+        filteredProductList.predicateProperty().bind(Bindings.createObjectBinding(
+            () -> productNameFilter.get()
+                .and(productVersionFilter.get()),
+                productNameFilter, productVersionFilter)
+        );
+        
+        filteredProductList.predicateProperty().addListener((observable) -> {
+            productTableView.refresh();
+        });
+    }
+    
+    private void bindContactFilters() {
+        contactNameFilter.bind(Bindings.createObjectBinding(() ->
+            contact ->{
+                if (contactNameSearchField.getText() != null && !contactNameSearchField.getText().isEmpty()) {
+                    return contact.getDisplayName().toLowerCase().contains(contactNameSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            contactNameSearchField.textProperty()
+        ));
+        
+        contactEmailFilter.bind(Bindings.createObjectBinding(() ->
+            contact ->{
+                if (contactEmailSearchField.getText() != null && !contactEmailSearchField.getText().isEmpty()) {
+                    return contact.getEmail().toLowerCase().contains(contactEmailSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            contactEmailSearchField.textProperty()
+        ));
+        
+        contactPhoneFilter.bind(Bindings.createObjectBinding(() ->
+            contact ->{
+                if (contactPhoneSearchField.getText() != null && !contactPhoneSearchField.getText().isEmpty()) {
+                    return contact.getPhone().toLowerCase().contains(contactPhoneSearchField.getText().toLowerCase());
+                } else {
+                    return true;
+                }
+            },
+            contactPhoneSearchField.textProperty()
+        ));
+        
+        contactCompanyFilter.bind(Bindings.createObjectBinding(() ->
+            contact ->{
+                if (contactCompanySearchField.getText() != null && !contactCompanySearchField.getText().isEmpty()) {
+                    return contact.getCompany() != null && !contact.getCompany().isEmpty() ?
+                        contact.getCompany().toLowerCase().contains(contactCompanySearchField.getText().toLowerCase())
+                            :
+                        false;
+                } else {
+                    return true;
+                }
+            },
+            contactCompanySearchField.textProperty()
+        ));
+        
+        filteredContactList.predicateProperty().bind(Bindings.createObjectBinding(
+            () -> contactNameFilter.get()
+                .and(contactEmailFilter.get())
+                .and(contactPhoneFilter.get())
+                .and(contactCompanyFilter.get()),
+                contactNameFilter , contactEmailFilter, contactPhoneFilter, contactCompanyFilter)
+        );
+        
+        filteredContactList.predicateProperty().addListener((observable) -> {
+            contactTableView.refresh();
+        });
+    }
+    
     private void initializeTicketsPane() {
         initializeTicketViewComboBox();
         initializeTicketTableView();
-        initializeTicketFilters();
-        
     }
     
     private void initializeBugsPane() {
         initializeBugViewComboBox();
         initializeBugTableView();
-        initializeBugFilters();
     }
     
     private void initializeAssetsPane() {
         initializeAssetTableView();
-        initializeAssetFilters();
     }
     
     private void initializeProductsPane() {
         initializeProductTableView();
-        initializeProductFilters();
     }
     
     private void initializeContactsPane() {
         initializeContactTableView();
-        initializeContactFilters();
     }
     
     private void displayStats() {
@@ -867,11 +970,7 @@ public class HomeScreenController implements Initializable {
             };
         });
     }
-    
-    private void initializeTicketFilters() {
-        
-    }
-    
+  
     // Bug pane
     private void initializeBugViewComboBox() {
         bugViewComboBox.getItems().setAll(BugView.values());
@@ -1018,10 +1117,6 @@ public class HomeScreenController implements Initializable {
         });
     }
     
-    private void initializeBugFilters() {
-        
-    }
-    
     // Asset pane
     private void initializeAssetTableView() {
         // Delete column
@@ -1129,10 +1224,6 @@ public class HomeScreenController implements Initializable {
         assetModelNumberColumn.setCellValueFactory(new PropertyValueFactory<>("modelNumber"));
     }
     
-    private void initializeAssetFilters() {
-        
-    }
-    
     // Product pane
     private void initializeProductTableView() {
         // Delete column
@@ -1188,10 +1279,6 @@ public class HomeScreenController implements Initializable {
         
         // Product version column
         productVersionColumn.setCellValueFactory(new PropertyValueFactory<>("version"));
-    }
-    
-    private void initializeProductFilters() {
-        
     }
     
     // Contact pane
@@ -1264,10 +1351,6 @@ public class HomeScreenController implements Initializable {
         contactCompanyColumn.setCellValueFactory(new PropertyValueFactory<>("company"));
     }
     
-    private void initializeContactFilters() {
-
-    }
-    
     // Table load methods
     private void loadTicketTableView() {
         filteredTicketList = new FilteredList<>(allTicketList, (pred) -> true);
@@ -1317,17 +1400,19 @@ public class HomeScreenController implements Initializable {
         productTableView.setItems(sortedProductList);
 
         productDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
+        bindProductFilters();
     }
     
     private void loadContactTableView() {
         filteredContactList = new FilteredList<>(allContactList, (pred) -> true);
         sortedContactList = new SortedList<>(filteredContactList);
         sortedContactList.comparatorProperty().bind(contactTableView.comparatorProperty());
-        // TODO filters
+        System.out.println("Sorted: " + sortedContactList.size());
         contactTableView.refresh();
         contactTableView.setItems(sortedContactList);
 
         contactDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
+        bindContactFilters();
     }
     
     // Event handlers
@@ -1498,6 +1583,30 @@ public class HomeScreenController implements Initializable {
         
         assetInfoClearFilterImageView.setOnMouseClicked((event) -> {
             assetInfoSearchField.clear();
+        });
+        
+        productNameClearFilterImageView.setOnMouseClicked((event) -> {
+            productNameSearchField.clear();
+        });
+        
+        productVersionClearFilterImageView.setOnMouseClicked((event) -> {
+            productVersionSearchField.clear();
+        });
+        
+        contactNameClearFilterImageView.setOnMouseClicked((event) -> {
+            contactNameSearchField.clear();
+        });
+        
+        contactEmailClearFilterImageView.setOnMouseClicked((event) -> {
+            contactEmailSearchField.clear();
+        });
+        
+        contactPhoneClearFilterImageView.setOnMouseClicked((event) -> {
+            contactPhoneSearchField.clear();
+        });
+        
+        contactCompanyClearFilterImageView.setOnMouseClicked((event) -> {
+            contactCompanySearchField.clear();
         });
         
         report1Label.setOnMouseClicked((event) -> {
@@ -1975,6 +2084,7 @@ public class HomeScreenController implements Initializable {
     
     private EventHandler<WorkerStateEvent> getAllContactsSuccess = (event) -> {
         allContactList = getAllContactsService.getValue();
+        System.out.println(allContactList.size());
         loadContactTableView();
     };
     
