@@ -603,7 +603,7 @@ public class HomeScreenController implements Initializable {
         });
     }
     
-    private void bindAssetfilters() {
+    private void bindAssetFilters() {
         assetTypeFilter.bind(Bindings.createObjectBinding(() ->
             asset ->{
                 if (assetTypeComboBox.getValue() != null) {
@@ -630,7 +630,7 @@ public class HomeScreenController implements Initializable {
             asset ->{
                 if (assetAssignedToSearchField.getText() != null || !assetAssignedToSearchField.getText().isEmpty()) {
                     return asset.getAssignedToAppUser().getDisplayName().toLowerCase()
-                            .contains(assetNumberSearchField.getText().toLowerCase());
+                            .contains(assetAssignedToSearchField.getText().toLowerCase());
                 } else {
                     return true;
                 }
@@ -1305,7 +1305,7 @@ public class HomeScreenController implements Initializable {
         assetTableView.setItems(sortedAssetList);
 
         assetDeleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
-        bindAssetfilters();
+        bindAssetFilters();
     }
     
     private void loadProductTableView() {
