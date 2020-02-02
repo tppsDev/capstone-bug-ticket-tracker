@@ -47,6 +47,8 @@ import sdtracker.Session;
 import sdtracker.database.AssetDbServiceManager;
 import sdtracker.database.AssetDbServiceManager.DeleteAssetService;
 import sdtracker.database.AssetDbServiceManager.GetAllAssetsService;
+import sdtracker.database.AssetTypeDbServiceManager;
+import sdtracker.database.AssetTypeDbServiceManager.GetAllAssetTypesService;
 import sdtracker.database.BugDbServiceManager;
 import sdtracker.database.BugDbServiceManager.DeleteBugService;
 import sdtracker.database.BugDbServiceManager.GetAllBugsService;
@@ -57,6 +59,8 @@ import sdtracker.database.BugStatusDbServiceManager.GetAllBugStatusesService;
 import sdtracker.database.ContactDbServiceManager;
 import sdtracker.database.ContactDbServiceManager.DeleteContactService;
 import sdtracker.database.ContactDbServiceManager.GetAllContactsService;
+import sdtracker.database.MfgDbServiceManager;
+import sdtracker.database.MfgDbServiceManager.GetAllMfgsService;
 import sdtracker.database.ProductDbServiceManager;
 import sdtracker.database.ProductDbServiceManager.DeleteProductService;
 import sdtracker.database.ProductDbServiceManager.GetAllProductsService;
@@ -177,11 +181,11 @@ public class HomeScreenController implements Initializable {
     @FXML private ImageView bugNumberClearFilterImageView;
     @FXML private ImageView bugContentClearFilterImageView;
     
-    ObjectProperty<Predicate<Bug>> myBugsFilter = new SimpleObjectProperty<>();
-    ObjectProperty<Predicate<Bug>> bugNumberFilter = new SimpleObjectProperty<>();
-    ObjectProperty<Predicate<Bug>> bugPriorityFilter = new SimpleObjectProperty<>();
-    ObjectProperty<Predicate<Bug>> bugContentFilter = new SimpleObjectProperty<>();
-    ObjectProperty<Predicate<Bug>> bugStatusFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Bug>> myBugsFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Bug>> bugNumberFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Bug>> bugPriorityFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Bug>> bugContentFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Bug>> bugStatusFilter = new SimpleObjectProperty<>();
     
     private ObservableList<BugPriority> allBugPrioritiesList = FXCollections.observableArrayList();
     private ObservableList<BugStatus> allBugStatusesList = FXCollections.observableArrayList();
@@ -190,11 +194,10 @@ public class HomeScreenController implements Initializable {
     @FXML private AnchorPane assetsPane;
     @FXML private Button assetAddButton;
     @FXML private TextField assetNumberSearchField;
-    @FXML private TextField assetNameSearchField;
     @FXML private ComboBox<AssetType> assetTypeComboBox;
     @FXML private TextField assetAssignedToSearchField;
     @FXML private ComboBox<Mfg> assetMfgComboBox;
-    @FXML private TextField assetModelNumberSearchField;
+    @FXML private TextField assetInfoSearchField;
     @FXML private TableView<Asset> assetTableView;
     @FXML private TableColumn<Asset, Asset> assetDeleteColumn;
     @FXML private TableColumn<Asset, Asset> assetEditColumn;
@@ -204,6 +207,20 @@ public class HomeScreenController implements Initializable {
     @FXML private TableColumn<Asset, AppUser> assetAssignedToColumn;
     @FXML private TableColumn<Asset, Mfg> assetMfgColumn;
     @FXML private TableColumn<Asset, String> assetModelNumberColumn;
+    @FXML private ImageView assetAssignedToClearFilterImageView;
+    @FXML private ImageView assetTypeClearFilterImageView;
+    @FXML private ImageView assetMfgClearFilterImageView;
+    @FXML private ImageView assetNumberClearFilterImageView;
+    @FXML private ImageView assetInfoClearFilterImageView;
+    
+    private ObjectProperty<Predicate<Asset>> assetTypeFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Asset>> assetNumberFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Asset>> assetAssignedToFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Asset>> assetInfoFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<Asset>> assetMfgFilter = new SimpleObjectProperty<>();
+    
+    private ObservableList<AssetType> allAssetTypesList = FXCollections.observableArrayList();
+    private ObservableList<Mfg> allMfgsList = FXCollections.observableArrayList();
     
     // Products pane elements
     @FXML private AnchorPane productsPane;
@@ -272,6 +289,12 @@ public class HomeScreenController implements Initializable {
     private GetAllAssetsService getAllAssetsService;
     private DeleteAssetService deleteAssetService;
     
+    private AssetTypeDbServiceManager assetTypeDbServiceManager = AssetTypeDbServiceManager.getServiceManager();
+    private GetAllAssetTypesService getAllAssetTypesService;
+    
+    private MfgDbServiceManager mfgDbServiceManager = MfgDbServiceManager.getServiceManager();
+    private GetAllMfgsService getAllMfgsService;
+    
     private ProductDbServiceManager productDbServiceManager = ProductDbServiceManager.getServiceManager();
     private GetAllProductsService getAllProductsService;
     private DeleteProductService deleteProductService;
@@ -330,6 +353,8 @@ public class HomeScreenController implements Initializable {
         runGetAllTicketStatusesService();
         runGetAllBugPrioritiesService();
         runGetAllBugStatusesService();
+        runGetAllAssetTypesService();
+        runGetAllMfgsService();
         startClickHandlers();
     }
     
@@ -346,6 +371,8 @@ public class HomeScreenController implements Initializable {
         
         getAllAssetsService = assetDbServiceManager.new GetAllAssetsService();
         deleteAssetService = assetDbServiceManager.new DeleteAssetService();
+        getAllAssetTypesService = assetTypeDbServiceManager.new  GetAllAssetTypesService();
+        getAllMfgsService = mfgDbServiceManager.new  GetAllMfgsService();
         
         getAllProductsService = productDbServiceManager.new GetAllProductsService();
         deleteProductService = productDbServiceManager.new DeleteProductService();
@@ -370,8 +397,12 @@ public class HomeScreenController implements Initializable {
         getAllBugStatusesService.setOnSucceeded(getAllBugStatusesSuccess);
         getAllBugStatusesService.setOnFailed(getAllBugStatusesFailure);
         
-        getAllAssetsService.setOnSucceeded(getAllAssetssSuccess);
-        getAllAssetsService.setOnFailed(getAllAssetssFailure);
+        getAllAssetsService.setOnSucceeded(getAllAssetsSuccess);
+        getAllAssetsService.setOnFailed(getAllAssetsFailure);
+        getAllAssetTypesService.setOnSucceeded(getAllAssetTypesSuccess);
+        getAllAssetTypesService.setOnFailed(getAllAssetTypesFailure);
+        getAllMfgsService.setOnSucceeded(getAllMfgsSuccess);
+        getAllMfgsService.setOnFailed(getAllMfgsFailure);
         
         getAllProductsService.setOnSucceeded(getAllProductsSuccess);
         getAllProductsService.setOnFailed(getAllProductsFailure);
@@ -442,7 +473,7 @@ public class HomeScreenController implements Initializable {
         ticketNumberFilter.bind(Bindings.createObjectBinding(() ->
             ticket -> {
                 if (ticketNumberSearchField.getText() != null || !ticketNumberSearchField.getText().isEmpty()) {
-                    return ticket.getTicketNumber().contains(ticketNumberSearchField.getText());
+                    return ticket.getTicketNumber().toLowerCase().contains(ticketNumberSearchField.getText().toLowerCase());
                 } else {
                     return true;
                 }
@@ -516,7 +547,7 @@ public class HomeScreenController implements Initializable {
         bugNumberFilter.bind(Bindings.createObjectBinding(() ->
             bug -> {
                 if (bugNumberSearchField.getText() != null || !bugNumberSearchField.getText().isEmpty()) {
-                    return bug.getBugNumber().contains(bugNumberSearchField.getText());
+                    return bug.getBugNumber().toLowerCase().contains(bugNumberSearchField.getText().toLowerCase());
                 } else {
                     return true;
                 }
@@ -1680,6 +1711,20 @@ public class HomeScreenController implements Initializable {
         }
     }
     
+    private void runGetAllAssetTypesService() {
+        if (!getAllAssetTypesService.isRunning()) {
+            getAllAssetTypesService.reset();
+            getAllAssetTypesService.start();
+        }
+    }
+    
+    private void runGetAllMfgsService() {
+        if (!getAllMfgsService.isRunning()) {
+            getAllMfgsService.reset();
+            getAllMfgsService.start();
+        }
+    }
+    
     private void runDeleteAssetService(Asset asset) {
         if (!deleteAssetService.isRunning()) {
             deleteAssetService.reset();
@@ -1796,12 +1841,32 @@ public class HomeScreenController implements Initializable {
         event.getSource().getException().printStackTrace();
     };
     
-    private EventHandler<WorkerStateEvent> getAllAssetssSuccess = (event) -> {
+    private EventHandler<WorkerStateEvent> getAllAssetsSuccess = (event) -> {
         allAssetList = getAllAssetsService.getValue();
         loadAssetTableView();
     };
     
-    private EventHandler<WorkerStateEvent> getAllAssetssFailure = (event) -> {
+    private EventHandler<WorkerStateEvent> getAllAssetsFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
+    };
+    
+    private EventHandler<WorkerStateEvent> getAllAssetTypesSuccess = (event) -> {
+        allAssetTypesList.clear();
+        allAssetTypesList = getAllAssetTypesService.getValue();
+        assetTypeComboBox.getItems().addAll(allAssetTypesList);
+    };
+    
+    private EventHandler<WorkerStateEvent> getAllAssetTypesFailure = (event) -> {
+        event.getSource().getException().printStackTrace();
+    };
+
+    private EventHandler<WorkerStateEvent> getAllMfgsSuccess = (event) -> {
+        allMfgsList.clear();
+        allMfgsList = getAllMfgsService.getValue();
+        assetMfgComboBox.getItems().addAll(allMfgsList);
+    };
+    
+    private EventHandler<WorkerStateEvent> getAllMfgsFailure = (event) -> {
         event.getSource().getException().printStackTrace();
     };
     
