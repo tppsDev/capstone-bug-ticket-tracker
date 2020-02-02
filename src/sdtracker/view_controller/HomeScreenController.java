@@ -1531,6 +1531,31 @@ public class HomeScreenController implements Initializable {
     private void handleSettingsNavButton(ActionEvent event) {
         settingsPane.toFront();
     }
+    
+    @FXML
+    private void handleChangePasswordButton() {
+        FXMLLoader setPasswordLoader = new FXMLLoader(getClass().getResource("SetPasswordForm.fxml"));
+        Scene setPasswordScene;
+        try {
+            setPasswordScene = new Scene(setPasswordLoader.load());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return;
+        }
+        Stage setPasswordStage = new Stage();
+        setPasswordStage.initOwner(progressIndicator.getScene().getWindow());
+        setPasswordStage.initModality(Modality.APPLICATION_MODAL);
+        setPasswordStage.setTitle("SDTracker 1.0 - Set Password");
+        setPasswordStage.setScene(setPasswordScene);
+        SetPasswordFormController setPasswordFormController = setPasswordLoader.getController();
+        setPasswordFormController.setAppUser(session.getSessionUser());
+        setPasswordFormController.setNewUser(false);
+        setPasswordFormController.setAdminPasswordSet(false);
+    
+        setPasswordStage.showAndWait();
+        FormResult setPasswordResult = setPasswordFormController.getFormResult();
+        systemMessageLabel.setText(setPasswordResult.getMessage());
+    }
             
     private void startClickHandlers() {
         ticketNumberClearFilterImageView.setOnMouseClicked((event) -> {

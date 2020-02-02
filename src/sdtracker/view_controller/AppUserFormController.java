@@ -241,7 +241,7 @@ public class AppUserFormController implements Initializable {
                 }
             }
             emailTextField.setText(appUser.getEmail());
-            
+            setPasswordButton.setVisible(true);
             titleLabel.setText("Update User");
             addSaveButton.setText("Save");
         } else {
@@ -468,17 +468,15 @@ public class AppUserFormController implements Initializable {
         setPasswordStage.setTitle("SDTracker 1.0 - Set Password");
         setPasswordStage.setScene(setPasswordScene);
         SetPasswordFormController setPasswordFormController = setPasswordLoader.getController();
-        setPasswordFormController.setAdminPasswordSet(true);
         setPasswordFormController.setAppUser(appUser);
         if (formMode.equals(FormMode.INSERT)) {
             setPasswordFormController.setNewUser(true);
         }
+        setPasswordFormController.setAdminPasswordSet(true);
         setPasswordStage.showAndWait();
         FormResult setPasswordResult = setPasswordFormController.getFormResult();
         passwordSet = setPasswordResult.getResultStatus().equals(FormResultStatus.SUCCESS);
         systemMessageLabel.setText(setPasswordResult.getMessage());
-        System.out.println(appUser.getSalt());
-        System.out.println(appUser.getPassword());
     }
     
     @FXML

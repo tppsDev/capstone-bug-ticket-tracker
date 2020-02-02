@@ -34,6 +34,7 @@ import sdtracker.utility.ValidationResult;
 public class SetPasswordFormController implements Initializable {
     @FXML private Label titleLabel;
     @FXML private ProgressBar progressIndicator;
+    @FXML private Label currentPasswordLabel;
     @FXML private PasswordField currentPasswordField;
     @FXML private PasswordField newPasswordField;
     @FXML private PasswordField confirmPasswordField;
@@ -67,7 +68,6 @@ public class SetPasswordFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeServices();
-        establishBindings();
     }
     
     private void initializeServices() {
@@ -81,15 +81,10 @@ public class SetPasswordFormController implements Initializable {
         newPasswordField.textProperty().bindBidirectional(unmaskedNewPasswordTextField.textProperty());
         confirmPasswordField.textProperty().bindBidirectional(unmaskedConfirmPasswordTextField.textProperty());
         
-        if (adminSetPassword.get()) {
+        if (!adminSetPassword.get()) {
             showCurrentPasswordImageView.visibleProperty().bind(currentPasswordField.visibleProperty());
             maskCurrentPasswordImageView.visibleProperty().bind(currentPasswordField.visibleProperty().not());
             unmaskedCurrentPasswordTextField.visibleProperty().bind(currentPasswordField.visibleProperty().not());
-        } else {
-            showCurrentPasswordImageView.setVisible(false);
-            maskCurrentPasswordImageView.setVisible(false);
-            currentPasswordField.setVisible(false);
-            unmaskedCurrentPasswordTextField.setVisible(false);
         }
         
         showNewPasswordImageView.visibleProperty().bind(newPasswordField.visibleProperty());
@@ -99,6 +94,22 @@ public class SetPasswordFormController implements Initializable {
         showConfirmPasswordImageView.visibleProperty().bind(confirmPasswordField.visibleProperty());
         maskConfirmPasswordImageView.visibleProperty().bind(confirmPasswordField.visibleProperty().not());
         unmaskedConfirmPasswordTextField.visibleProperty().bind(confirmPasswordField.visibleProperty().not());
+    }
+    
+    private void applyFormMode() {
+        if (adminSetPassword.get()) {
+            showCurrentPasswordImageView.setVisible(false);
+            maskCurrentPasswordImageView.setVisible(false);
+            currentPasswordField.setVisible(false);
+            unmaskedCurrentPasswordTextField.setVisible(false);
+            currentPasswordLabel.setVisible(false);
+        } else {
+            showCurrentPasswordImageView.setVisible(true);
+            maskCurrentPasswordImageView.setVisible(true);
+            currentPasswordField.setVisible(true);
+            unmaskedCurrentPasswordTextField.setVisible(true);
+        }
+        establishBindings();
     }
     
     private void runUpdatePasswordAppUserService() {
@@ -259,6 +270,7 @@ public class SetPasswordFormController implements Initializable {
 
     public void setAdminPasswordSet(boolean value) {
         adminSetPassword.set(value);
+        applyFormMode();
     }
 
     private BooleanProperty adminPasswordSetProperty() {
