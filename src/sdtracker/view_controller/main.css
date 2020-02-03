@@ -140,6 +140,10 @@
     -fx-font-style: italic;
 }
 
+.report-link:hover {
+    -fx-cursor: hand;
+}
+
 .screen-header {
     -fx-background-color: -primary-nuetral-color;
     -fx-alignment: CENTER;

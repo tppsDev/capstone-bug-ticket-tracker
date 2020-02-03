@@ -66,6 +66,7 @@ public class TicketStatusDaoImpl implements CrudDao<TicketStatus> {
                 ticketStatusList.add(new TicketStatus(id, name));
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
         

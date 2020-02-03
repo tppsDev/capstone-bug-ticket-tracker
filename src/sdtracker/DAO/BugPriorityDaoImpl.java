@@ -66,6 +66,7 @@ public class BugPriorityDaoImpl implements CrudDao<BugPriority> {
                 bugPriorityList.add(new BugPriority(id, name));
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
         

@@ -66,6 +66,7 @@ public class BugStatusDaoImpl implements CrudDao<BugStatus> {
                 bugStatusList.add(new BugStatus(id, name));
             }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             throw new DaoException("Database error: Try again later.");
         }
         

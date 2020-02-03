@@ -34,7 +34,7 @@ public class SDTracker extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         
-        Parent root = FXMLLoader.load(getClass().getResource("view_controller/CurrentBugBreakdownReport.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("view_controller/Login.fxml"));
         
         Scene scene = new Scene(root);
         

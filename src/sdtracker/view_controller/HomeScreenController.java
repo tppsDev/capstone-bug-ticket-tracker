@@ -1635,11 +1635,37 @@ public class HomeScreenController implements Initializable {
         });
         
         report1Label.setOnMouseClicked((event) -> {
-            
+            FXMLLoader currentTicketReportLoader = new FXMLLoader(getClass().getResource("CurrentTicketBreakdownReport.fxml"));
+            Scene currentTicketReportScene;
+            try {
+                currentTicketReportScene = new Scene(currentTicketReportLoader.load());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            Stage currentTicketReportStage = new Stage();
+            currentTicketReportStage.initOwner(activeUserLabel.getScene().getWindow());
+            currentTicketReportStage.initModality(Modality.APPLICATION_MODAL);
+            currentTicketReportStage.setTitle("SDTracker - Current Ticket Breakdown");
+            currentTicketReportStage.setScene(currentTicketReportScene);
+            currentTicketReportStage.showAndWait();
         });
         
         report2Label.setOnMouseClicked((event) -> {
-            
+            FXMLLoader currentBugReportLoader = new FXMLLoader(getClass().getResource("CurrentBugBreakdownReport.fxml"));
+            Scene currentBugReportScene;
+            try {
+                currentBugReportScene = new Scene(currentBugReportLoader.load());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                return;
+            }
+            Stage currentBugReportStage = new Stage();
+            currentBugReportStage.initOwner(activeUserLabel.getScene().getWindow());
+            currentBugReportStage.initModality(Modality.APPLICATION_MODAL);
+            currentBugReportStage.setTitle("SDTracker - Current Bug Breakdown");
+            currentBugReportStage.setScene(currentBugReportScene);
+            currentBugReportStage.showAndWait();
         });
         
         assetTypeConfigLabel.setOnMouseClicked((event) -> {
