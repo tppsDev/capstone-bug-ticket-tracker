@@ -8,9 +8,11 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="592.0" prefWidth="800.0" styleClass="white-background" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="sdtracker.view_controller.AppUserConfigScreenController">
+<AnchorPane id="AnchorPane" prefHeight="592.0" prefWidth="800.0" styleClass="white-background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.AppUserConfigScreenController">
     <stylesheets>
         <URL value="@main.css" />
     </stylesheets>
@@ -22,19 +24,34 @@
          </children>
       </AnchorPane>
       <Button fx:id="addAppUserButton" layoutX="14.0" layoutY="91.0" mnemonicParsing="false" onAction="#handleAddAppUserButton" styleClass="form-button" text="Add User" />
-      <Label layoutX="23.0" layoutY="141.0" prefHeight="18.0" prefWidth="73.0" styleClass="form-label" text="Search:" />
-      <TextField fx:id="searchNameTextField" layoutX="106.0" layoutY="136.0" prefHeight="29.0" prefWidth="244.0" styleClass="form-text-field" />
+      <Label layoutX="15.0" layoutY="141.0" prefHeight="18.0" prefWidth="73.0" styleClass="form-label" text="Search:" />
+      <TextField fx:id="searchNameTextField" layoutX="98.0" layoutY="136.0" prefHeight="29.0" prefWidth="224.0" styleClass="form-text-field" />
       <TableView fx:id="appUserTableView" layoutX="15.0" layoutY="172.0" prefHeight="354.0" prefWidth="772.0">
          <columns>
             <TableColumn fx:id="deleteColumn" editable="false" prefWidth="40.0" />
             <TableColumn fx:id="editColumn" editable="false" prefWidth="40.0" />
-            <TableColumn fx:id="nameColumn" editable="false" prefWidth="300.0" text="Name" />
-            <TableColumn fx:id="usernameColumn" editable="false" prefWidth="150.0" text="Username" />
+            <TableColumn fx:id="nameColumn" editable="false" prefWidth="275.0" text="Name" />
+            <TableColumn fx:id="usernameColumn" editable="false" prefWidth="175.0" text="Username" />
             <TableColumn fx:id="departmentColumn" editable="false" prefWidth="240.0" text="Department" />
          </columns>
       </TableView>
       <Label fx:id="systemMessageLabel" layoutX="15.0" layoutY="536.0" prefHeight="35.0" prefWidth="772.0" styleClass="system-message-label" wrapText="true" />
-      <TextField fx:id="searchUsernameTextField" layoutX="400.0" layoutY="136.0" prefHeight="29.0" prefWidth="131.0" styleClass="form-text-field" />
-      <ComboBox fx:id="departmentFilterComboBox" layoutX="555.0" layoutY="136.0" prefHeight="29.0" prefWidth="224.0" styleClass="form-text-field" />
+      <TextField fx:id="searchUsernameTextField" layoutX="370.0" layoutY="136.0" prefHeight="29.0" prefWidth="130.0" styleClass="form-text-field" />
+      <ComboBox fx:id="departmentFilterComboBox" layoutX="543.0" layoutY="136.0" prefHeight="29.0" prefWidth="216.0" styleClass="form-text-field" />
+      <ImageView fx:id="nameClearSearchImageView" fitHeight="25.0" fitWidth="26.0" layoutX="329.0" layoutY="138.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/clear-filter.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="usernameClearSearchImageView" fitHeight="25.0" fitWidth="26.0" layoutX="508.0" layoutY="138.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/clear-filter.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="departmentClearSearchImageView" fitHeight="25.0" fitWidth="26.0" layoutX="761.0" layoutY="138.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/clear-filter.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

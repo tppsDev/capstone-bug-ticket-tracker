@@ -7,8 +7,12 @@ package sdtracker.view_controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
+import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -29,6 +33,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -51,8 +56,11 @@ public class AppUserConfigScreenController implements Initializable {
     @FXML private ProgressBar progressIndicator;
     @FXML private Button addAppUserButton;
     @FXML private TextField searchNameTextField;
-    @FXML private TextField searchuserNameTextField;
+    @FXML private TextField searchUsernameTextField;
     @FXML private ComboBox<Department> departmentFilterComboBox;
+    @FXML private ImageView nameClearSearchImageView;
+    @FXML private ImageView usernameClearSearchImageView;
+    @FXML private ImageView departmentClearSearchImageView;
     @FXML private TableView<AppUser> appUserTableView;
     @FXML private TableColumn<AppUser, AppUser> deleteColumn;
     @FXML private TableColumn<AppUser, AppUser> editColumn;
@@ -60,6 +68,10 @@ public class AppUserConfigScreenController implements Initializable {
     @FXML private TableColumn<AppUser, String> usernameColumn;
     @FXML private TableColumn<AppUser, Department> departmentColumn;
     @FXML private Label systemMessageLabel;
+    
+    private ObjectProperty<Predicate<AppUser>> nameSearchFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<AppUser>> usernameSearchFilter = new SimpleObjectProperty<>();
+    private ObjectProperty<Predicate<AppUser>> departmentSearchFilter = new SimpleObjectProperty<>();
 
     Session session = Session.getSession();
     
@@ -84,6 +96,7 @@ public class AppUserConfigScreenController implements Initializable {
         initializeAppUserTableView();
         runGetAllAppUsersService();
         runGetAllDepartmentsService();
+        startClickListeners();
     }
 
     private void initializeServices() {
@@ -196,6 +209,21 @@ public class AppUserConfigScreenController implements Initializable {
         appUserTableView.setItems(sortedAppUserList);
 
         deleteColumn.setVisible(session.getSessionUser().getSecurityRole().getId() > 1);
+        bindFilters();
+    }
+    
+    private void startClickListeners() {
+        nameClearSearchImageView.setOnMouseClicked((event) -> {
+            searchNameTextField.clear();
+        });
+        
+        usernameClearSearchImageView.setOnMouseClicked((event) -> {
+            searchUsernameTextField.clear();
+        });
+        
+        departmentClearSearchImageView.setOnMouseClicked((event) -> {
+            departmentFilterComboBox.getSelectionModel().clearSelection();
+        });
     }
     
     private void handleDeleteButton(AppUser appUser) {
@@ -250,6 +278,52 @@ public class AppUserConfigScreenController implements Initializable {
         if (contactFormResult.getResultStatus().equals(SUCCESS)) {
             runGetAllAppUsersService();
         }
+    }
+    
+    private void bindFilters() {
+        nameSearchFilter.bind(Bindings.createObjectBinding(() ->
+            appUser -> {
+                if (searchNameTextField.getText() != null && !searchNameTextField.getText().isEmpty()) {
+                    return appUser.getDisplayName().toLowerCase().contains(searchNameTextField.getText().toLowerCase());
+                } else {
+                    return true;
+                } 
+            },
+            searchNameTextField.textProperty()
+        ));
+        
+        usernameSearchFilter.bind(Bindings.createObjectBinding(() ->
+            appUser -> {
+                if (searchUsernameTextField.getText() != null && !searchUsernameTextField.getText().isEmpty()) {
+                    return appUser.getUsername().toLowerCase().contains(searchUsernameTextField.getText().toLowerCase());
+                } else {
+                    return true;
+                } 
+            },
+            searchUsernameTextField.textProperty()
+        ));
+        
+        departmentSearchFilter.bind(Bindings.createObjectBinding(() ->
+            appUser -> {
+                if (departmentFilterComboBox.getValue() != null) {
+                    return appUser.getDepartment().equals(departmentFilterComboBox.getValue());
+                } else {
+                    return true;
+                } 
+            },
+            departmentFilterComboBox.valueProperty()
+        ));
+        
+        filteredAppUserList.predicateProperty().bind(Bindings.createObjectBinding(
+            () -> nameSearchFilter.get()
+                .and(usernameSearchFilter.get())
+                .and(departmentSearchFilter.get()),
+                nameSearchFilter, usernameSearchFilter, departmentSearchFilter)
+        );
+        
+        filteredAppUserList.predicateProperty().addListener((observable) -> {
+            appUserTableView.refresh();
+        });
     }
 
 /***************************************************************************************

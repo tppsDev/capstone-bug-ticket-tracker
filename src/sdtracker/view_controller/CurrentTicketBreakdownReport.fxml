@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1060.0" styleClass="white-background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.CurrentTicketBreakdownReportController">
+    <stylesheets>
+        <URL value="@main.css" />
+    </stylesheets>
+   <children>
+      <VBox maxHeight="100.0" prefHeight="100.0" prefWidth="1060.0">
+         <children>
+            <HBox alignment="CENTER" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" styleClass="screen-header-label">
+               <children>
+                  <Label text="Current Ticket Breakdown Report" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" maxHeight="100.0" prefHeight="40.0" prefWidth="200.0">
+               <children>
+                  <Label text="Current Tickets defined as all tickets that are not in a status of Closed or Cancelled" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <PieChart fx:id="ticketStatusBreakdownPieChart" layoutX="27.0" layoutY="117.0" prefHeight="296.0" prefWidth="561.0" styleClass="thin-dark-border" />
+      <VBox fx:id="agingVBox" layoutX="645.0" layoutY="117.0" prefHeight="613.0" prefWidth="351.0">
+         <children>
+            <HBox alignment="CENTER" maxHeight="60.0" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <Label styleClass="form-label" text="Average Ticket Aging Times by Status" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="60.0" text="New:" />
+                  <Label fx:id="newTicketAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="60.0" text="Open:" />
+                  <Label fx:id="openTicketAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="60.0" text="Resolved:" />
+                  <Label fx:id="resolvedTicketAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="60.0" text="On Hold:" />
+                  <Label fx:id="onHoldTicketAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" maxHeight="60.0" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <Label styleClass="form-label" text="Average Ticket Aging Times by Priority" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="60.0" text="Critical:" />
+                  <Label fx:id="criticalTicketAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="60.0" text="Urgent:" />
+                  <Label fx:id="urgentTicketAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="60.0" text="Normal:" />
+                  <Label fx:id="normalTicketAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="60.0" text="Low:" />
+                  <Label fx:id="lowTicketAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+      <PieChart fx:id="ticketPriorityBreakdownPieChart" layoutX="27.0" layoutY="424.0" prefHeight="296.0" prefWidth="561.0" styleClass="thin-dark-border" />
+      <ProgressIndicator fx:id="progressIndicator" layoutX="494.0" layoutY="362.0" prefHeight="60.0" prefWidth="72.0" styleClass="primary-progress-indicator" />
+   </children>
+</AnchorPane>

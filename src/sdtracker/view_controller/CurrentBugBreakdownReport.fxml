@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="AnchorPane" prefHeight="730.0" prefWidth="1060.0" styleClass="white-background" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sdtracker.view_controller.CurrentBugBreakdownReportController">
+    <stylesheets>
+        <URL value="@main.css" />
+    </stylesheets>
+   <children>
+      <VBox maxHeight="100.0" prefHeight="100.0" prefWidth="1060.0">
+         <children>
+            <HBox alignment="CENTER" minHeight="60.0" prefHeight="60.0" prefWidth="200.0" styleClass="screen-header-label">
+               <children>
+                  <Label text="Current Bug Breakdown Report" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" maxHeight="100.0" prefHeight="40.0" prefWidth="200.0">
+               <children>
+                  <Label text="Current Bugs defined as all bugs that are not in a status of Closed or Cancelled" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+      <PieChart fx:id="bugStatusBreakdownPieChart" layoutX="27.0" layoutY="117.0" prefHeight="296.0" prefWidth="657.0" styleClass="thin-dark-border" />
+      <VBox fx:id="agingVBox" layoutX="695.0" layoutY="118.0" prefHeight="613.0" prefWidth="351.0">
+         <children>
+            <HBox alignment="CENTER" maxHeight="60.0" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <Label styleClass="form-label" text="Average Bug Aging Times by Status" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="New:" />
+                  <Label fx:id="newBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="Open:" />
+                  <Label fx:id="openBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="Fix in Development:" />
+                  <Label fx:id="fixInDevelopmentBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="Pending Testing:" />
+                  <Label fx:id="fixPendingTestingBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="Resolved:" />
+                  <Label fx:id="resolvedBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="On Hold:" />
+                  <Label fx:id="onHoldBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER" maxHeight="60.0" prefHeight="60.0" prefWidth="200.0">
+               <children>
+                  <Label styleClass="form-label" text="Average Bug Aging Times by Priority" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="Critical:" />
+                  <Label fx:id="criticalBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="Urgent:" />
+                  <Label fx:id="urgentBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="Normal:" />
+                  <Label fx:id="normalBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="60.0" prefWidth="200.0" spacing="20.0">
+               <children>
+                  <Label alignment="CENTER_RIGHT" prefWidth="120.0" text="Low:" />
+                  <Label fx:id="lowBugAgingLabel" prefWidth="100.0" />
+               </children>
+               <padding>
+                  <Insets left="20.0" right="20.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
+      <PieChart fx:id="bugPriorityBreakdownPieChart" layoutX="27.0" layoutY="424.0" prefHeight="296.0" prefWidth="657.0" styleClass="thin-dark-border" />
+      <ProgressIndicator fx:id="progressIndicator" layoutX="494.0" layoutY="362.0" prefHeight="60.0" prefWidth="72.0" styleClass="primary-progress-indicator" />
+   </children>
+</AnchorPane>
